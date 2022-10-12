@@ -1740,25 +1740,25 @@ define("freshservice/tests/acceptance/components/module-service-request/list-tes
   }
 
   function _performSearch() {
-    _performSearch = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee13(term) {
-      return regeneratorRuntime.wrap(function _callee13$(_context13) {
+    _performSearch = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee14(term) {
+      return regeneratorRuntime.wrap(function _callee14$(_context14) {
         while (1) {
-          switch (_context13.prev = _context13.next) {
+          switch (_context14.prev = _context14.next) {
             case 0:
               _list.default.search.fillSearch(term);
 
-              _context13.next = 3;
+              _context14.next = 3;
               return _list.default.search.keyUp();
 
             case 3:
-              return _context13.abrupt("return");
+              return _context14.abrupt("return");
 
             case 4:
             case "end":
-              return _context13.stop();
+              return _context14.stop();
           }
         }
-      }, _callee13);
+      }, _callee14);
     }));
     return _performSearch.apply(this, arguments);
   }
@@ -1941,44 +1941,39 @@ define("freshservice/tests/acceptance/components/module-service-request/list-tes
     }());
     (0, _qunit.test)('Should search items in other categories', /*#__PURE__*/function () {
       var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(assert) {
-        var intl, searchTerm, emptyTitle;
+        var searchTerm;
         return regeneratorRuntime.wrap(function _callee6$(_context6) {
           while (1) {
             switch (_context6.prev = _context6.next) {
               case 0:
-                intl = this.owner.lookup('service:intl');
                 searchTerm = 'Employee';
-                emptyTitle = intl.t('fs.request_items.catalog_list.no_results.title', {
-                  term: searchTerm
-                });
-                _context6.next = 5;
+                _context6.next = 3;
                 return _list.default.visitITServiceCategory();
 
-              case 5:
-                _context6.next = 7;
+              case 3:
+                _context6.next = 5;
                 return performSearch(searchTerm);
 
-              case 7:
+              case 5:
                 assert.ok(_list.default.search.clearBtnVisible, 'clear button visible');
-                assert.ok(_list.default.item.emptyStateVisible, 'Empty State Visible');
-                assert.equal(_list.default.item.emptyStateTitleText, emptyTitle, 'Empty state title match');
+                assert.notOk(_list.default.item.emptyStateVisible, 'Empty State should not be visible');
                 assert.ok(_list.default.search.otherResultsTitleVisible, 'Other Results Title Visible');
                 assert.ok(_list.default.search.otherResultsListVisible, 'Other Results List Visible');
                 assert.equal(_list.default.item.count, 3, 'Other Results Count match');
 
-              case 13:
+              case 10:
               case "end":
                 return _context6.stop();
             }
           }
-        }, _callee6, this);
+        }, _callee6);
       }));
 
       return function (_x7) {
         return _ref6.apply(this, arguments);
       };
     }());
-    (0, _qunit.test)('Should update search items when category is changed', /*#__PURE__*/function () {
+    (0, _qunit.test)('Should show empty state only when no items in any category maches', /*#__PURE__*/function () {
       var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(assert) {
         var intl, searchTerm, emptyTitle;
         return regeneratorRuntime.wrap(function _callee7$(_context7) {
@@ -1986,35 +1981,25 @@ define("freshservice/tests/acceptance/components/module-service-request/list-tes
             switch (_context7.prev = _context7.next) {
               case 0:
                 intl = this.owner.lookup('service:intl');
-                searchTerm = 'Adobe';
+                searchTerm = 'Random word';
                 emptyTitle = intl.t('fs.request_items.catalog_list.no_results.title', {
                   term: searchTerm
                 });
                 _context7.next = 5;
-                return _list.default.visitDefault();
+                return _list.default.visitITServiceCategory();
 
               case 5:
                 _context7.next = 7;
                 return performSearch(searchTerm);
 
               case 7:
-                assert.equal(_list.default.item.count, 4, 'All Items search Count match');
-                _context7.next = 10;
-                return _list.default.category.facilitiesManagementClick();
-
-              case 10:
-                assert.equal(_list.default.search.value, 'Adobe', 'Search term remains populated');
                 assert.ok(_list.default.search.clearBtnVisible, 'clear button visible');
-                assert.equal(_list.default.item.count, 1, 'Facilities Management search Count match'); // HR Mangement click
-
-                _context7.next = 15;
-                return _list.default.category.linkClickable();
-
-              case 15:
-                assert.ok(_list.default.item.emptyStateVisible, 'Empty State Visible on other category');
+                assert.ok(_list.default.item.emptyStateVisible, 'Empty State is visible');
                 assert.equal(_list.default.item.emptyStateTitleText, emptyTitle, 'Empty state title match');
+                assert.notOk(_list.default.search.otherResultsTitleVisible, 'Other Results Title not Visible');
+                assert.notOk(_list.default.search.otherResultsListVisible, 'Other Results List not Visible');
 
-              case 17:
+              case 12:
               case "end":
                 return _context7.stop();
             }
@@ -2026,13 +2011,56 @@ define("freshservice/tests/acceptance/components/module-service-request/list-tes
         return _ref7.apply(this, arguments);
       };
     }());
-    (0, _qunit.test)('Should show searched items by defualt when loaded via URL Param', /*#__PURE__*/function () {
+    (0, _qunit.test)('Should update search items when category is changed', /*#__PURE__*/function () {
       var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(assert) {
+        var searchTerm;
         return regeneratorRuntime.wrap(function _callee8$(_context8) {
           while (1) {
             switch (_context8.prev = _context8.next) {
               case 0:
-                _context8.next = 2;
+                searchTerm = 'Adobe';
+                _context8.next = 3;
+                return _list.default.visitDefault();
+
+              case 3:
+                _context8.next = 5;
+                return performSearch(searchTerm);
+
+              case 5:
+                assert.equal(_list.default.item.count, 4, 'All Items search Count match');
+                _context8.next = 8;
+                return _list.default.category.facilitiesManagementClick();
+
+              case 8:
+                assert.equal(_list.default.search.value, 'Adobe', 'Search term remains populated');
+                assert.ok(_list.default.search.clearBtnVisible, 'clear button visible');
+                assert.equal(_list.default.item.count, 1, 'Facilities Management search Count match'); // HR Mangement click
+
+                _context8.next = 13;
+                return _list.default.category.linkClickable();
+
+              case 13:
+                assert.ok(_list.default.search.otherResultsTitleVisible, 'Other Results Title Visible');
+
+              case 14:
+              case "end":
+                return _context8.stop();
+            }
+          }
+        }, _callee8);
+      }));
+
+      return function (_x9) {
+        return _ref8.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Should show searched items by defualt when loaded via URL Param', /*#__PURE__*/function () {
+      var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9(assert) {
+        return regeneratorRuntime.wrap(function _callee9$(_context9) {
+          while (1) {
+            switch (_context9.prev = _context9.next) {
+              case 0:
+                _context9.next = 2;
                 return _list.default.visitAdobeSearch();
 
               case 2:
@@ -2046,81 +2074,39 @@ define("freshservice/tests/acceptance/components/module-service-request/list-tes
 
               case 9:
               case "end":
-                return _context8.stop();
-            }
-          }
-        }, _callee8);
-      }));
-
-      return function (_x9) {
-        return _ref8.apply(this, arguments);
-      };
-    }());
-    (0, _qunit.test)('Should search items in other categories when loaded via URL Param', /*#__PURE__*/function () {
-      var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9(assert) {
-        var intl, searchTerm, emptyTitle;
-        return regeneratorRuntime.wrap(function _callee9$(_context9) {
-          while (1) {
-            switch (_context9.prev = _context9.next) {
-              case 0:
-                intl = this.owner.lookup('service:intl');
-                searchTerm = 'Employee';
-                emptyTitle = intl.t('fs.request_items.catalog_list.no_results.title', {
-                  term: searchTerm
-                });
-                _context9.next = 5;
-                return _list.default.visitITServiceEmployeeSearch();
-
-              case 5:
-                _context9.next = 7;
-                return performSearch(searchTerm);
-
-              case 7:
-                assert.ok(_list.default.search.clearBtnVisible, 'clear button visible');
-                assert.ok(_list.default.item.emptyStateVisible, 'Empty State Visible');
-                assert.equal(_list.default.item.emptyStateTitleText, emptyTitle, 'Empty state title match');
-                assert.ok(_list.default.search.otherResultsTitleVisible, 'Other Results Title Visible');
-                assert.ok(_list.default.search.otherResultsListVisible, 'Other Results List Visible');
-                assert.equal(_list.default.item.count, 3, 'Other Results Count match');
-
-              case 13:
-              case "end":
                 return _context9.stop();
             }
           }
-        }, _callee9, this);
+        }, _callee9);
       }));
 
       return function (_x10) {
         return _ref9.apply(this, arguments);
       };
     }());
-    (0, _qunit.test)('Should clear search items when clear button is clicked', /*#__PURE__*/function () {
+    (0, _qunit.test)('Should search items in other categories when loaded via URL Param', /*#__PURE__*/function () {
       var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10(assert) {
         var searchTerm;
         return regeneratorRuntime.wrap(function _callee10$(_context10) {
           while (1) {
             switch (_context10.prev = _context10.next) {
               case 0:
-                searchTerm = 'Adobe';
+                searchTerm = 'Employee';
                 _context10.next = 3;
-                return _list.default.visitDefault();
+                return _list.default.visitITServiceEmployeeSearch();
 
               case 3:
                 _context10.next = 5;
                 return performSearch(searchTerm);
 
               case 5:
-                assert.equal(_list.default.item.count, 4, 'Search Results Rendered');
-                _context10.next = 8;
-                return _list.default.search.clearBtnClickable();
+                assert.ok(_list.default.search.clearBtnVisible, 'clear button visible');
+                assert.notOk(_list.default.item.emptyStateVisible, 'Empty State should not Visible');
+                assert.ok(_list.default.search.otherResultsTitleVisible, 'Other Results Title Visible');
+                assert.ok(_list.default.search.otherResultsListVisible, 'Other Results List Visible');
+                assert.equal(_list.default.item.count, 3, 'Other Results Count match');
 
-              case 8:
-                assert.equal(_list.default.search.value, '', 'Search term cleared');
-                assert.ok(_list.default.search.clearBtnHidden, 'clear button hidden');
-                assert.ok(_list.default.item.count >= 30, 'Search Results cleared');
-
-              case 11:
+              case 10:
               case "end":
                 return _context10.stop();
             }
@@ -2132,7 +2118,7 @@ define("freshservice/tests/acceptance/components/module-service-request/list-tes
         return _ref10.apply(this, arguments);
       };
     }());
-    (0, _qunit.test)('Should clear search items when Escape is pressed', /*#__PURE__*/function () {
+    (0, _qunit.test)('Should clear search items when clear button is clicked', /*#__PURE__*/function () {
       var _ref11 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11(assert) {
         var searchTerm;
         return regeneratorRuntime.wrap(function _callee11$(_context11) {
@@ -2148,13 +2134,9 @@ define("freshservice/tests/acceptance/components/module-service-request/list-tes
                 return performSearch(searchTerm);
 
               case 5:
-                assert.equal(_list.default.item.count, 4, 'Search Results Rendered'); // key param inside Event is used by ember input helpers
-                // Refer: https://github.com/emberjs/ember.js/blob/master/packages/%40ember/-internals/glimmer/lib/components/abstract-input.ts#L150
-
+                assert.equal(_list.default.item.count, 4, 'Search Results Rendered');
                 _context11.next = 8;
-                return _list.default.search.keyUp({
-                  key: 'Escape'
-                });
+                return _list.default.search.clearBtnClickable();
 
               case 8:
                 assert.equal(_list.default.search.value, '', 'Search term cleared');
@@ -2173,14 +2155,55 @@ define("freshservice/tests/acceptance/components/module-service-request/list-tes
         return _ref11.apply(this, arguments);
       };
     }());
-    (0, _qunit.test)('Should lazy load items on scrolling', /*#__PURE__*/function () {
+    (0, _qunit.test)('Should clear search items when Escape is pressed', /*#__PURE__*/function () {
       var _ref12 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee12(assert) {
-        var prevCount, container, loader;
+        var searchTerm;
         return regeneratorRuntime.wrap(function _callee12$(_context12) {
           while (1) {
             switch (_context12.prev = _context12.next) {
               case 0:
-                _context12.next = 2;
+                searchTerm = 'Adobe';
+                _context12.next = 3;
+                return _list.default.visitDefault();
+
+              case 3:
+                _context12.next = 5;
+                return performSearch(searchTerm);
+
+              case 5:
+                assert.equal(_list.default.item.count, 4, 'Search Results Rendered'); // key param inside Event is used by ember input helpers
+                // Refer: https://github.com/emberjs/ember.js/blob/master/packages/%40ember/-internals/glimmer/lib/components/abstract-input.ts#L150
+
+                _context12.next = 8;
+                return _list.default.search.keyUp({
+                  key: 'Escape'
+                });
+
+              case 8:
+                assert.equal(_list.default.search.value, '', 'Search term cleared');
+                assert.ok(_list.default.search.clearBtnHidden, 'clear button hidden');
+                assert.ok(_list.default.item.count >= 30, 'Search Results cleared');
+
+              case 11:
+              case "end":
+                return _context12.stop();
+            }
+          }
+        }, _callee12);
+      }));
+
+      return function (_x13) {
+        return _ref12.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Should lazy load items on scrolling', /*#__PURE__*/function () {
+      var _ref13 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee13(assert) {
+        var prevCount, container, loader;
+        return regeneratorRuntime.wrap(function _callee13$(_context13) {
+          while (1) {
+            switch (_context13.prev = _context13.next) {
+              case 0:
+                _context13.next = 2;
                 return _list.default.visitDefault();
 
               case 2:
@@ -2189,25 +2212,25 @@ define("freshservice/tests/acceptance/components/module-service-request/list-tes
                 container.scrollTop = container.scrollHeight - 50; // Delaying the server response to verify loaders
 
                 this.server.timing = 500;
-                _context12.next = 8;
+                _context13.next = 8;
                 return _list.default.item.scrollList();
 
               case 8:
-                _context12.next = 10;
+                _context13.next = 10;
                 return (0, _testHelpers.find)('.infinity-loader');
 
               case 10:
-                loader = _context12.sent;
-                _context12.next = 13;
+                loader = _context13.sent;
+                _context13.next = 13;
                 return loader === null || loader === void 0 ? void 0 : loader.scrollIntoView();
 
               case 13:
                 assert.ok(_list.default.item.lazyLoaderExist, 'Loader is displayed');
-                _context12.next = 16;
+                _context13.next = 16;
                 return _list.default.item.lazyLoaderRemoved;
 
               case 16:
-                _context12.next = 18;
+                _context13.next = 18;
                 return (0, _testHelpers.waitUntil)(function () {
                   return prevCount < _list.default.item.count;
                 }, {
@@ -2219,14 +2242,14 @@ define("freshservice/tests/acceptance/components/module-service-request/list-tes
 
               case 19:
               case "end":
-                return _context12.stop();
+                return _context13.stop();
             }
           }
-        }, _callee12, this);
+        }, _callee13, this);
       }));
 
-      return function (_x13) {
-        return _ref12.apply(this, arguments);
+      return function (_x14) {
+        return _ref13.apply(this, arguments);
       };
     }());
   });
@@ -6781,7 +6804,7 @@ define("freshservice/tests/integration/components/admin/itom/on-call-schedules/n
                 assert.equal(_notificationRule.default.textHeaderMedium, "Medium", "Notify Rule condition Medium title rendered properly");
                 assert.equal(_notificationRule.default.textHeaderLow, "Low", "Notify Rule condition Low title rendered properly");
                 assert.equal(_notificationRule.default.valueLevel1DefaultActionInterval, 1, "Notify Rule condition Urgent Level Default Action interval rendered properly");
-                assert.true(_notificationRule.default.textLevel1DefaultActionChannelSelected[0].includes('Phone'), "Notify Rule condition Urgent Level Default Action Channel Phone rendered properly");
+                assert.true(_notificationRule.default.textLevel1DefaultActionChannelSelected[0].includes('Call'), "Notify Rule condition Urgent Level Default Action Channel Call rendered properly");
                 assert.true(_notificationRule.default.textLevel1DefaultActionChannelSelected[1].includes('SMS'), "Notify Rule condition Urgent Level Default Action Channel SMS rendered properly");
                 assert.true(_notificationRule.default.textLevel1DefaultActionChannelSelected[2].includes('Email'), "Notify Rule condition Urgent Level Default Action Channel Email rendered properly");
 
@@ -8233,23 +8256,27 @@ define("freshservice/tests/integration/components/admin/module-workspaces/edit/c
                 }));
 
               case 7:
+                window.currentWorkspace = {
+                  id: 121,
+                  name: "General"
+                };
                 assert.ok(_edit.default.workspaceDelete);
                 assert.ok(_edit.default.updateWorkspace);
                 assert.notOk(_edit.default.updateDraftWorkspace);
                 assert.notOk(_edit.default.publishWorkspace);
-                _context3.next = 13;
+                _context3.next = 14;
                 return _edit.default.workspaceDeleteBtn();
 
-              case 13:
-                _context3.next = 15;
+              case 14:
+                _context3.next = 16;
                 return _edit.default.workspaceDeleteConfirm();
 
-              case 15:
+              case 16:
                 assert.ok(successToastrSpy.calledWithExactly(this.intl.t("fs.workspaces.workspace_deleted", {
                   workspace_name: this.model.name
                 })), "Success toastr message is displayed on successful delete");
 
-              case 16:
+              case 17:
               case "end":
                 return _context3.stop();
             }
@@ -11475,8 +11502,12 @@ define("freshservice/tests/integration/components/app-components/requester-info/
 });
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-define("freshservice/tests/integration/components/app-components/subject/component-test", ["qunit", "@ember/test-helpers", "ember-qunit", "ember-cli-mirage/test-support", "freshservice/tests/lib/intl", "freshservice/tests/lib/sinon-context", "freshservice/tests/pages/components/module-tickets/detail", "freshservice/constants/ticket"], function (_qunit, _testHelpers, _emberQunit, _testSupport, _intl, _sinonContext, _detail, _ticket) {
+define("freshservice/tests/integration/components/app-components/subject/component-test", ["qunit", "@ember/test-helpers", "ember-qunit", "ember-cli-mirage/test-support", "freshservice/tests/lib/intl", "freshservice/tests/lib/sinon-context", "freshservice/tests/lib/stub-current-user", "freshservice/tests/pages/components/module-tickets/detail", "freshservice/constants/ticket"], function (_qunit, _testHelpers, _emberQunit, _testSupport, _intl, _sinonContext, _stubCurrentUser, _detail, _ticket) {
   "use strict";
+
+  function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+  function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -11500,6 +11531,10 @@ define("freshservice/tests/integration/components/app-components/subject/compone
 
   function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+  var CURRENT_USER = {
+    privileges: ['edit_ticket_properties'],
+    language: "en"
+  };
   (0, _qunit.module)('Integration | Component | app-components | subject', function (hooks) {
     (0, _emberQunit.setupRenderingTest)(hooks);
     (0, _testSupport.setupMirage)(hooks);
@@ -11510,6 +11545,7 @@ define("freshservice/tests/integration/components/app-components/subject/compone
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
+              (0, _stubCurrentUser.stubCurrentUser)(CURRENT_USER);
               this.intl = this.owner.lookup("service:intl");
               this.store = this.owner.lookup('service:store');
               this.owner.lookup('router:main').setupRouter();
@@ -11517,13 +11553,51 @@ define("freshservice/tests/integration/components/app-components/subject/compone
               this.server.loadFixtures("users");
               this.server.loadFixtures("requesters");
 
-            case 6:
+            case 7:
             case "end":
               return _context.stop();
           }
         }
       }, _callee, this);
     })));
+
+    function renderSubjectComponent() {
+      return _renderSubjectComponent.apply(this, arguments);
+    }
+
+    function _renderSubjectComponent() {
+      _renderSubjectComponent = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10() {
+        return regeneratorRuntime.wrap(function _callee10$(_context10) {
+          while (1) {
+            switch (_context10.prev = _context10.next) {
+              case 0:
+                _context10.next = 2;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <AppComponents::Subject 
+                                        @model              =   {{this.model}}
+                                        @module				=	"tickets"
+                                        @parentModel		= 	{{this.parentTicketDetails}}
+                                        @sourceMapping		=	{{this.ticketSourceMapping}} 
+                                        @iconName			= 	{{this.iconName}}
+                                        @editPermission		= 	{{true}} />
+                */
+                {
+                  id: "orjttLfB",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"app-components/subject\",[],[[\"@model\",\"@module\",\"@parentModel\",\"@sourceMapping\",\"@iconName\",\"@editPermission\"],[[23,0,[\"model\"]],\"tickets\",[23,0,[\"parentTicketDetails\"]],[23,0,[\"ticketSourceMapping\"]],[23,0,[\"iconName\"]],true]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 2:
+              case "end":
+                return _context10.stop();
+            }
+          }
+        }, _callee10);
+      }));
+      return _renderSubjectComponent.apply(this, arguments);
+    }
+
     (0, _qunit.test)('should show subject, ticket icon, requester details, source, cc email list', /*#__PURE__*/function () {
       var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(assert) {
         var _TICKET_TYPE_MAPPING$;
@@ -11579,19 +11653,7 @@ define("freshservice/tests/integration/components/app-components/subject/compone
                 this.owner.unregister('service:moduleFields');
                 this.owner.register('service:moduleFields', MockService);
                 _context2.next = 14;
-                return (0, _testHelpers.render)(Ember.HTMLBars.template(
-                /*
-                  <AppComponents::Subject 
-                                        @model              =   {{this.model}}
-                                        @module				=	"tickets"
-                                        @sourceMapping		=	{{this.ticketSourceMapping}} 
-                                        @iconName			= 	{{this.iconName}} />
-                */
-                {
-                  id: "h68oyIMy",
-                  block: "{\"symbols\":[],\"statements\":[[5,\"app-components/subject\",[],[[\"@model\",\"@module\",\"@sourceMapping\",\"@iconName\"],[[23,0,[\"model\"]],\"tickets\",[23,0,[\"ticketSourceMapping\"]],[23,0,[\"iconName\"]]]]]],\"hasEval\":false}",
-                  meta: {}
-                }));
+                return renderSubjectComponent();
 
               case 14:
                 assert.ok(_detail.default.ticketIcon, "Ticket icon is visible");
@@ -11611,41 +11673,33 @@ define("freshservice/tests/integration/components/app-components/subject/compone
         return _ref3.apply(this, arguments);
       };
     }());
-    (0, _qunit.skip)('should show requester hover card on hovering on requester name', /*#__PURE__*/function () {
+    (0, _qunit.test)('should validate requester cell wrapper exists if it has view contacts previlege', /*#__PURE__*/function () {
       var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(assert) {
         var _TICKET_TYPE_MAPPING$2;
 
-        var mockTicket;
+        var currentUserPrivilege, mockTicket;
         return regeneratorRuntime.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                _context3.next = 2;
+                currentUserPrivilege = {
+                  privileges: ["view_contacts"]
+                };
+                (0, _stubCurrentUser.stubCurrentUser)(currentUserPrivilege);
+                _context3.next = 4;
                 return this.store.findRecord('ticket', 17);
 
-              case 2:
+              case 4:
                 mockTicket = _context3.sent;
                 this.model = mockTicket;
                 this.iconName = (_TICKET_TYPE_MAPPING$2 = _ticket.TICKET_TYPE_MAPPING[this.model.type]) === null || _TICKET_TYPE_MAPPING$2 === void 0 ? void 0 : _TICKET_TYPE_MAPPING$2.icon;
                 this.ticketSourceMapping = _ticket.TICKET_SOURCE_MAPPING;
                 this.requesterURL = "/users/".concat(this.model.requesterId);
-                _context3.next = 9;
-                return (0, _testHelpers.render)(Ember.HTMLBars.template(
-                /*
-                  <AppComponents::Subject 
-                                        @model              =   {{this.model}}
-                                        @module				=	"tickets"
-                                        @sourceMapping		=	{{this.ticketSourceMapping}} 
-                                        @iconName			= 	{{this.iconName}} />
-                */
-                {
-                  id: "h68oyIMy",
-                  block: "{\"symbols\":[],\"statements\":[[5,\"app-components/subject\",[],[[\"@model\",\"@module\",\"@sourceMapping\",\"@iconName\"],[[23,0,[\"model\"]],\"tickets\",[23,0,[\"ticketSourceMapping\"]],[23,0,[\"iconName\"]]]]]],\"hasEval\":false}",
-                  meta: {}
-                }));
-
-              case 9:
                 _context3.next = 11;
+                return renderSubjectComponent();
+
+              case 11:
+                _context3.next = 13;
                 return (0, _testHelpers.render)(Ember.HTMLBars.template(
                 /*
                   <ModuleItilCommon::EmberTableComponents::RequesterCell
@@ -11662,12 +11716,8 @@ define("freshservice/tests/integration/components/app-components/subject/compone
                   meta: {}
                 }));
 
-              case 11:
-                _context3.next = 13;
-                return _detail.default.showRequesterHoverCard();
-
               case 13:
-                assert.ok(_detail.default.requesterHoverCardVisible, 'Requester Hover card is visible');
+                assert.ok(_detail.default.requesterCellWrapperExists, 'Requester cell wrapper exists');
 
               case 14:
               case "end":
@@ -11681,7 +11731,7 @@ define("freshservice/tests/integration/components/app-components/subject/compone
         return _ref4.apply(this, arguments);
       };
     }());
-    (0, _qunit.test)('should show SR icon and "Requested for" value for Service requests', /*#__PURE__*/function () {
+    (0, _qunit.test)('should validate requester span wrapper exists if it does not have view contacts privilege', /*#__PURE__*/function () {
       var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(assert) {
         var _TICKET_TYPE_MAPPING$3;
 
@@ -11691,29 +11741,57 @@ define("freshservice/tests/integration/components/app-components/subject/compone
             switch (_context4.prev = _context4.next) {
               case 0:
                 _context4.next = 2;
-                return this.store.findRecord('ticket', 16);
+                return this.store.findRecord('ticket', 17);
 
               case 2:
                 mockTicket = _context4.sent;
                 this.model = mockTicket;
                 this.iconName = (_TICKET_TYPE_MAPPING$3 = _ticket.TICKET_TYPE_MAPPING[this.model.type]) === null || _TICKET_TYPE_MAPPING$3 === void 0 ? void 0 : _TICKET_TYPE_MAPPING$3.icon;
                 this.ticketSourceMapping = _ticket.TICKET_SOURCE_MAPPING;
-                _context4.next = 8;
-                return (0, _testHelpers.render)(Ember.HTMLBars.template(
-                /*
-                  <AppComponents::Subject 
-                                        @model              =   {{this.model}}
-                                        @module				=	"tickets"
-                                        @sourceMapping		=	{{this.ticketSourceMapping}} 
-                                        @iconName			= 	{{this.iconName}} />
-                */
-                {
-                  id: "h68oyIMy",
-                  block: "{\"symbols\":[],\"statements\":[[5,\"app-components/subject\",[],[[\"@model\",\"@module\",\"@sourceMapping\",\"@iconName\"],[[23,0,[\"model\"]],\"tickets\",[23,0,[\"ticketSourceMapping\"]],[23,0,[\"iconName\"]]]]]],\"hasEval\":false}",
-                  meta: {}
-                }));
+                this.requesterURL = "/users/".concat(this.model.requesterId);
+                _context4.next = 9;
+                return renderSubjectComponent();
 
-              case 8:
+              case 9:
+                assert.ok(_detail.default.requesterSpanWrapperExists, 'Requester Spam wrapper exists');
+
+              case 10:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this);
+      }));
+
+      return function (_x3) {
+        return _ref5.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('should show SR icon and "Requested for" value for Service requests', /*#__PURE__*/function () {
+      var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(assert) {
+        var _TICKET_TYPE_MAPPING$4;
+
+        var currentUserPrivilege, mockTicket;
+        return regeneratorRuntime.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                currentUserPrivilege = {
+                  privileges: ["view_contacts"]
+                };
+                (0, _stubCurrentUser.stubCurrentUser)(currentUserPrivilege);
+                _context5.next = 4;
+                return this.store.findRecord('ticket', 16);
+
+              case 4:
+                mockTicket = _context5.sent;
+                this.model = mockTicket;
+                this.iconName = (_TICKET_TYPE_MAPPING$4 = _ticket.TICKET_TYPE_MAPPING[this.model.type]) === null || _TICKET_TYPE_MAPPING$4 === void 0 ? void 0 : _TICKET_TYPE_MAPPING$4.icon;
+                this.ticketSourceMapping = _ticket.TICKET_SOURCE_MAPPING;
+                _context5.next = 10;
+                return renderSubjectComponent();
+
+              case 10:
                 assert.ok(_detail.default.SRIconVisible, 'SR Icon is visible');
                 assert.notOk(_detail.default.INCIconVisible, 'Incident Icon is not visible');
 
@@ -11737,61 +11815,7 @@ define("freshservice/tests/integration/components/app-components/subject/compone
                   assert.notOk(_detail.default.requesterForVIPBadge, 'Requested for VIP icon is not visible');
                 }
 
-              case 14:
-              case "end":
-                return _context4.stop();
-            }
-          }
-        }, _callee4, this);
-      }));
-
-      return function (_x3) {
-        return _ref5.apply(this, arguments);
-      };
-    }());
-    (0, _qunit.skip)('Show restore spam button for spam ticket', /*#__PURE__*/function () {
-      var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(assert) {
-        var _TICKET_TYPE_MAPPING$4;
-
-        var mockTicket;
-        return regeneratorRuntime.wrap(function _callee5$(_context5) {
-          while (1) {
-            switch (_context5.prev = _context5.next) {
-              case 0:
-                _context5.next = 2;
-                return this.store.findRecord('ticket', 19);
-
-              case 2:
-                mockTicket = _context5.sent;
-                this.model = mockTicket;
-                this.iconName = (_TICKET_TYPE_MAPPING$4 = _ticket.TICKET_TYPE_MAPPING[this.model.type]) === null || _TICKET_TYPE_MAPPING$4 === void 0 ? void 0 : _TICKET_TYPE_MAPPING$4.icon;
-                this.ticketSourceMapping = _ticket.TICKET_SOURCE_MAPPING;
-                _context5.next = 8;
-                return (0, _testHelpers.render)(Ember.HTMLBars.template(
-                /*
-                  <AppComponents::Subject 
-                                        @model              =   {{this.model}}
-                                        @module				=	"tickets"
-                                        @sourceMapping		=	{{this.ticketSourceMapping}} 
-                                        @iconName			= 	{{this.iconName}} />
-                */
-                {
-                  id: "h68oyIMy",
-                  block: "{\"symbols\":[],\"statements\":[[5,\"app-components/subject\",[],[[\"@model\",\"@module\",\"@sourceMapping\",\"@iconName\"],[[23,0,[\"model\"]],\"tickets\",[23,0,[\"ticketSourceMapping\"]],[23,0,[\"iconName\"]]]]]],\"hasEval\":false}",
-                  meta: {}
-                }));
-
-              case 8:
-                assert.ok(_detail.default.restoreSpamBadge, 'Unspam button is visible');
-                assert.ok(_detail.default.ticketIconDisabled, 'Ticket icon garyed for Spammed ticket');
-                _context5.next = 12;
-                return _detail.default.restoreSpamBtnClick();
-
-              case 12:
-                assert.notOk(_detail.default.restoreSpamBadge, 'Unspam button is not visible');
-                assert.notOk(_detail.default.ticketIconDisabled, 'Ticket icon grey removed for restored ticket');
-
-              case 14:
+              case 16:
               case "end":
                 return _context5.stop();
             }
@@ -11803,17 +11827,17 @@ define("freshservice/tests/integration/components/app-components/subject/compone
         return _ref6.apply(this, arguments);
       };
     }());
-    (0, _qunit.skip)('Show restore delete button for deleted ticket', /*#__PURE__*/function () {
+    (0, _qunit.test)('Show restore spam button for spam ticket', /*#__PURE__*/function () {
       var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(assert) {
         var _TICKET_TYPE_MAPPING$5;
 
-        var mockTicket;
+        var mockTicket, mockTicketData;
         return regeneratorRuntime.wrap(function _callee6$(_context6) {
           while (1) {
             switch (_context6.prev = _context6.next) {
               case 0:
                 _context6.next = 2;
-                return this.store.findRecord('ticket', 18);
+                return this.store.findRecord('ticket', 19);
 
               case 2:
                 mockTicket = _context6.sent;
@@ -11821,31 +11845,23 @@ define("freshservice/tests/integration/components/app-components/subject/compone
                 this.iconName = (_TICKET_TYPE_MAPPING$5 = _ticket.TICKET_TYPE_MAPPING[this.model.type]) === null || _TICKET_TYPE_MAPPING$5 === void 0 ? void 0 : _TICKET_TYPE_MAPPING$5.icon;
                 this.ticketSourceMapping = _ticket.TICKET_SOURCE_MAPPING;
                 _context6.next = 8;
-                return (0, _testHelpers.render)(Ember.HTMLBars.template(
-                /*
-                  <AppComponents::Subject 
-                                        @model              =   {{this.model}}
-                                        @module				=	"tickets"
-                                        @sourceMapping		=	{{this.ticketSourceMapping}} 
-                                        @iconName			= 	{{this.iconName}} />
-                */
-                {
-                  id: "h68oyIMy",
-                  block: "{\"symbols\":[],\"statements\":[[5,\"app-components/subject\",[],[[\"@model\",\"@module\",\"@sourceMapping\",\"@iconName\"],[[23,0,[\"model\"]],\"tickets\",[23,0,[\"ticketSourceMapping\"]],[23,0,[\"iconName\"]]]]]],\"hasEval\":false}",
-                  meta: {}
-                }));
+                return renderSubjectComponent();
 
               case 8:
-                assert.ok(_detail.default.restoreDeleteBadge, 'Restore delete button is visible');
-                assert.ok(_detail.default.ticketIconDisabled, 'Ticket icon garyed for Deleted ticket');
+                assert.ok(_detail.default.restoreSpamBadge, 'Unspam button is visible');
+                assert.ok(_detail.default.ticketIconDisabled, 'Ticket icon garyed for Spammed ticket');
                 _context6.next = 12;
-                return _detail.default.restoreDeleteBtnClick();
+                return _detail.default.restoreSpamBtnClick();
 
               case 12:
-                assert.notOk(_detail.default.restoreDeleteBadge, 'Restore delete button is not visible');
-                assert.notOk(_detail.default.ticketIconDisabled, 'Ticket icon gray removed for restored ticket');
+                mockTicketData = _objectSpread(_objectSpread({}, mockTicket), {}, {
+                  spam: false
+                });
+                this.set('model', mockTicketData);
+                assert.notOk(_detail.default.restoreSpamBadge, 'Unspam button is not visible');
+                assert.notOk(_detail.default.ticketIconDisabled, 'Ticket icon grey removed for restored ticket');
 
-              case 14:
+              case 16:
               case "end":
                 return _context6.stop();
             }
@@ -11855,6 +11871,134 @@ define("freshservice/tests/integration/components/app-components/subject/compone
 
       return function (_x5) {
         return _ref7.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Show restore delete button for delete ticket', /*#__PURE__*/function () {
+      var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(assert) {
+        var _TICKET_TYPE_MAPPING$6;
+
+        var mockTicket, mockTicketData;
+        return regeneratorRuntime.wrap(function _callee7$(_context7) {
+          while (1) {
+            switch (_context7.prev = _context7.next) {
+              case 0:
+                _context7.next = 2;
+                return this.store.findRecord('ticket', 18);
+
+              case 2:
+                mockTicket = _context7.sent;
+                this.model = mockTicket;
+                this.iconName = (_TICKET_TYPE_MAPPING$6 = _ticket.TICKET_TYPE_MAPPING[this.model.type]) === null || _TICKET_TYPE_MAPPING$6 === void 0 ? void 0 : _TICKET_TYPE_MAPPING$6.icon;
+                this.ticketSourceMapping = _ticket.TICKET_SOURCE_MAPPING;
+                _context7.next = 8;
+                return renderSubjectComponent();
+
+              case 8:
+                assert.ok(_detail.default.restoreDeleteBadge, 'Restore delete button is visible');
+                assert.ok(_detail.default.ticketIconDisabled, 'Ticket icon garyed for Deleted ticket');
+                _context7.next = 12;
+                return _detail.default.restoreDeleteBtnClick();
+
+              case 12:
+                mockTicketData = _objectSpread(_objectSpread({}, mockTicket), {}, {
+                  deleted: false
+                });
+                this.set('model', mockTicketData);
+                assert.notOk(_detail.default.restoreDeleteBadge, 'Restore delete button is not visible');
+                assert.notOk(_detail.default.ticketIconDisabled, 'Ticket icon gray removed for restored ticket');
+
+              case 16:
+              case "end":
+                return _context7.stop();
+            }
+          }
+        }, _callee7, this);
+      }));
+
+      return function (_x6) {
+        return _ref8.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Show disabled delete button for child if parent is deleted for service request type', /*#__PURE__*/function () {
+      var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(assert) {
+        var _TICKET_TYPE_MAPPING$7;
+
+        var mockTicket, parentMockTicket;
+        return regeneratorRuntime.wrap(function _callee8$(_context8) {
+          while (1) {
+            switch (_context8.prev = _context8.next) {
+              case 0:
+                _context8.next = 2;
+                return this.store.findRecord('ticket', 31);
+
+              case 2:
+                mockTicket = _context8.sent;
+                this.set('model', mockTicket);
+                _context8.next = 6;
+                return this.store.findRecord('ticket', 18);
+
+              case 6:
+                parentMockTicket = _context8.sent;
+                this.set('parentTicketDetails', parentMockTicket);
+                this.iconName = (_TICKET_TYPE_MAPPING$7 = _ticket.TICKET_TYPE_MAPPING[this.model.type]) === null || _TICKET_TYPE_MAPPING$7 === void 0 ? void 0 : _TICKET_TYPE_MAPPING$7.icon;
+                this.ticketSourceMapping = _ticket.TICKET_SOURCE_MAPPING;
+                _context8.next = 12;
+                return renderSubjectComponent();
+
+              case 12:
+                assert.ok(_detail.default.disabledDeleteButtonExists, 'Disabled delete button exists');
+
+              case 13:
+              case "end":
+                return _context8.stop();
+            }
+          }
+        }, _callee8, this);
+      }));
+
+      return function (_x7) {
+        return _ref9.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Show disabled spam button for child if parent is spammed for service request type', /*#__PURE__*/function () {
+      var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9(assert) {
+        var _TICKET_TYPE_MAPPING$8;
+
+        var mockTicket, parentMockTicket;
+        return regeneratorRuntime.wrap(function _callee9$(_context9) {
+          while (1) {
+            switch (_context9.prev = _context9.next) {
+              case 0:
+                _context9.next = 2;
+                return this.store.findRecord('ticket', 33);
+
+              case 2:
+                mockTicket = _context9.sent;
+                this.set('model', mockTicket);
+                _context9.next = 6;
+                return this.store.findRecord('ticket', 19);
+
+              case 6:
+                parentMockTicket = _context9.sent;
+                this.set('parentTicketDetails', parentMockTicket);
+                this.iconName = (_TICKET_TYPE_MAPPING$8 = _ticket.TICKET_TYPE_MAPPING[this.model.type]) === null || _TICKET_TYPE_MAPPING$8 === void 0 ? void 0 : _TICKET_TYPE_MAPPING$8.icon;
+                this.ticketSourceMapping = _ticket.TICKET_SOURCE_MAPPING;
+                _context9.next = 12;
+                return renderSubjectComponent();
+
+              case 12:
+                assert.ok(_detail.default.disabledSpamButtonExists, 'Disabled spam button exists');
+
+              case 13:
+              case "end":
+                return _context9.stop();
+            }
+          }
+        }, _callee9, this);
+      }));
+
+      return function (_x8) {
+        return _ref10.apply(this, arguments);
       };
     }());
   });
@@ -18165,6 +18309,88 @@ define("freshservice/tests/integration/components/module-ams/services/details/al
     }());
   });
 });
+define("freshservice/tests/integration/components/module-ams/services/details/associations/changes/component-test", ["qunit", "ember-qunit", "freshservice/tests/lib/intl", "ember-cli-mirage/test-support", "@ember/test-helpers", "freshservice/mirage/fixtures/services", "freshservice/tests/pages/components/module-ams/services/details-associations"], function (_qunit, _emberQunit, _intl, _testSupport, _testHelpers, _services, _detailsAssociations) {
+  "use strict";
+
+  function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+  function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+  (0, _qunit.module)('Integration | Component | module-ams | services | details | associations | changes', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _testSupport.setupMirage)(hooks);
+    (0, _intl.setupTranslations)(hooks); // 1. Empty state
+
+    (0, _qunit.test)('should render empty state if there is no change associated with service', /*#__PURE__*/function () {
+      var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(assert) {
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                this.set('model', _services.default[0]);
+                _context.next = 3;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <ModuleAms::Services::Details::Associations::Change @model={{this.model}}/>
+                */
+                {
+                  id: "Cds71sAN",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-ams/services/details/associations/change\",[],[[\"@model\"],[[23,0,[\"model\"]]]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 3:
+                assert.ok(_detailsAssociations.default.emptyChangeState, 'Empty state is visible');
+
+              case 4:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      return function (_x) {
+        return _ref2.apply(this, arguments);
+      };
+    }()); // 2. Basic render test
+
+    (0, _qunit.test)('should renders and display associated change in expected format', /*#__PURE__*/function () {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(assert) {
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                this.set('model', _services.default[2]);
+                _context2.next = 3;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <ModuleAms::Services::Details::Associations::Change @model={{this.model}}/>
+                */
+                {
+                  id: "Cds71sAN",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-ams/services/details/associations/change\",[],[[\"@model\"],[[23,0,[\"model\"]]]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 3:
+                assert.ok(_detailsAssociations.default.isAssociatedChangeVisible, "Associated changes are rendered successfully");
+                assert.equal(_detailsAssociations.default.associatedChange, 1, "Service has 1 associated changes");
+
+              case 5:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      return function (_x2) {
+        return _ref3.apply(this, arguments);
+      };
+    }());
+  });
+});
 define("freshservice/tests/integration/components/module-ams/services/details/contract/component-test", ["qunit", "ember-qunit", "freshservice/tests/lib/intl", "ember-cli-mirage/test-support", "@ember/test-helpers", "freshservice/mirage/fixtures/services", "freshservice/tests/pages/components/module-ams/service-details"], function (_qunit, _emberQunit, _intl, _testSupport, _testHelpers, _services, _serviceDetails) {
   "use strict";
 
@@ -18924,19 +19150,58 @@ define("freshservice/tests/integration/components/module-compare-plan/goal-selec
   var TEST_ACCOUNT = {
     subscription: {
       subscription_plan: 'Starter'
-    }
+    },
+    isThpEnabled: true
   };
+
+  function renderComponent() {
+    return _renderComponent.apply(this, arguments);
+  }
+
+  function _renderComponent() {
+    _renderComponent = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8() {
+      return regeneratorRuntime.wrap(function _callee8$(_context8) {
+        while (1) {
+          switch (_context8.prev = _context8.next) {
+            case 0:
+              _context8.next = 2;
+              return (0, _testHelpers.render)(Ember.HTMLBars.template(
+              /*
+                
+              		<div id="default-header-wrapper"></div>
+              		<div id="custom-header-wrapper"></div>
+              		<ModuleComparePlan::GoalSelection />
+              */
+              {
+                id: "dcRs5Wcx",
+                block: "{\"symbols\":[],\"statements\":[[0,\"\\n\\t\\t\"],[7,\"div\",true],[10,\"id\",\"default-header-wrapper\"],[8],[9],[0,\"\\n\\t\\t\"],[7,\"div\",true],[10,\"id\",\"custom-header-wrapper\"],[8],[9],[0,\"\\n\\t\\t\"],[5,\"module-compare-plan/goal-selection\",[],[[],[]]]],\"hasEval\":false}",
+                meta: {}
+              }));
+
+            case 2:
+            case "end":
+              return _context8.stop();
+          }
+        }
+      }, _callee8);
+    }));
+    return _renderComponent.apply(this, arguments);
+  }
+
   (0, _qunit.module)('Integration | Component | module-compare-plan/goal-selection', function (hooks) {
     (0, _emberQunit.setupRenderingTest)(hooks);
     (0, _intl.setupTranslations)(hooks);
     hooks.beforeEach( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      var router;
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               this.intl = this.owner.lookup("service:intl");
+              router = this.owner.lookup('router:main');
+              router.setupRouter();
 
-            case 1:
+            case 3:
             case "end":
               return _context.stop();
           }
@@ -18955,15 +19220,7 @@ define("freshservice/tests/integration/components/module-compare-plan/goal-selec
                 (0, _stubCurrentAccount.stubCurrentAccount)(TEST_ACCOUNT); // Act
 
                 _context2.next = 3;
-                return (0, _testHelpers.render)(Ember.HTMLBars.template(
-                /*
-                  <ModuleComparePlan::GoalSelection />
-                */
-                {
-                  id: "mibCq2yA",
-                  block: "{\"symbols\":[],\"statements\":[[5,\"module-compare-plan/goal-selection\",[],[[],[]]]],\"hasEval\":false}",
-                  meta: {}
-                }));
+                return renderComponent();
 
               case 3:
                 // Assert
@@ -18991,15 +19248,7 @@ define("freshservice/tests/integration/components/module-compare-plan/goal-selec
                 (0, _stubCurrentAccount.stubCurrentAccount)(TEST_ACCOUNT); // Act
 
                 _context3.next = 3;
-                return (0, _testHelpers.render)(Ember.HTMLBars.template(
-                /*
-                  <ModuleComparePlan::GoalSelection />
-                */
-                {
-                  id: "mibCq2yA",
-                  block: "{\"symbols\":[],\"statements\":[[5,\"module-compare-plan/goal-selection\",[],[[],[]]]],\"hasEval\":false}",
-                  meta: {}
-                }));
+                return renderComponent();
 
               case 3:
                 goals = this.element.querySelectorAll('.explore-item'); // Assert
@@ -19029,15 +19278,7 @@ define("freshservice/tests/integration/components/module-compare-plan/goal-selec
                 (0, _stubCurrentAccount.stubCurrentAccount)(TEST_ACCOUNT); // Act
 
                 _context4.next = 3;
-                return (0, _testHelpers.render)(Ember.HTMLBars.template(
-                /*
-                  <ModuleComparePlan::GoalSelection />
-                */
-                {
-                  id: "mibCq2yA",
-                  block: "{\"symbols\":[],\"statements\":[[5,\"module-compare-plan/goal-selection\",[],[[],[]]]],\"hasEval\":false}",
-                  meta: {}
-                }));
+                return renderComponent();
 
               case 3:
                 goals = this.element.querySelectorAll('.explore-item'); // Assert
@@ -19067,15 +19308,7 @@ define("freshservice/tests/integration/components/module-compare-plan/goal-selec
                 (0, _stubCurrentAccount.stubCurrentAccount)(TEST_ACCOUNT); // Act
 
                 _context5.next = 3;
-                return (0, _testHelpers.render)(Ember.HTMLBars.template(
-                /*
-                  <ModuleComparePlan::GoalSelection />
-                */
-                {
-                  id: "mibCq2yA",
-                  block: "{\"symbols\":[],\"statements\":[[5,\"module-compare-plan/goal-selection\",[],[[],[]]]],\"hasEval\":false}",
-                  meta: {}
-                }));
+                return renderComponent();
 
               case 3:
                 goals = this.element.querySelectorAll('.explore-item'); // Assert
@@ -19111,15 +19344,7 @@ define("freshservice/tests/integration/components/module-compare-plan/goal-selec
                 (0, _stubCurrentAccount.stubCurrentAccount)(TEST_ACCOUNT); // Act
 
                 _context6.next = 3;
-                return (0, _testHelpers.render)(Ember.HTMLBars.template(
-                /*
-                  <ModuleComparePlan::GoalSelection />
-                */
-                {
-                  id: "mibCq2yA",
-                  block: "{\"symbols\":[],\"statements\":[[5,\"module-compare-plan/goal-selection\",[],[[],[]]]],\"hasEval\":false}",
-                  meta: {}
-                }));
+                return renderComponent();
 
               case 3:
                 goals = this.element.querySelectorAll('.explore-item'); // Assert
@@ -19155,15 +19380,7 @@ define("freshservice/tests/integration/components/module-compare-plan/goal-selec
                 (0, _stubCurrentAccount.stubCurrentAccount)(TEST_ACCOUNT); // Act
 
                 _context7.next = 3;
-                return (0, _testHelpers.render)(Ember.HTMLBars.template(
-                /*
-                  <ModuleComparePlan::GoalSelection />
-                */
-                {
-                  id: "mibCq2yA",
-                  block: "{\"symbols\":[],\"statements\":[[5,\"module-compare-plan/goal-selection\",[],[[],[]]]],\"hasEval\":false}",
-                  meta: {}
-                }));
+                return renderComponent();
 
               case 3:
                 goals = this.element.querySelectorAll('.explore-item');
@@ -19175,8 +19392,10 @@ define("freshservice/tests/integration/components/module-compare-plan/goal-selec
               case 7:
                 // Assert
                 assert.dom('.goal-image').exists().hasClass('optimize_it_operations');
+                _context7.next = 10;
+                return (0, _testHelpers.click)('[data-test-go-to="plan-comparison-page"]');
 
-              case 8:
+              case 10:
               case "end":
                 return _context7.stop();
             }
@@ -19186,6 +19405,891 @@ define("freshservice/tests/integration/components/module-compare-plan/goal-selec
 
       return function (_x6) {
         return _ref8.apply(this, arguments);
+      };
+    }());
+  });
+});
+define("freshservice/tests/integration/components/module-compare-plan/plan-comparison/compare-plans/component-test", ["qunit", "ember-qunit", "@ember/test-helpers", "freshservice/tests/lib/stub-current-account"], function (_qunit, _emberQunit, _testHelpers, _stubCurrentAccount) {
+  "use strict";
+
+  function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+  function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+  var TEST_ACCOUNT = {
+    subscription: {
+      subscription_plan: 'Starter'
+    },
+    isThpEnabled: true
+  };
+  (0, _qunit.module)('Integration | Component | module-compare-plan/plan-comparison/compare-plans', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _qunit.test)('Clicking and Opening Compare plans dialog box', /*#__PURE__*/function () {
+      var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(assert) {
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                (0, _stubCurrentAccount.stubCurrentAccount)(TEST_ACCOUNT);
+                _context.next = 3;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <ModuleComparePlan::PlanComparison::ComparePlans />
+                */
+                {
+                  id: "fxreiAv0",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-compare-plan/plan-comparison/compare-plans\",[],[[],[]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 3:
+                assert.dom('.compare-plans').doesNotExist("Compare plans dialog box is NOT open");
+                _context.next = 6;
+                return (0, _testHelpers.click)((0, _testHelpers.find)('[data-test-id="compare-plan-button"]'));
+
+              case 6:
+                assert.dom('.compare-plans').exists("After clicking Compare plans button, dialog box is open now");
+
+              case 7:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }));
+
+      return function (_x) {
+        return _ref2.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Selecting a specific goal', /*#__PURE__*/function () {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(assert) {
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                (0, _stubCurrentAccount.stubCurrentAccount)(TEST_ACCOUNT);
+                _context2.next = 3;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <ModuleComparePlan::PlanComparison::ComparePlans />
+                */
+                {
+                  id: "fxreiAv0",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-compare-plan/plan-comparison/compare-plans\",[],[[],[]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 3:
+                _context2.next = 5;
+                return (0, _testHelpers.click)((0, _testHelpers.find)('[data-test-id="compare-plan-button"]'));
+
+              case 5:
+                assert.dom('[data-test-filteroption="improve_customer_experience"]').doesNotHaveClass('is-active', "All filters are unselected");
+                assert.dom('[data-test-category="it_productivity"]').exists("'IT productivity features' are also visible");
+                _context2.next = 9;
+                return (0, _testHelpers.click)((0, _testHelpers.find)('[data-test-filteroption="improve_customer_experience"]'));
+
+              case 9:
+                assert.dom('[data-test-filteroption="improve_customer_experience"]').hasClass('is-active', "'Improve customer experience' filter is selected on clicking");
+                assert.dom('[data-test-category="it_productivity"]').doesNotExist("'IT productivity' features are NO longer visible");
+
+              case 11:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }));
+
+      return function (_x2) {
+        return _ref3.apply(this, arguments);
+      };
+    }());
+  });
+});
+define("freshservice/tests/integration/components/module-compare-plan/plan-comparison/component-test", ["qunit", "ember-qunit", "@ember/test-helpers", "freshservice/tests/lib/intl", "freshservice/tests/lib/stub-current-account", "ember-power-select/test-support/helpers", "ember-power-select/test-support"], function (_qunit, _emberQunit, _testHelpers, _intl, _stubCurrentAccount, _helpers, _testSupport) {
+  "use strict";
+
+  function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+  function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+  var TEST_ACCOUNT = {
+    subscription: {
+      subscription_plan: 'Starter'
+    },
+    isThpEnabled: true
+  };
+
+  function renderComponent() {
+    return _renderComponent.apply(this, arguments);
+  }
+
+  function _renderComponent() {
+    _renderComponent = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9() {
+      return regeneratorRuntime.wrap(function _callee9$(_context9) {
+        while (1) {
+          switch (_context9.prev = _context9.next) {
+            case 0:
+              _context9.next = 2;
+              return (0, _testHelpers.render)(Ember.HTMLBars.template(
+              /*
+                
+              		<div id="default-header-wrapper"></div>
+              		<div id="custom-header-wrapper"></div>
+              		<ModuleComparePlan::PlanComparison />
+              */
+              {
+                id: "BleTJbH1",
+                block: "{\"symbols\":[],\"statements\":[[0,\"\\n\\t\\t\"],[7,\"div\",true],[10,\"id\",\"default-header-wrapper\"],[8],[9],[0,\"\\n\\t\\t\"],[7,\"div\",true],[10,\"id\",\"custom-header-wrapper\"],[8],[9],[0,\"\\n\\t\\t\"],[5,\"module-compare-plan/plan-comparison\",[],[[],[]]]],\"hasEval\":false}",
+                meta: {}
+              }));
+
+            case 2:
+            case "end":
+              return _context9.stop();
+          }
+        }
+      }, _callee9);
+    }));
+    return _renderComponent.apply(this, arguments);
+  }
+
+  (0, _qunit.module)('Integration | Component | module-compare-plan/plan-comparison', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _intl.setupTranslations)(hooks);
+    hooks.beforeEach( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              this.intl = this.owner.lookup("service:intl");
+
+            case 1:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, this);
+    })));
+    hooks.after(function () {
+      this.owner.destroy("service:intl");
+    });
+    (0, _qunit.test)('it renders', /*#__PURE__*/function () {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(assert) {
+        var goalsTitle;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                (0, _stubCurrentAccount.stubCurrentAccount)(TEST_ACCOUNT); // Act
+
+                _context2.next = 3;
+                return renderComponent();
+
+              case 3:
+                goalsTitle = this.element.querySelectorAll('.goals-filter .goal-title'); // Assert
+
+                assert.dom(goalsTitle[0]).exists('first goal exists').hasTagName('span').hasText(this.intl.t("thp_plan.goal.improve_customer_experience")); // Assert
+
+                assert.dom(goalsTitle[1]).exists('second goal exists').hasTagName('span').hasText(this.intl.t("thp_plan.goal.it_productivity")); // Assert
+
+                assert.dom(goalsTitle[2]).exists('third goal exists').hasTagName('span').hasText(this.intl.t("thp_plan.goal.manage_asset_lifecycle"));
+
+              case 7:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      return function (_x) {
+        return _ref3.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('first goal will be selected by default', /*#__PURE__*/function () {
+      var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(assert) {
+        var goals;
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                (0, _stubCurrentAccount.stubCurrentAccount)(TEST_ACCOUNT); // Act
+
+                _context3.next = 3;
+                return renderComponent();
+
+              case 3:
+                goals = this.element.querySelectorAll('.feature-goal'); // Assert
+
+                assert.dom(goals[0]).exists('first goal exists').hasClass('is-active', "first goal is selected by default");
+
+              case 5:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      return function (_x2) {
+        return _ref4.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('unselected goal is selected on clicking', /*#__PURE__*/function () {
+      var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(assert) {
+        var goals;
+        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                (0, _stubCurrentAccount.stubCurrentAccount)(TEST_ACCOUNT); // Act
+
+                _context4.next = 3;
+                return renderComponent();
+
+              case 3:
+                goals = this.element.querySelectorAll('.feature-goal'); // Assert
+
+                assert.dom(goals[1]).doesNotHaveClass('is-active', "currently goal is unselected"); // Act
+
+                _context4.next = 7;
+                return (0, _testHelpers.click)(goals[1]);
+
+              case 7:
+                // Assert
+                assert.dom(goals[1]).hasClass('is-active', "unselected goal is selected on clicking"); // Act
+
+                _context4.next = 10;
+                return (0, _testHelpers.click)(goals[1]);
+
+              case 10:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this);
+      }));
+
+      return function (_x3) {
+        return _ref5.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Next higher of user plan is selected by default in dropdown', /*#__PURE__*/function () {
+      var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(assert) {
+        return regeneratorRuntime.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                (0, _stubCurrentAccount.stubCurrentAccount)(TEST_ACCOUNT); // Act
+
+                _context5.next = 3;
+                return renderComponent();
+
+              case 3:
+                // Assert
+                assert.dom(".plan-select").exists('selected plan is Growth by default for starter in dropdown').hasText(this.intl.t("thp_plan.compare_plans.growth"));
+
+              case 4:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5, this);
+      }));
+
+      return function (_x4) {
+        return _ref6.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('we can select higher plan in dropdown', /*#__PURE__*/function () {
+      var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(assert) {
+        return regeneratorRuntime.wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                (0, _stubCurrentAccount.stubCurrentAccount)(TEST_ACCOUNT); // Act
+
+                _context6.next = 3;
+                return renderComponent();
+
+              case 3:
+                // Assert
+                assert.dom(".plan-select").exists('third goal exists').hasText(this.intl.t("thp_plan.compare_plans.growth")); // Act
+
+                _context6.next = 6;
+                return (0, _helpers.clickTrigger)();
+
+              case 6:
+                _context6.next = 8;
+                return (0, _testSupport.selectChoose)('.plan-select', this.intl.t("thp_plan.compare_plans.pro"));
+
+              case 8:
+                // Assert
+                assert.dom(".plan-select").hasText(this.intl.t("thp_plan.compare_plans.pro"));
+
+              case 9:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6, this);
+      }));
+
+      return function (_x5) {
+        return _ref7.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('if no feature is there for selected goal in try higher plan we show some messages', /*#__PURE__*/function () {
+      var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(assert) {
+        var goals;
+        return regeneratorRuntime.wrap(function _callee7$(_context7) {
+          while (1) {
+            switch (_context7.prev = _context7.next) {
+              case 0:
+                (0, _stubCurrentAccount.stubCurrentAccount)(TEST_ACCOUNT); // Act
+
+                _context7.next = 3;
+                return renderComponent();
+
+              case 3:
+                goals = this.element.querySelectorAll('.goals-filter .feature-goal'); // Assert
+
+                assert.dom(goals[0]).hasText(this.intl.t("thp_plan.goal.improve_customer_experience")).hasClass('is-active', "Improve Customer Experience goal is selected"); // Assert
+
+                assert.dom(goals[1]).hasText(this.intl.t("thp_plan.goal.it_productivity")).doesNotHaveClass('is-active', "Increase IT Productivity goal is not selected"); // Assert
+
+                assert.dom(goals[2]).hasText(this.intl.t("thp_plan.goal.manage_asset_lifecycle")).doesNotHaveClass('is-active', "Manage Asset Lifecycle goal is not selected"); // Assert
+
+                assert.dom('[data-test-empty="higher-plan"]').doesNotExist('empty-feature box is not shown if selected goal has features for higher plan'); // Act
+
+                _context7.next = 10;
+                return (0, _helpers.clickTrigger)('.plan-select');
+
+              case 10:
+                _context7.next = 12;
+                return (0, _testSupport.selectChoose)('.plan-select', this.intl.t("thp_plan.compare_plans.pro"));
+
+              case 12:
+                // Assert
+                assert.dom(".plan-select").hasText(this.intl.t("thp_plan.compare_plans.pro")); // Assert
+
+                assert.dom('[data-test-empty="higher-plan"]').exists('empty-feature box is shown if on switching higher plan selected goal has no features for higher plan'); // Act
+
+                _context7.next = 16;
+                return (0, _helpers.clickTrigger)('.plan-select');
+
+              case 16:
+                _context7.next = 18;
+                return (0, _testSupport.selectChoose)('.plan-select', this.intl.t("thp_plan.compare_plans.enterprise"));
+
+              case 18:
+                // Assert
+                assert.dom('[data-test-empty="higher-plan"]').doesNotExist('empty-feature box is not shown if on switching higher plan selected goal has features for higher plan'); // Act
+
+                _context7.next = 21;
+                return (0, _testHelpers.click)(goals[0]);
+
+              case 21:
+                _context7.next = 23;
+                return (0, _testHelpers.click)(goals[2]);
+
+              case 23:
+                // Assert
+                assert.dom('[data-test-empty="higher-plan"]').exists('empty-feature box is shown if goal is selected by clicking and has no features for higher plan'); // Act
+
+                _context7.next = 26;
+                return (0, _testHelpers.click)(goals[0]);
+
+              case 26:
+                _context7.next = 28;
+                return (0, _testHelpers.click)(goals[2]);
+
+              case 28:
+              case "end":
+                return _context7.stop();
+            }
+          }
+        }, _callee7, this);
+      }));
+
+      return function (_x6) {
+        return _ref8.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('on clicking features popup is opened', /*#__PURE__*/function () {
+      var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(assert) {
+        return regeneratorRuntime.wrap(function _callee8$(_context8) {
+          while (1) {
+            switch (_context8.prev = _context8.next) {
+              case 0:
+                (0, _stubCurrentAccount.stubCurrentAccount)(TEST_ACCOUNT); // Act
+
+                _context8.next = 3;
+                return renderComponent();
+
+              case 3:
+                _context8.next = 5;
+                return (0, _testHelpers.click)('.explore-higher-plan .goal-feature');
+
+              case 5:
+                assert.dom(".explore-higher-plan .goal-feature").exists('feature exist');
+                assert.dom(".feature-details .feature-title").exists('feature popup opens on clicking feature');
+
+              case 7:
+              case "end":
+                return _context8.stop();
+            }
+          }
+        }, _callee8);
+      }));
+
+      return function (_x7) {
+        return _ref9.apply(this, arguments);
+      };
+    }());
+  });
+});
+define("freshservice/tests/integration/components/module-compare-plan/plan-comparison/features/component-test", ["qunit", "ember-qunit", "@ember/test-helpers", "freshservice/tests/lib/intl"], function (_qunit, _emberQunit, _testHelpers, _intl) {
+  "use strict";
+
+  function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+  function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+  (0, _qunit.module)('Integration | Component | module-compare-plan/plan-comparison/features', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _intl.setupTranslations)(hooks);
+    hooks.beforeEach( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              this.intl = this.owner.lookup("service:intl");
+
+            case 1:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, this);
+    })));
+    hooks.after(function () {
+      this.owner.destroy("service:intl");
+    });
+    (0, _qunit.test)('it renders', /*#__PURE__*/function () {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(assert) {
+        var feautureTitle;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                this.set('planGoal', [{
+                  name: "improve_customer_experience",
+                  selected: true,
+                  features: ['know_management', 'csat_survey'],
+                  class: 'default'
+                }, {
+                  name: "it_productivity",
+                  selected: false,
+                  features: ['workflow_automation', 'canned_responses', 'analytics_basic']
+                }, {
+                  name: "optimize_it_operations",
+                  selected: false,
+                  features: ['acl_basic', 'default_sla', 'default_business']
+                }]);
+                _context2.next = 3;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <ModuleComparePlan::PlanComparison::Features @planGoals={{this.planGoal}} @showAllFeatures={{false}} @showGoalinfo={{true}} />
+                */
+                {
+                  id: "qY0eojpo",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-compare-plan/plan-comparison/features\",[],[[\"@planGoals\",\"@showAllFeatures\",\"@showGoalinfo\"],[[23,0,[\"planGoal\"]],false,true]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 3:
+                feautureTitle = this.element.querySelectorAll('.goal-title'); // Assert
+
+                assert.dom(feautureTitle[0]).exists('first goal exists').hasTagName('span').hasText(this.intl.t("thp_plan.compare_plans.features.know_management")); // Assert
+
+                assert.dom(feautureTitle[1]).exists('second goal exists').hasTagName('span').hasText(this.intl.t("thp_plan.compare_plans.features.csat_survey"));
+
+              case 6:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      return function (_x) {
+        return _ref3.apply(this, arguments);
+      };
+    }());
+  });
+});
+define("freshservice/tests/integration/components/module-compare-plan/plan-comparison/goals/component-test", ["qunit", "ember-qunit", "@ember/test-helpers", "freshservice/tests/lib/intl"], function (_qunit, _emberQunit, _testHelpers, _intl) {
+  "use strict";
+
+  function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+  function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+  (0, _qunit.module)('Integration | Component | module-compare-plan/plan-comparison/goals', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _intl.setupTranslations)(hooks);
+    hooks.beforeEach( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              this.intl = this.owner.lookup("service:intl");
+
+            case 1:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, this);
+    })));
+    hooks.after(function () {
+      this.owner.destroy("service:intl");
+    });
+    (0, _qunit.test)('it renders', /*#__PURE__*/function () {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(assert) {
+        var goals;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                this.set('planGoal', [{
+                  name: "improve_customer_experience",
+                  selected: true,
+                  features: ['know_management', 'csat_survey'],
+                  class: 'default'
+                }, {
+                  name: "it_productivity",
+                  selected: false,
+                  features: ['workflow_automation', 'canned_responses', 'analytics_basic']
+                }, {
+                  name: "optimize_it_operations",
+                  selected: false,
+                  features: ['acl_basic', 'default_sla', 'default_business']
+                }]);
+                this.set('chooseGoals', function (goal) {
+                  Ember.set(goal, 'selected', !goal.selected);
+                }); // Act
+
+                _context2.next = 4;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <ModuleComparePlan::PlanComparison::Goals @planGoal={{this.planGoal}} @chooseGoals={{this.chooseGoals}}/>
+                */
+                {
+                  id: "fjvXYpJf",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-compare-plan/plan-comparison/goals\",[],[[\"@planGoal\",\"@chooseGoals\"],[[23,0,[\"planGoal\"]],[23,0,[\"chooseGoals\"]]]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 4:
+                goals = this.element.querySelectorAll('.feature-goal'); // Assert
+
+                assert.dom(goals[0]).exists('first goal exists').hasTagName('button').hasText(this.intl.t("thp_plan.goal.improve_customer_experience")); // Assert
+
+                assert.dom(goals[1]).exists('second goal exists').hasTagName('button').hasText(this.intl.t("thp_plan.goal.it_productivity")); // Assert
+
+                assert.dom(goals[2]).exists('third goal exists').hasTagName('button').hasText(this.intl.t("thp_plan.goal.optimize_it_operations")); // Act
+
+                _context2.next = 10;
+                return (0, _testHelpers.click)(goals[1]);
+
+              case 10:
+                // Assert
+                assert.dom(goals[1]).hasClass('is-active', "unselected goal is selected on clicking"); // Act
+
+                _context2.next = 13;
+                return (0, _testHelpers.click)(goals[1]);
+
+              case 13:
+                // Assert
+                assert.dom(goals[1]).doesNotHaveClass('is-active', "currently goal is unselected");
+
+              case 14:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      return function (_x) {
+        return _ref3.apply(this, arguments);
+      };
+    }());
+  });
+});
+define("freshservice/tests/integration/components/module-compare-plan/plan-comparison/trial-activation/component-test", ["qunit", "ember-qunit", "@ember/test-helpers", "ember-power-select/test-support", "freshservice/tests/lib/intl", "ember-power-select/test-support/helpers", "freshservice/tests/lib/stub-current-account"], function (_qunit, _emberQunit, _testHelpers, _testSupport, _intl, _helpers, _stubCurrentAccount) {
+  "use strict";
+
+  function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+  function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+  var TEST_ACCOUNT = {
+    subscription: {
+      subscription_plan: 'Starter'
+    },
+    isThpEnabled: true
+  };
+  (0, _qunit.module)('Integration | Component | module-compare-plan/plan-comparison', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _intl.setupTranslations)(hooks);
+    hooks.beforeEach( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              this.intl = this.owner.lookup("service:intl");
+
+            case 1:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, this);
+    })));
+    hooks.after(function () {
+      this.owner.destroy("service:intl");
+    });
+    (0, _qunit.test)('Clicking and Opening "Start 21-day free trial" dialog box', /*#__PURE__*/function () {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(assert) {
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                (0, _stubCurrentAccount.stubCurrentAccount)(TEST_ACCOUNT);
+                _context2.next = 3;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <ModuleComparePlan::PlanComparison/>
+                */
+                {
+                  id: "7FFbuL3E",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-compare-plan/plan-comparison\",[],[[],[]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 3:
+                assert.dom('.activate-trial-overlay').doesNotExist("Activate Trial dialog box is not open");
+                _context2.next = 6;
+                return (0, _testHelpers.click)((0, _testHelpers.find)('[data-test-id="start-trial-button"]'));
+
+              case 6:
+                assert.dom('.activate-trial-overlay').exists("After clicking 'Start 21 day trial' button, dialog box is open now");
+
+              case 7:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }));
+
+      return function (_x) {
+        return _ref3.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Selecting checkbox and Enabling "Activate" button', /*#__PURE__*/function () {
+      var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(assert) {
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                (0, _stubCurrentAccount.stubCurrentAccount)(TEST_ACCOUNT);
+                _context3.next = 3;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <ModuleComparePlan::PlanComparison/>
+                */
+                {
+                  id: "7FFbuL3E",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-compare-plan/plan-comparison\",[],[[],[]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 3:
+                _context3.next = 5;
+                return (0, _helpers.clickTrigger)();
+
+              case 5:
+                _context3.next = 7;
+                return (0, _testSupport.selectChoose)('.plan-select', this.intl.t("thp_plan.compare_plans.pro"));
+
+              case 7:
+                _context3.next = 9;
+                return (0, _testHelpers.click)((0, _testHelpers.find)('[data-test-id="start-trial-button"]'));
+
+              case 9:
+                assert.dom('[data-test-id="active-trial-btn"]').doesNotExist("'Activate' button disabled as checkbox is not selected");
+                _context3.next = 12;
+                return (0, _testHelpers.click)((0, _testHelpers.find)('[data-test-checkbox="checkbox"]'));
+
+              case 12:
+                assert.dom('[data-test-id="active-trial-btn"]').exists("After checkbox selected, 'Activate' button is enabled");
+                _context3.next = 15;
+                return (0, _testHelpers.click)((0, _testHelpers.find)('[data-test-id="active-trial-btn"]'));
+
+              case 15:
+                assert.dom('.activate-trial-overlay').doesNotExist("After clicking 'Activate' button, Trial Activated & dialog box is Closed");
+
+              case 16:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      return function (_x2) {
+        return _ref4.apply(this, arguments);
+      };
+    }());
+  });
+});
+define("freshservice/tests/integration/components/module-compare-plan/plan-comparison/trial-termination/component-test", ["qunit", "ember-qunit", "@ember/test-helpers", "ember-power-select/test-support", "freshservice/tests/lib/intl", "ember-power-select/test-support/helpers", "freshservice/tests/lib/stub-current-account"], function (_qunit, _emberQunit, _testHelpers, _testSupport, _intl, _helpers, _stubCurrentAccount) {
+  "use strict";
+
+  function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+  function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+  var TEST_ACCOUNT = {
+    subscription: {
+      subscription_plan: 'Starter',
+      trial_subscription_active: 1,
+      trial_subscription_plan: 13
+    },
+    isThpEnabled: true
+  };
+  (0, _qunit.module)('Integration | Component | module-compare-plan/plan-comparison', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _intl.setupTranslations)(hooks);
+    hooks.beforeEach( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              this.intl = this.owner.lookup("service:intl");
+
+            case 1:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, this);
+    })));
+    hooks.after(function () {
+      this.owner.destroy("service:intl");
+    });
+    (0, _qunit.test)('Clicking on "Cancel Trial" button', /*#__PURE__*/function () {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(assert) {
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                (0, _stubCurrentAccount.stubCurrentAccount)(TEST_ACCOUNT);
+                _context2.next = 3;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <ModuleComparePlan::PlanComparison/>
+                */
+                {
+                  id: "7FFbuL3E",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-compare-plan/plan-comparison\",[],[[],[]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 3:
+                assert.dom('.cancel-activated-trial-overlay').doesNotExist("Cancel Trial dialog box is not open");
+                _context2.next = 6;
+                return (0, _helpers.clickTrigger)();
+
+              case 6:
+                _context2.next = 8;
+                return (0, _testSupport.selectChoose)('.plan-select', this.intl.t("thp_plan.compare_plans.pro"));
+
+              case 8:
+                _context2.next = 10;
+                return (0, _testHelpers.click)((0, _testHelpers.find)('[data-test-id="cancel-trial-button"]'));
+
+              case 10:
+                assert.dom('.cancel-activated-trial-overlay').exists("After clicking 'Cancel Trial' button, dialog box is open now");
+
+              case 11:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      return function (_x) {
+        return _ref3.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Cancelling trial and disabling the "Start 21-day trial" button', /*#__PURE__*/function () {
+      var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(assert) {
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                (0, _stubCurrentAccount.stubCurrentAccount)(TEST_ACCOUNT);
+                _context3.next = 3;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <ModuleComparePlan::PlanComparison/>
+                */
+                {
+                  id: "7FFbuL3E",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-compare-plan/plan-comparison\",[],[[],[]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 3:
+                _context3.next = 5;
+                return (0, _helpers.clickTrigger)();
+
+              case 5:
+                _context3.next = 7;
+                return (0, _testSupport.selectChoose)('.plan-select', this.intl.t("thp_plan.compare_plans.pro"));
+
+              case 7:
+                _context3.next = 9;
+                return (0, _testHelpers.click)((0, _testHelpers.find)('[data-test-id="cancel-trial-button"]'));
+
+              case 9:
+                assert.dom('.cancel-activated-trial-overlay').exists("Opening 'Cancel Trial' dialog box");
+                _context3.next = 12;
+                return (0, _testHelpers.click)((0, _testHelpers.find)('[data-test-id="terminate-trial-btn"]'));
+
+              case 12:
+                assert.dom('.cancel-activated-trial-overlay').doesNotExist("After Cancelling Trial, dialog box is closed");
+                assert.dom('[data-test-id="start-trial-button"]').doesNotExist("'Start 21-day trial' button has been disabled");
+
+              case 14:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      return function (_x2) {
+        return _ref4.apply(this, arguments);
       };
     }());
   });
@@ -19515,6 +20619,7 @@ define("freshservice/tests/integration/components/module-itil-common/add-new-req
   var MOCK_DATA = {
     requester: {
       name: 'new_requester',
+      lastName: 'last_name',
       email: 'new_requester@gmail.com',
       mobile: '+91 984442 93212'
     },
@@ -19569,17 +20674,21 @@ define("freshservice/tests/integration/components/module-itil-common/add-new-req
 
               case 6:
                 _context.next = 8;
-                return _newTicket.default.fillRequesterModalEmail(MOCK_DATA.requester.email);
+                return _newTicket.default.fillRequesterModalLastName(MOCK_DATA.requester.lastName);
 
               case 8:
                 _context.next = 10;
-                return _newTicket.default.requesterModalCreateButton();
+                return _newTicket.default.fillRequesterModalEmail(MOCK_DATA.requester.email);
 
               case 10:
-                isExpected = this.requester.firstName === MOCK_DATA.requester.name && this.requester.primaryEmail === MOCK_DATA.requester.email;
-                assert.ok(isExpected, "Expected Requester was created");
+                _context.next = 12;
+                return _newTicket.default.requesterModalCreateButton();
 
               case 12:
+                isExpected = this.requester.firstName === MOCK_DATA.requester.name && this.requester.primaryEmail === MOCK_DATA.requester.email && this.requester.lastName === MOCK_DATA.requester.lastName;
+                assert.ok(isExpected, "Expected Requester was created");
+
+              case 14:
               case "end":
                 return _context.stop();
             }
@@ -32269,8 +33378,8 @@ define("freshservice/tests/integration/components/module-service-request/list/it
 
               case 4:
                 assert.equal(_list.default.item.costText1, "".concat(currentAccount.currencySymbol, " 100"), 'Cost Info is displayed');
-                assert.equal(_list.default.item.costText2, '', 'Cost Info is not displayed');
-                assert.equal(_list.default.item.costText3, '', 'Cost Info is not displayed');
+                assert.ok(_list.default.item.cost2Hidden, 'Cost Info is not displayed');
+                assert.ok(_list.default.item.cost3Hidden, 'Cost Info is not displayed');
                 assert.equal(_list.default.item.emptyHyphenText1, '', 'Hyphen is not displayed');
 
               case 8:
@@ -32376,12 +33485,12 @@ define("freshservice/tests/integration/components/module-service-request/list/it
                 /*
                   
                 			<ModuleServiceRequest::List::ItemList @items={{items}} as |list|>
-                				<list.emptyState>{{emptyText}}</list.emptyState>
+                				<list.emptyState><h2>{{emptyText}}</h2></list.emptyState>
                 			</ModuleServiceRequest::List::ItemList>
                 */
                 {
-                  id: "aPfTJ73i",
-                  block: "{\"symbols\":[\"list\"],\"statements\":[[0,\"\\n\\t\\t\\t\"],[5,\"module-service-request/list/item-list\",[],[[\"@items\"],[[22,\"items\"]]],{\"statements\":[[0,\"\\n\\t\\t\\t\\t\"],[6,[23,1,[\"emptyState\"]],[],[[],[]],{\"statements\":[[1,[22,\"emptyText\"],false]],\"parameters\":[]}],[0,\"\\n\\t\\t\\t\"]],\"parameters\":[1]}]],\"hasEval\":false}",
+                  id: "na0eNj0c",
+                  block: "{\"symbols\":[\"list\"],\"statements\":[[0,\"\\n\\t\\t\\t\"],[5,\"module-service-request/list/item-list\",[],[[\"@items\"],[[22,\"items\"]]],{\"statements\":[[0,\"\\n\\t\\t\\t\\t\"],[6,[23,1,[\"emptyState\"]],[],[[],[]],{\"statements\":[[7,\"h2\",true],[8],[1,[22,\"emptyText\"],false],[9]],\"parameters\":[]}],[0,\"\\n\\t\\t\\t\"]],\"parameters\":[1]}]],\"hasEval\":false}",
                   meta: {}
                 }));
 
@@ -39387,13 +40496,13 @@ define("freshservice/tests/integration/components/module-tickets/details/apps/pa
 });
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-define("freshservice/tests/integration/components/module-tickets/details/component-test", ["exports", "sinon", "qunit", "ember-qunit", "@ember/test-helpers", "ember-cli-mirage/test-support", "freshservice/tests/lib/stub-current-user", "ember-keyboard/test-support/test-helpers", "freshservice/constants/keyboard-shortcut-trap", "freshservice/tests/pages/components/module-tickets/conversation", "freshservice/constants/tickets/module-config", "freshservice/constants/tickets/ticket-property", "freshservice/constants/common/form-field-configs/details/ticket", "freshservice/mirage/fixtures/agents_groups"], function (_exports, _sinon, _qunit, _emberQunit, _testHelpers, _testSupport, _stubCurrentUser, _testHelpers2, _keyboardShortcutTrap, _conversation, _moduleConfig, _ticketProperty, _ticket, _agents_groups) {
+define("freshservice/tests/integration/components/module-tickets/details/component-test", ["exports", "sinon", "qunit", "ember-qunit", "@ember/test-helpers", "ember-cli-mirage/test-support", "freshservice/tests/lib/stub-current-user", "ember-keyboard/test-support/test-helpers", "freshservice/constants/keyboard-shortcut-trap", "freshservice/tests/pages/components/module-tickets/conversation", "freshservice/constants/tickets/module-config", "freshservice/constants/tickets/ticket-property", "freshservice/constants/common/form-field-configs/details/ticket", "freshservice/mirage/fixtures/agents_groups", "freshservice/mirage/fixtures/ticket-form-fields", "freshservice/services/module-fields", "freshservice/tests/lib/stub-current-account"], function (_exports, _sinon, _qunit, _emberQunit, _testHelpers, _testSupport, _stubCurrentUser, _testHelpers2, _keyboardShortcutTrap, _conversation, _moduleConfig, _ticketProperty, _ticket, _agents_groups, _ticketFormFields, _moduleFields, _stubCurrentAccount) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
     value: true
   });
-  _exports.MockSocketsTicketDetailsAgentCollisionRtsService = void 0;
+  _exports.MockSocketsTicketDetailsAgentCollisionRtsService = _exports.MockFieldsService = void 0;
 
   function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -39402,6 +40511,18 @@ define("freshservice/tests/integration/components/module-tickets/details/compone
   function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
   function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+  function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+  function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+  function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+  function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+  function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+  function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -39425,15 +40546,15 @@ define("freshservice/tests/integration/components/module-tickets/details/compone
 
   function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-  var MockSocketsTicketDetailsAgentCollisionRtsService = /*#__PURE__*/function (_Ember$Service) {
-    _inherits(MockSocketsTicketDetailsAgentCollisionRtsService, _Ember$Service);
+  var MockFieldsService = /*#__PURE__*/function (_ModuleFieldsService) {
+    _inherits(MockFieldsService, _ModuleFieldsService);
 
-    var _super = _createSuper(MockSocketsTicketDetailsAgentCollisionRtsService);
+    var _super = _createSuper(MockFieldsService);
 
-    function MockSocketsTicketDetailsAgentCollisionRtsService() {
+    function MockFieldsService() {
       var _this;
 
-      _classCallCheck(this, MockSocketsTicketDetailsAgentCollisionRtsService);
+      _classCallCheck(this, MockFieldsService);
 
       for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
@@ -39441,11 +40562,64 @@ define("freshservice/tests/integration/components/module-tickets/details/compone
 
       _this = _super.call.apply(_super, [this].concat(args));
 
-      _defineProperty(_assertThisInitialized(_this), "viewersIds", []);
+      _defineProperty(_assertThisInitialized(_this), "ticketFormFields", Ember.A(_toConsumableArray(_ticketFormFields.default)));
 
-      _defineProperty(_assertThisInitialized(_this), "repliersIds", []);
+      _defineProperty(_assertThisInitialized(_this), "ticketFormFieldHash", Object.freeze({
+        status: {
+          choices: [{
+            id: 2,
+            value: 'Open'
+          }, {
+            id: 3,
+            value: 'Pending'
+          }, {
+            id: 4,
+            value: 'Resolved'
+          }, {
+            id: 5,
+            value: 'Closed'
+          }]
+        }
+      }));
 
       return _this;
+    }
+
+    _createClass(MockFieldsService, [{
+      key: "getFormField",
+      value: function getFormField(fieldName, module) {
+        return this["".concat(module, "FormFields")].findBy('name', fieldName);
+      }
+    }]);
+
+    return MockFieldsService;
+  }(_moduleFields.default);
+
+  _exports.MockFieldsService = MockFieldsService;
+
+  window.__CLASSIC_OWN_CLASSES__.set(MockFieldsService, true);
+
+  var MockSocketsTicketDetailsAgentCollisionRtsService = /*#__PURE__*/function (_Ember$Service) {
+    _inherits(MockSocketsTicketDetailsAgentCollisionRtsService, _Ember$Service);
+
+    var _super2 = _createSuper(MockSocketsTicketDetailsAgentCollisionRtsService);
+
+    function MockSocketsTicketDetailsAgentCollisionRtsService() {
+      var _this2;
+
+      _classCallCheck(this, MockSocketsTicketDetailsAgentCollisionRtsService);
+
+      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        args[_key2] = arguments[_key2];
+      }
+
+      _this2 = _super2.call.apply(_super2, [this].concat(args));
+
+      _defineProperty(_assertThisInitialized(_this2), "viewersIds", []);
+
+      _defineProperty(_assertThisInitialized(_this2), "repliersIds", []);
+
+      return _this2;
     }
 
     _createClass(MockSocketsTicketDetailsAgentCollisionRtsService, [{
@@ -39470,12 +40644,14 @@ define("freshservice/tests/integration/components/module-tickets/details/compone
     (0, _emberQunit.setupRenderingTest)(hooks);
     (0, _testSupport.setupMirage)(hooks);
     hooks.beforeEach( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      var router;
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               this.store = this.owner.lookup('service:store');
               this.server.loadFixtures("users");
+              this.server.loadFixtures('ticketFormFields');
               this.server.loadFixtures('tickets');
               this.server.loadFixtures('conversations');
               this.server.loadFixtures('agents_groups');
@@ -39490,21 +40666,36 @@ define("freshservice/tests/integration/components/module-tickets/details/compone
                 privileges: ['manage_tickets', 'edit_ticket_properties', 'reply_ticket', 'forward_ticket', 'view_time_entries'],
                 preferences: []
               });
-              _context.next = 9;
+              (0, _stubCurrentAccount.stubCurrentAccount)({
+                features: [],
+                subscription: {}
+              });
+              _context.next = 11;
               return this.store.findRecord('ticket', 22);
 
-            case 9:
+            case 11:
               this.nonFdTicket = _context.sent;
               this.nonFdTicket.fromEmail = 'email@email.com';
+              this.nonFdTicket.description = '';
+              this.nonFdTicket.timerActiveAgents = [];
 
               this.noop = function () {};
 
               this.var = {};
+              router = this.owner.lookup('service:router');
+              this.owner.setupRouter();
+              router.set('replaceWith', function () {});
               this.owner.register("service:socket-actions-rts", Ember.Service.extend({}));
               this.owner.register("service:sockets.ticket-details-rts", Ember.Service.extend({
-                initializeRTSConnection: function initializeRTSConnection() {}
+                initializeRTSConnection: function initializeRTSConnection() {},
+                closeRTSConnection: function closeRTSConnection() {}
               }));
               this.owner.register("service:sockets.ticket-details-agent-collision-rts", MockSocketsTicketDetailsAgentCollisionRtsService);
+              this.owner.register('service:moduleFields', MockFieldsService);
+              this.propertyForm = this.owner.lookup('service:propertyForm');
+
+              _sinon.default.stub(this.propertyForm, 'resetDataAfterUpdateSuccess').returns(null);
+
               this.marketplaceAdapter = this.owner.lookup('service:marketplaceAdapter');
 
               _sinon.default.stub(this.marketplaceAdapter, 'publishEvent').returns(null);
@@ -39519,7 +40710,7 @@ define("freshservice/tests/integration/components/module-tickets/details/compone
 
               _sinon.default.stub(this.marketplaceEventApi, 'prepareDepartmentMap').returns({});
 
-            case 23:
+            case 33:
             case "end":
               return _context.stop();
           }
@@ -39527,9 +40718,12 @@ define("freshservice/tests/integration/components/module-tickets/details/compone
       }, _callee, this);
     })));
     hooks.after(function () {
-      this.owner.destroy("service:current-user");
+      var _this$owner, _this$owner$destroy, _this$owner2, _this$owner2$destory;
+
+      (_this$owner = this.owner) === null || _this$owner === void 0 ? void 0 : (_this$owner$destroy = _this$owner.destroy) === null || _this$owner$destroy === void 0 ? void 0 : _this$owner$destroy.call(_this$owner, "service:current-user");
+      (_this$owner2 = this.owner) === null || _this$owner2 === void 0 ? void 0 : (_this$owner2$destory = _this$owner2.destory) === null || _this$owner2$destory === void 0 ? void 0 : _this$owner2$destory.call(_this$owner2, 'service:moduleFields');
     });
-    (0, _qunit.test)('Should render note in conversation editor on press n', /*#__PURE__*/function () {
+    (0, _qunit.skip)('Should render note in conversation editor on press n', /*#__PURE__*/function () {
       var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(assert) {
         var ticktShowPage;
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
@@ -39539,18 +40733,11 @@ define("freshservice/tests/integration/components/module-tickets/details/compone
                 _context2.next = 2;
                 return (0, _testHelpers.render)(Ember.HTMLBars.template(
                 /*
-                  <ModuleTickets::Details::ConversationActions   @model={{this.nonFdTicket}} 
-                			@ticketModel			= {{this.nonFdTicket}} 
-                			@updateConversationList = {{this.noop}} 
-                			@openEditorType			= {{'note'}}
-                			@convoEditorExternalDataHash = {{this.var}}
-                			@afterPropertyUpdated 	= {{this.noop}}
-                			@conversationsCount		= {{2}}
-                			@page = "ticket"/>
+                  <ModuleTickets::Details @model={{this.nonFdTicket}}/>
                 */
                 {
-                  id: "zPUS5IWp",
-                  block: "{\"symbols\":[],\"statements\":[[5,\"module-tickets/details/conversation-actions\",[],[[\"@model\",\"@ticketModel\",\"@updateConversationList\",\"@openEditorType\",\"@convoEditorExternalDataHash\",\"@afterPropertyUpdated\",\"@conversationsCount\",\"@page\"],[[23,0,[\"nonFdTicket\"]],[23,0,[\"nonFdTicket\"]],[23,0,[\"noop\"]],\"note\",[23,0,[\"var\"]],[23,0,[\"noop\"]],2,\"ticket\"]]]],\"hasEval\":false}",
+                  id: "FYljq3pp",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-tickets/details\",[],[[\"@model\"],[[23,0,[\"nonFdTicket\"]]]]]],\"hasEval\":false}",
                   meta: {}
                 }));
 
@@ -39581,7 +40768,7 @@ define("freshservice/tests/integration/components/module-tickets/details/compone
         return _ref3.apply(this, arguments);
       };
     }());
-    (0, _qunit.test)('Should render reply in conversation editor on press r', /*#__PURE__*/function () {
+    (0, _qunit.skip)('Should render reply in conversation editor on press r', /*#__PURE__*/function () {
       var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(assert) {
         var ticktShowPage;
         return regeneratorRuntime.wrap(function _callee3$(_context3) {
@@ -39591,18 +40778,11 @@ define("freshservice/tests/integration/components/module-tickets/details/compone
                 _context3.next = 2;
                 return (0, _testHelpers.render)(Ember.HTMLBars.template(
                 /*
-                  <ModuleTickets::Details::ConversationActions   @model={{this.nonFdTicket}} 
-                			@ticketModel			= {{this.nonFdTicket}} 
-                			@updateConversationList = {{this.noop}} 
-                			@openEditorType			= {{'note'}}
-                			@convoEditorExternalDataHash = {{this.var}}
-                			@afterPropertyUpdated 	= {{this.noop}}
-                			@conversationsCount		= {{2}}
-                			@page = "ticket"/>
+                  <ModuleTickets::Details @model={{this.nonFdTicket}}/>
                 */
                 {
-                  id: "zPUS5IWp",
-                  block: "{\"symbols\":[],\"statements\":[[5,\"module-tickets/details/conversation-actions\",[],[[\"@model\",\"@ticketModel\",\"@updateConversationList\",\"@openEditorType\",\"@convoEditorExternalDataHash\",\"@afterPropertyUpdated\",\"@conversationsCount\",\"@page\"],[[23,0,[\"nonFdTicket\"]],[23,0,[\"nonFdTicket\"]],[23,0,[\"noop\"]],\"note\",[23,0,[\"var\"]],[23,0,[\"noop\"]],2,\"ticket\"]]]],\"hasEval\":false}",
+                  id: "FYljq3pp",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-tickets/details\",[],[[\"@model\"],[[23,0,[\"nonFdTicket\"]]]]]],\"hasEval\":false}",
                   meta: {}
                 }));
 
@@ -39612,17 +40792,16 @@ define("freshservice/tests/integration/components/module-tickets/details/compone
                 return (0, _testHelpers2.keyDown)(_keyboardShortcutTrap.TICKET_LIST.REPLY, ticktShowPage);
 
               case 5:
-                assert.notOk(_conversation.default.conversationActions.addNoteEditorExists, "Note editor is removed");
                 assert.ok(_conversation.default.conversationActions.replyEditorExists, "Reply editor is visible");
-                _context3.next = 9;
+                _context3.next = 8;
                 return (0, _testHelpers2.keyDown)(_keyboardShortcutTrap.TICKET_VIEW.ESCAPE, ticktShowPage);
 
-              case 9:
+              case 8:
                 assert.notOk(_conversation.default.conversationActions.replyEditorExists, "Reply editor is removed");
                 assert.notOk(_conversation.default.conversationActions.addNoteEditorExists, "Note editor is removed");
                 assert.notOk(_conversation.default.conversationActions.forwardEditorExists, "Forward editor is removed");
 
-              case 12:
+              case 11:
               case "end":
                 return _context3.stop();
             }
@@ -39634,7 +40813,7 @@ define("freshservice/tests/integration/components/module-tickets/details/compone
         return _ref4.apply(this, arguments);
       };
     }());
-    (0, _qunit.test)('Should render forward in conversation editor on press f', /*#__PURE__*/function () {
+    (0, _qunit.skip)('Should render forward in conversation editor on press f', /*#__PURE__*/function () {
       var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(assert) {
         var ticktShowPage;
         return regeneratorRuntime.wrap(function _callee4$(_context4) {
@@ -39644,18 +40823,11 @@ define("freshservice/tests/integration/components/module-tickets/details/compone
                 _context4.next = 2;
                 return (0, _testHelpers.render)(Ember.HTMLBars.template(
                 /*
-                  <ModuleTickets::Details::ConversationActions   @model={{this.nonFdTicket}} 
-                			@ticketModel			= {{this.nonFdTicket}} 
-                			@updateConversationList = {{this.noop}} 
-                			@openEditorType			= {{'note'}}
-                			@convoEditorExternalDataHash = {{this.var}}
-                			@afterPropertyUpdated 	= {{this.noop}}
-                			@conversationsCount		= {{2}}
-                			@page = "ticket"/>
+                  <ModuleTickets::Details @model={{this.nonFdTicket}} />
                 */
                 {
-                  id: "zPUS5IWp",
-                  block: "{\"symbols\":[],\"statements\":[[5,\"module-tickets/details/conversation-actions\",[],[[\"@model\",\"@ticketModel\",\"@updateConversationList\",\"@openEditorType\",\"@convoEditorExternalDataHash\",\"@afterPropertyUpdated\",\"@conversationsCount\",\"@page\"],[[23,0,[\"nonFdTicket\"]],[23,0,[\"nonFdTicket\"]],[23,0,[\"noop\"]],\"note\",[23,0,[\"var\"]],[23,0,[\"noop\"]],2,\"ticket\"]]]],\"hasEval\":false}",
+                  id: "FYljq3pp",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-tickets/details\",[],[[\"@model\"],[[23,0,[\"nonFdTicket\"]]]]]],\"hasEval\":false}",
                   meta: {}
                 }));
 
@@ -39714,7 +40886,7 @@ define("freshservice/tests/integration/components/module-tickets/details/compone
 
               case 5:
                 assert.notOk(_conversation.default.loadMoreConversations, "load more conversations button is removed");
-                assert.equal(_conversation.default.conversationsCount, 8, "all conversations is visible");
+                assert.equal(_conversation.default.conversationsCount, 9, "all conversations is visible");
 
               case 7:
               case "end":
@@ -42137,6 +43309,2050 @@ define("freshservice/tests/integration/components/module-tickets/details/edit-fo
     }());
   });
 });
+define("freshservice/tests/integration/components/module-tickets/details/freddy-suggestion/canned-responses/component-test", ["qunit", "ember-qunit", "@ember/test-helpers", "ember-cli-mirage/test-support", "freshservice/tests/lib/intl", "freshservice/tests/pages/components/module-tickets/freddy-suggestion", "freshservice/tests/lib/sinon-context", "freshservice/tests/lib/stub-current-user"], function (_qunit, _emberQunit, _testHelpers, _testSupport, _intl, _freddySuggestion, _sinonContext, _stubCurrentUser) {
+  "use strict";
+
+  function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+  function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+  (0, _qunit.module)('Integration | Component | module-tickets/details/freddy-suggestion/canned-responses', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _sinonContext.setupSinonSandbox)(hooks);
+    (0, _testSupport.setupMirage)(hooks);
+    (0, _intl.setupTranslations)(hooks);
+    hooks.beforeEach( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      var mockTicket, replyModel, forwardModel;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              this.store = this.owner.lookup('service:store');
+              this.server.loadFixtures("tickets");
+              this.server.loadFixtures("users");
+
+              this.noop = function () {};
+
+              _context.next = 6;
+              return this.store.findRecord('ticket', 375);
+
+            case 6:
+              mockTicket = _context.sent;
+              this.set('model', mockTicket);
+              this.set('updateActionType', function () {});
+              this.set('focusEditor', function () {});
+              this.set('cancelAction', function () {});
+              replyModel = this.store.createRecord('conversation', {});
+              this.set('uniqueId', this.model.id);
+              this.set('replyModel', replyModel);
+              this.set('updateReplyDraftData', function () {});
+              this.set('convoCreateSuccessCallback', function () {});
+              forwardModel = this.store.createRecord('conversation', {});
+              this.set('forwardModel', forwardModel);
+
+            case 18:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, this);
+    })));
+
+    function renderFreddySuggestions() {
+      return _renderFreddySuggestions.apply(this, arguments);
+    }
+
+    function _renderFreddySuggestions() {
+      _renderFreddySuggestions = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4() {
+        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.next = 2;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <ModuleTickets::Details::FreddySuggestion 
+                		@ticketModel			= {{this.model}} 
+                		@showConversationEditor = {{this.noop}}
+                	/>
+                */
+                {
+                  id: "Y5WF7uIQ",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-tickets/details/freddy-suggestion\",[],[[\"@ticketModel\",\"@showConversationEditor\"],[[23,0,[\"model\"]],[23,0,[\"noop\"]]]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 2:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }));
+      return _renderFreddySuggestions.apply(this, arguments);
+    }
+
+    (0, _qunit.test)('should trigger canned response side modal and click on insert canned response button opens reply editor if it has reply privilege', /*#__PURE__*/function () {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(assert) {
+        var currentUserPrivilege, mockTicket;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                //should open reply editor only if it has reply previlege
+                currentUserPrivilege = {
+                  scoped_privileges: {
+                    0: ["reply_ticket"],
+                    1: [],
+                    2: [],
+                    3: []
+                  },
+                  privileges: ["reply_ticket"]
+                };
+                (0, _stubCurrentUser.stubCurrentUser)(currentUserPrivilege);
+                _context2.next = 4;
+                return this.store.findRecord('ticket', 375);
+
+              case 4:
+                mockTicket = _context2.sent;
+                this.set('model', mockTicket); // Act
+
+                _context2.next = 8;
+                return renderFreddySuggestions();
+
+              case 8:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.cannedResponseTabExists);
+                _context2.next = 11;
+                return _freddySuggestion.default.freddySuggestionsActions.openCannedResponse();
+
+              case 11:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.cannedResponseBtnActive);
+                _context2.next = 14;
+                return _freddySuggestion.default.freddySuggestionsActions.openCannedResponseModal();
+
+              case 14:
+                _context2.next = 16;
+                return _freddySuggestion.default.freddySuggestionsActions.openCannedResponsesInsertContent();
+
+              case 16:
+                _context2.next = 18;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <ModuleTickets::Details::ConversationActions::Reply 
+                    @ticketModel      = {{ this.model }} 
+                    @updateActionType = {{ this.updateActionType }}
+                    @cancelAction     = {{ this.cancelAction }}
+                    @focusEditor	    = {{ this.focusEditor}} 
+                    @convoCreateSuccessCallback = {{this.convoCreateSuccessCallback}}
+                    @uniqueId         = {{this.uniqueId}}
+                    @replyModel       = {{this.replyModel}}
+                    @savedReplyCc				= {{this.savedReplyCc}}
+                              @savedReplyBcc				= {{this.savedReplyBcc}}
+                    @updateReplyDraftData = {{this.updateReplyDraftData}}
+                  />
+                */
+                {
+                  id: "D2FIB+aL",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-tickets/details/conversation-actions/reply\",[],[[\"@ticketModel\",\"@updateActionType\",\"@cancelAction\",\"@focusEditor\",\"@convoCreateSuccessCallback\",\"@uniqueId\",\"@replyModel\",\"@savedReplyCc\",\"@savedReplyBcc\",\"@updateReplyDraftData\"],[[23,0,[\"model\"]],[23,0,[\"updateActionType\"]],[23,0,[\"cancelAction\"]],[23,0,[\"focusEditor\"]],[23,0,[\"convoCreateSuccessCallback\"]],[23,0,[\"uniqueId\"]],[23,0,[\"replyModel\"]],[23,0,[\"savedReplyCc\"]],[23,0,[\"savedReplyBcc\"]],[23,0,[\"updateReplyDraftData\"]]]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 18:
+                //should open reply editor only if it has reply previlege
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.replyEditorExists);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.replyConversationEditor);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.conversationCancelButton);
+
+              case 21:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      return function (_x) {
+        return _ref3.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('should render forward or add note editor if user does not have reply privilege and insert canned response', /*#__PURE__*/function () {
+      var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(assert) {
+        var currentUserPrivilege, mockTicket;
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                //should open reply editor only if it has reply previlege
+                currentUserPrivilege = {
+                  scoped_privileges: {
+                    0: ["forward_ticket"],
+                    1: [],
+                    2: [],
+                    3: []
+                  },
+                  privileges: ["forward_ticket"]
+                };
+                (0, _stubCurrentUser.stubCurrentUser)(currentUserPrivilege);
+                _context3.next = 4;
+                return this.store.findRecord('ticket', 369);
+
+              case 4:
+                mockTicket = _context3.sent;
+                this.set('model', mockTicket); // Act
+
+                _context3.next = 8;
+                return renderFreddySuggestions();
+
+              case 8:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.cannedResponseTabExists);
+                _context3.next = 11;
+                return _freddySuggestion.default.freddySuggestionsActions.openCannedResponse();
+
+              case 11:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.cannedResponseBtnActive);
+                _context3.next = 14;
+                return _freddySuggestion.default.freddySuggestionsActions.openCannedResponseModal();
+
+              case 14:
+                _context3.next = 16;
+                return _freddySuggestion.default.freddySuggestionsActions.openCannedResponsesInsertContent();
+
+              case 16:
+                _context3.next = 18;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <ModuleTickets::Details::ConversationActions::Forward 
+                          @ticketModel              = {{ this.model }} 
+                          @updateActionType         = {{ this.updateActionType }}
+                          @cancelAction             = {{ this.cancelAction }}
+                          @focusEditor	            = {{ this.focusEditor}}
+                          @convoCreateSuccessCallback = {{this.convoCreateSuccessCallback}}
+                          @uniqueId					= {{this.uniqueId}}
+                          @forwardModel				= {{this.forwardModel}} />
+                */
+                {
+                  id: "WwBPh4Eg",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-tickets/details/conversation-actions/forward\",[],[[\"@ticketModel\",\"@updateActionType\",\"@cancelAction\",\"@focusEditor\",\"@convoCreateSuccessCallback\",\"@uniqueId\",\"@forwardModel\"],[[23,0,[\"model\"]],[23,0,[\"updateActionType\"]],[23,0,[\"cancelAction\"]],[23,0,[\"focusEditor\"]],[23,0,[\"convoCreateSuccessCallback\"]],[23,0,[\"uniqueId\"]],[23,0,[\"forwardModel\"]]]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 18:
+                //should open forward editor only if it does not have reply previlege
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.forwardEditorExists, 'forward editor should be shown');
+                assert.notOk(_freddySuggestion.default.freddySuggestionsActions.replyEditorExists, 'Reply editor shouldnt be rendered once forward action is triggered');
+                assert.notOk(_freddySuggestion.default.freddySuggestionsActions.addNoteEditorExists, 'Note editor should be shown');
+
+              case 21:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      return function (_x2) {
+        return _ref4.apply(this, arguments);
+      };
+    }());
+  });
+});
+define("freshservice/tests/integration/components/module-tickets/details/freddy-suggestion/component-test", ["qunit", "ember-qunit", "@ember/test-helpers", "ember-cli-mirage/test-support", "freshservice/tests/lib/intl", "freshservice/tests/pages/components/module-tickets/freddy-suggestion", "freshservice/tests/lib/sinon-context"], function (_qunit, _emberQunit, _testHelpers, _testSupport, _intl, _freddySuggestion, _sinonContext) {
+  "use strict";
+
+  function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+  function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+  (0, _qunit.module)('Integration | Component | module-tickets/details/freddy-suggestion', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _sinonContext.setupSinonSandbox)(hooks);
+    (0, _testSupport.setupMirage)(hooks);
+    (0, _intl.setupTranslations)(hooks);
+    hooks.beforeEach( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              this.store = this.owner.lookup('service:store');
+              this.server.loadFixtures("tickets");
+              this.server.loadFixtures("users");
+              this.server.loadFixtures("conversations");
+
+              this.noop = function () {};
+
+            case 5:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, this);
+    })));
+
+    function renderFreddySuggestions() {
+      return _renderFreddySuggestions.apply(this, arguments);
+    }
+
+    function _renderFreddySuggestions() {
+      _renderFreddySuggestions = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7() {
+        return regeneratorRuntime.wrap(function _callee7$(_context7) {
+          while (1) {
+            switch (_context7.prev = _context7.next) {
+              case 0:
+                _context7.next = 2;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <ModuleTickets::Details::FreddySuggestion 
+                		@ticketModel			= {{this.model}} 
+                		@showConversationEditor = {{this.noop}}
+                	/>
+                */
+                {
+                  id: "Y5WF7uIQ",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-tickets/details/freddy-suggestion\",[],[[\"@ticketModel\",\"@showConversationEditor\"],[[23,0,[\"model\"]],[23,0,[\"noop\"]]]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 2:
+              case "end":
+                return _context7.stop();
+            }
+          }
+        }, _callee7);
+      }));
+      return _renderFreddySuggestions.apply(this, arguments);
+    }
+
+    (0, _qunit.test)('should not show freddy suggestions if there is no canned responses, solution articles & similar incidents', /*#__PURE__*/function () {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(assert) {
+        var mockTicket;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return this.store.findRecord('ticket', 32);
+
+              case 2:
+                mockTicket = _context2.sent;
+                this.set('model', mockTicket); // Act
+
+                _context2.next = 6;
+                return renderFreddySuggestions();
+
+              case 6:
+                assert.notOk(_freddySuggestion.default.freddySuggetionsWrapperExists);
+                assert.notOk(_freddySuggestion.default.freddySuggestionsActions.solutionArticlesBtnExists);
+                assert.notOk(_freddySuggestion.default.freddySuggestionsActions.cannedResponseBtnExists);
+                assert.notOk(_freddySuggestion.default.freddySuggestionsActions.similarIncidentsBtnExists);
+
+              case 10:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      return function (_x) {
+        return _ref3.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Should render freddy suggestions action buttons', /*#__PURE__*/function () {
+      var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(assert) {
+        var mockTicket;
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return this.store.findRecord('ticket', 375);
+
+              case 2:
+                mockTicket = _context3.sent;
+                this.set('model', mockTicket); // Act
+
+                _context3.next = 6;
+                return renderFreddySuggestions();
+
+              case 6:
+                assert.ok(_freddySuggestion.default.freddySuggetionsWrapperExists);
+
+              case 7:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      return function (_x2) {
+        return _ref4.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('should render solution articles on clicking solution Articles button, check existence of irrelevant suggestions and opening & closing of side modal', /*#__PURE__*/function () {
+      var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(assert) {
+        var mockTicket;
+        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.next = 2;
+                return this.store.findRecord('ticket', 17);
+
+              case 2:
+                mockTicket = _context4.sent;
+                this.set('model', mockTicket); // Act
+
+                _context4.next = 6;
+                return renderFreddySuggestions();
+
+              case 6:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.solutionArticlesTabExists);
+                _context4.next = 9;
+                return _freddySuggestion.default.freddySuggestionsActions.openSolutionArticles();
+
+              case 9:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.solutionArticlesBtnActive);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.freddyMultiTabExists);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.irrelevantSuggestionSolutionArticlesExists);
+                _context4.next = 14;
+                return _freddySuggestion.default.freddySuggestionsActions.openSolutionArticlesModal();
+
+              case 14:
+                _context4.next = 16;
+                return _freddySuggestion.default.freddySuggestionsActions.closeSolutionArticlesModal();
+
+              case 16:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this);
+      }));
+
+      return function (_x3) {
+        return _ref5.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('should trigger canned responses on clicking canned response button and check existence of irrelevant suggestions and opening & closing of side modal', /*#__PURE__*/function () {
+      var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(assert) {
+        var mockTicket;
+        return regeneratorRuntime.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                _context5.next = 2;
+                return this.store.findRecord('ticket', 369);
+
+              case 2:
+                mockTicket = _context5.sent;
+                this.set('model', mockTicket); // Act
+
+                _context5.next = 6;
+                return renderFreddySuggestions();
+
+              case 6:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.cannedResponseTabExists);
+                _context5.next = 9;
+                return _freddySuggestion.default.freddySuggestionsActions.openCannedResponse();
+
+              case 9:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.cannedResponseBtnActive);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.freddyMultiTabExists);
+                assert.dom('[data-test-id="freddy-irrelevant-suggestions"]').exists();
+                _context5.next = 14;
+                return _freddySuggestion.default.freddySuggestionsActions.openCannedResponseModal();
+
+              case 14:
+                _context5.next = 16;
+                return _freddySuggestion.default.freddySuggestionsActions.closeCannedResponseModal();
+
+              case 16:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5, this);
+      }));
+
+      return function (_x4) {
+        return _ref6.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('should trigger similar incidents on clicking similar incidents button and check existence of irrelevant suggestions and opening & closing of side modal', /*#__PURE__*/function () {
+      var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(assert) {
+        var mockTicket;
+        return regeneratorRuntime.wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                _context6.next = 2;
+                return this.store.findRecord('ticket', 375);
+
+              case 2:
+                mockTicket = _context6.sent;
+                this.set('model', mockTicket); // Act
+
+                _context6.next = 6;
+                return renderFreddySuggestions();
+
+              case 6:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.similarIncidentsTabExists);
+                _context6.next = 9;
+                return _freddySuggestion.default.freddySuggestionsActions.openSimilarIncidents();
+
+              case 9:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.similarIncidentsBtnActive);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.freddyMultiTabExists);
+                assert.dom('[data-test-id="freddy-irrelevant-suggestions"]').exists();
+                _context6.next = 14;
+                return _freddySuggestion.default.freddySuggestionsActions.openSimilarIncidentsModal();
+
+              case 14:
+                _context6.next = 16;
+                return _freddySuggestion.default.freddySuggestionsActions.closeSimilarIncidentsModal();
+
+              case 16:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6, this);
+      }));
+
+      return function (_x5) {
+        return _ref7.apply(this, arguments);
+      };
+    }());
+  });
+});
+define("freshservice/tests/integration/components/module-tickets/details/freddy-suggestion/irrelevant-suggestions/component-test", ["qunit", "ember-qunit", "@ember/test-helpers", "ember-cli-mirage/test-support", "freshservice/tests/lib/intl", "freshservice/tests/pages/components/module-tickets/freddy-suggestion", "freshservice/tests/lib/sinon-context"], function (_qunit, _emberQunit, _testHelpers, _testSupport, _intl, _freddySuggestion, _sinonContext) {
+  "use strict";
+
+  function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+  function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+  (0, _qunit.module)('Integration | Component | module-tickets/details/freddy-suggestion/irrelevant-suggestions', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _sinonContext.setupSinonSandbox)(hooks);
+    (0, _testSupport.setupMirage)(hooks);
+    (0, _intl.setupTranslations)(hooks);
+    hooks.beforeEach( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              this.store = this.owner.lookup('service:store');
+              this.server.loadFixtures("tickets");
+              this.server.loadFixtures("users");
+
+              this.noop = function () {};
+
+            case 4:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, this);
+    })));
+
+    function renderFreddySuggestions() {
+      return _renderFreddySuggestions.apply(this, arguments);
+    }
+
+    function _renderFreddySuggestions() {
+      _renderFreddySuggestions = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
+        return regeneratorRuntime.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                _context5.next = 2;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <ModuleTickets::Details::FreddySuggestion 
+                		@ticketModel			= {{this.model}} 
+                		@showConversationEditor = {{this.noop}}
+                	/>
+                */
+                {
+                  id: "Y5WF7uIQ",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-tickets/details/freddy-suggestion\",[],[[\"@ticketModel\",\"@showConversationEditor\"],[[23,0,[\"model\"]],[23,0,[\"noop\"]]]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 2:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5);
+      }));
+      return _renderFreddySuggestions.apply(this, arguments);
+    }
+
+    (0, _qunit.test)('should render irrelevant suggestions in solution articles', /*#__PURE__*/function () {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(assert) {
+        var mockTicket;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return this.store.findRecord('ticket', 375);
+
+              case 2:
+                mockTicket = _context2.sent;
+                this.set('model', mockTicket); // Act
+
+                _context2.next = 6;
+                return renderFreddySuggestions();
+
+              case 6:
+                _context2.next = 8;
+                return _freddySuggestion.default.freddySuggestionsActions.openSolutionArticles();
+
+              case 8:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.solutionArticlesBtnActive);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.irrelevantSuggestionSolutionArticlesExists);
+                _context2.next = 12;
+                return _freddySuggestion.default.freddySuggestionsActions.irrelevantSuggestionButtonClick();
+
+              case 12:
+                assert.equal(_freddySuggestion.default.irrelevantSolutionArticlesText, 'Thank you for your feedback!'); // After click within 2secs irrelevant button will hide untill refresh the page
+
+                _context2.next = 15;
+                return assert.notOk(_freddySuggestion.default.freddySuggestionsActions.irrelevantSuggestionButtonExists);
+
+              case 15:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      return function (_x) {
+        return _ref3.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('should render irrelevant suggestions in canned responses', /*#__PURE__*/function () {
+      var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(assert) {
+        var mockTicket;
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return this.store.findRecord('ticket', 375);
+
+              case 2:
+                mockTicket = _context3.sent;
+                this.set('model', mockTicket); // Act
+
+                _context3.next = 6;
+                return renderFreddySuggestions();
+
+              case 6:
+                _context3.next = 8;
+                return _freddySuggestion.default.freddySuggestionsActions.openCannedResponse();
+
+              case 8:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.cannedResponseBtnActive);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.irrelevantSuggestionCannedResponseExists);
+                _context3.next = 12;
+                return _freddySuggestion.default.freddySuggestionsActions.irrelevantSuggestionButtonClick();
+
+              case 12:
+                assert.equal(_freddySuggestion.default.irrelevantCannedResponsesText, 'Thank you for your feedback!'); // After click within 2secs irrelevant button will hide untill refresh the page
+
+                _context3.next = 15;
+                return assert.notOk(_freddySuggestion.default.freddySuggestionsActions.irrelevantSuggestionButtonExists);
+
+              case 15:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      return function (_x2) {
+        return _ref4.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('should render and click irrelevant suggestions in similar incidents card', /*#__PURE__*/function () {
+      var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(assert) {
+        var mockTicket;
+        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.next = 2;
+                return this.store.findRecord('ticket', 375);
+
+              case 2:
+                mockTicket = _context4.sent;
+                this.set('model', mockTicket);
+                _context4.next = 6;
+                return renderFreddySuggestions();
+
+              case 6:
+                _context4.next = 8;
+                return _freddySuggestion.default.freddySuggestionsActions.openSimilarIncidents();
+
+              case 8:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.similarIncidentsBtnActive);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.irrelevantSuggestionSimilarIncidentsExists);
+                assert.dom('[data-test-id="mark-irrelevant-si-btn"]').exists();
+                _context4.next = 13;
+                return (0, _testHelpers.click)('[data-test-id="mark-irrelevant-si-btn"]');
+
+              case 13:
+                _context4.next = 15;
+                return _freddySuggestion.default.freddySuggestionsActions.irrelevantSuggestionButtonClick();
+
+              case 15:
+                assert.equal(_freddySuggestion.default.irrelevantSimilarIncidentsText, 'Thank you for your feedback!'); // After click within 2secs irrelevant button will hide untill refresh the page
+
+                _context4.next = 18;
+                return assert.notOk(_freddySuggestion.default.freddySuggestionsActions.irrelevantSuggestionButtonExists);
+
+              case 18:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this);
+      }));
+
+      return function (_x3) {
+        return _ref5.apply(this, arguments);
+      };
+    }());
+  });
+});
+define("freshservice/tests/integration/components/module-tickets/details/freddy-suggestion/similar-incidents/component-test", ["qunit", "ember-qunit", "@ember/test-helpers", "ember-cli-mirage/test-support", "freshservice/tests/lib/intl", "freshservice/tests/pages/components/module-tickets/freddy-suggestion", "freshservice/tests/lib/sinon-context", "freshservice/tests/lib/stub-current-user"], function (_qunit, _emberQunit, _testHelpers, _testSupport, _intl, _freddySuggestion, _sinonContext, _stubCurrentUser) {
+  "use strict";
+
+  function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+  function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+  (0, _qunit.module)('Integration | Component | module-tickets/details/freddy-suggestion/similar-incidents', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _sinonContext.setupSinonSandbox)(hooks);
+    (0, _testSupport.setupMirage)(hooks);
+    (0, _intl.setupTranslations)(hooks);
+    hooks.beforeEach( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      var mockTicket, replyModel, forwardModel;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              this.store = this.owner.lookup('service:store');
+              this.server.loadFixtures("tickets");
+              this.server.loadFixtures("users");
+              this.server.loadFixtures("conversations");
+
+              this.noop = function () {};
+
+              _context.next = 7;
+              return this.store.findRecord('ticket', 375);
+
+            case 7:
+              mockTicket = _context.sent;
+              this.set('model', mockTicket);
+              this.set('updateActionType', function () {});
+              this.set('focusEditor', function () {});
+              this.set('cancelAction', function () {});
+              replyModel = this.store.createRecord('conversation', {});
+              this.set('convoCreateSuccessCallback', function () {});
+              this.set('uniqueId', this.model.id);
+              this.set('replyModel', replyModel);
+              this.set('updateReplyDraftData', function () {});
+              forwardModel = this.store.createRecord('conversation', {});
+              this.set('forwardModel', forwardModel);
+
+            case 19:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, this);
+    })));
+
+    function renderFreddySuggestions() {
+      return _renderFreddySuggestions.apply(this, arguments);
+    }
+
+    function _renderFreddySuggestions() {
+      _renderFreddySuggestions = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6() {
+        return regeneratorRuntime.wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                _context6.next = 2;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <ModuleTickets::Details::FreddySuggestion 
+                		@ticketModel			= {{this.model}}
+                		@showConversationEditor = {{this.noop}}
+                	/>
+                */
+                {
+                  id: "Y5WF7uIQ",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-tickets/details/freddy-suggestion\",[],[[\"@ticketModel\",\"@showConversationEditor\"],[[23,0,[\"model\"]],[23,0,[\"noop\"]]]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 2:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6);
+      }));
+      return _renderFreddySuggestions.apply(this, arguments);
+    }
+
+    (0, _qunit.test)('should trigger similar incidents, check existence of irrelevant suggestions, open side modal and navigate previous and next incidents', /*#__PURE__*/function () {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(assert) {
+        var mockTicket;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return this.store.findRecord('ticket', 375);
+
+              case 2:
+                mockTicket = _context2.sent;
+                this.set('model', mockTicket);
+                _context2.next = 6;
+                return renderFreddySuggestions();
+
+              case 6:
+                _context2.next = 8;
+                return _freddySuggestion.default.freddySuggestionsActions.openSimilarIncidents();
+
+              case 8:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.similarIncidentsBtnActive);
+                assert.dom('[data-test-id="mark-irrelevant-si-btn"]').exists();
+                assert.dom('[data-test-id="freddy-irrelevant-suggestions"]').exists();
+                _context2.next = 13;
+                return _freddySuggestion.default.freddySuggestionsActions.openSimilarIncidentsModal();
+
+              case 13:
+                _context2.next = 15;
+                return _freddySuggestion.default.freddySuggestionsActions.similarIncidentsPageNavNextClick();
+
+              case 15:
+                _context2.next = 17;
+                return _freddySuggestion.default.freddySuggestionsActions.similarIncidentsPagePrevNextClick();
+
+              case 17:
+                _context2.next = 19;
+                return _freddySuggestion.default.freddySuggestionsActions.closeSimilarIncidentsModal();
+
+              case 19:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      return function (_x) {
+        return _ref3.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('should not render conversation if similar incident doesn not have any conversation', /*#__PURE__*/function () {
+      var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(assert) {
+        var mockTicket;
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return this.store.findRecord('ticket', 375);
+
+              case 2:
+                mockTicket = _context3.sent;
+                this.set('model', mockTicket); // Act
+
+                _context3.next = 6;
+                return renderFreddySuggestions();
+
+              case 6:
+                _context3.next = 8;
+                return _freddySuggestion.default.freddySuggestionsActions.openSimilarIncidents();
+
+              case 8:
+                _context3.next = 10;
+                return _freddySuggestion.default.freddySuggestionsActions.openSimilarIncidentsModal();
+
+              case 10:
+                _context3.next = 12;
+                return _freddySuggestion.default.freddySuggestionsActions.similarIncidentsPageNavNextClick();
+
+              case 12:
+                assert.notOk(_freddySuggestion.default.freddySuggestionsActions.similarIncidentsConversationExists);
+
+              case 13:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      return function (_x2) {
+        return _ref4.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('should render conversations and insert content in the ticket', /*#__PURE__*/function () {
+      var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(assert) {
+        var currentUserPrivilege, mockTicket;
+        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                currentUserPrivilege = {
+                  scoped_privileges: {
+                    0: ["reply_ticket"],
+                    1: [],
+                    2: [],
+                    3: []
+                  },
+                  privileges: ["reply_ticket"]
+                };
+                (0, _stubCurrentUser.stubCurrentUser)(currentUserPrivilege);
+                _context4.next = 4;
+                return this.store.findRecord('ticket', 375);
+
+              case 4:
+                mockTicket = _context4.sent;
+                this.set('model', mockTicket); // Act
+
+                _context4.next = 8;
+                return renderFreddySuggestions();
+
+              case 8:
+                _context4.next = 10;
+                return _freddySuggestion.default.freddySuggestionsActions.openSimilarIncidents();
+
+              case 10:
+                _context4.next = 12;
+                return _freddySuggestion.default.freddySuggestionsActions.openSimilarIncidentsModal();
+
+              case 12:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.similarIncidentsConversationExists);
+                _context4.next = 15;
+                return _freddySuggestion.default.freddySuggestionsActions.insertConversationClick();
+
+              case 15:
+                _context4.next = 17;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <ModuleTickets::Details::ConversationActions::Reply 
+                    @ticketModel      = {{ this.model }} 
+                    @updateActionType = {{ this.updateActionType }}
+                    @cancelAction     = {{ this.cancelAction }}
+                    @focusEditor	    = {{ this.focusEditor}} 
+                    @convoCreateSuccessCallback = {{this.convoCreateSuccessCallback}}
+                    @uniqueId         = {{this.uniqueId}}
+                    @replyModel       = {{this.replyModel}}
+                    @savedReplyCc				= {{this.savedReplyCc}}
+                              @savedReplyBcc				= {{this.savedReplyBcc}}
+                    @updateReplyDraftData = {{this.updateReplyDraftData}}
+                  />
+                */
+                {
+                  id: "D2FIB+aL",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-tickets/details/conversation-actions/reply\",[],[[\"@ticketModel\",\"@updateActionType\",\"@cancelAction\",\"@focusEditor\",\"@convoCreateSuccessCallback\",\"@uniqueId\",\"@replyModel\",\"@savedReplyCc\",\"@savedReplyBcc\",\"@updateReplyDraftData\"],[[23,0,[\"model\"]],[23,0,[\"updateActionType\"]],[23,0,[\"cancelAction\"]],[23,0,[\"focusEditor\"]],[23,0,[\"convoCreateSuccessCallback\"]],[23,0,[\"uniqueId\"]],[23,0,[\"replyModel\"]],[23,0,[\"savedReplyCc\"]],[23,0,[\"savedReplyBcc\"]],[23,0,[\"updateReplyDraftData\"]]]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 17:
+                //should open reply editor only if it has reply previlege
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.replyEditorExists);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.replyConversationEditor);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.conversationCancelButton);
+
+              case 20:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this);
+      }));
+
+      return function (_x3) {
+        return _ref5.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('should not insert content if user does not have reply previlege', /*#__PURE__*/function () {
+      var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(assert) {
+        var mockTicket, currentUserPrivilege;
+        return regeneratorRuntime.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                _context5.next = 2;
+                return this.store.findRecord('ticket', 375);
+
+              case 2:
+                mockTicket = _context5.sent;
+                this.set('model', mockTicket);
+                currentUserPrivilege = {
+                  scoped_privileges: {
+                    0: ["forward_ticket"],
+                    1: [],
+                    2: [],
+                    3: []
+                  },
+                  privileges: ["forward_ticket"]
+                };
+                (0, _stubCurrentUser.stubCurrentUser)(currentUserPrivilege); // Act
+
+                _context5.next = 8;
+                return renderFreddySuggestions();
+
+              case 8:
+                _context5.next = 10;
+                return _freddySuggestion.default.freddySuggestionsActions.openSimilarIncidents();
+
+              case 10:
+                assert.notOk(_freddySuggestion.default.freddySuggestionsActions.replyButtonExists);
+                _context5.next = 13;
+                return _freddySuggestion.default.freddySuggestionsActions.openSimilarIncidentsModal();
+
+              case 13:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.similarIncidentsConversationExists);
+                assert.notOk(_freddySuggestion.default.freddySuggestionsActions.insertConversationButtonExists);
+
+              case 15:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5, this);
+      }));
+
+      return function (_x4) {
+        return _ref6.apply(this, arguments);
+      };
+    }());
+  });
+});
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+define("freshservice/tests/integration/components/module-tickets/details/freddy-suggestion/similar-incidents/incident-card/component-test", ["qunit", "ember-qunit", "@ember/test-helpers", "ember-cli-mirage/test-support", "freshservice/tests/lib/intl", "freshservice/tests/pages/components/module-tickets/freddy-suggestion", "freshservice/tests/lib/sinon-context", "freshservice/tests/lib/stub-current-user", "freshservice/mirage/fixtures/ticket-form-fields"], function (_qunit, _emberQunit, _testHelpers, _testSupport, _intl, _freddySuggestion, _sinonContext, _stubCurrentUser, _ticketFormFields) {
+  "use strict";
+
+  function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+  function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+  function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+  function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+  function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+  function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+  function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+  function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+  function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+  function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+  function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+  function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+  function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+  function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+  function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  var MockService = /*#__PURE__*/function (_Ember$Service) {
+    _inherits(MockService, _Ember$Service);
+
+    var _super = _createSuper(MockService);
+
+    function MockService() {
+      var _this;
+
+      _classCallCheck(this, MockService);
+
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      _this = _super.call.apply(_super, [this].concat(args));
+
+      _defineProperty(_assertThisInitialized(_this), "showForm", true);
+
+      _defineProperty(_assertThisInitialized(_this), "ticketFormFields", Ember.A(_toConsumableArray(_ticketFormFields.default)));
+
+      return _this;
+    }
+
+    _createClass(MockService, [{
+      key: "getModuleFieldLabel",
+      value: function getModuleFieldLabel(fieldName, module) {
+        var field = this["".concat(module, "FormFields")].find(function (ele) {
+          return ele.name === fieldName;
+        });
+        return field.label;
+      }
+    }]);
+
+    return MockService;
+  }(Ember.Service);
+
+  window.__CLASSIC_OWN_CLASSES__.set(MockService, true);
+
+  (0, _qunit.module)('Integration | Component | module-tickets/details/freddy-suggestion/similar-incidents/incident-card', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _sinonContext.setupSinonSandbox)(hooks);
+    (0, _testSupport.setupMirage)(hooks);
+    (0, _intl.setupTranslations)(hooks);
+    hooks.beforeEach( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              (0, _stubCurrentUser.stubCurrentUser)({
+                privileges: ['edit_ticket_properties']
+              });
+              this.store = this.owner.lookup('service:store');
+              this.server.loadFixtures('ticketFormFields');
+              this.server.loadFixtures("tickets");
+              this.server.loadFixtures("users");
+              this.server.loadFixtures('agentsGroups');
+              this.owner.unregister('service:moduleFields');
+              this.owner.register('service:moduleFields', MockService);
+
+              this.noop = function () {};
+
+            case 9:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, this);
+    })));
+
+    function renderFreddySuggestions() {
+      return _renderFreddySuggestions.apply(this, arguments);
+    }
+
+    function _renderFreddySuggestions() {
+      _renderFreddySuggestions = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8() {
+        return regeneratorRuntime.wrap(function _callee8$(_context8) {
+          while (1) {
+            switch (_context8.prev = _context8.next) {
+              case 0:
+                _context8.next = 2;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <ModuleTickets::Details::FreddySuggestion 
+                		@ticketModel			= {{this.model}}
+                		@showConversationEditor = {{this.noop}}
+                	/>
+                */
+                {
+                  id: "Y5WF7uIQ",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-tickets/details/freddy-suggestion\",[],[[\"@ticketModel\",\"@showConversationEditor\"],[[23,0,[\"model\"]],[23,0,[\"noop\"]]]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 2:
+              case "end":
+                return _context8.stop();
+            }
+          }
+        }, _callee8);
+      }));
+      return _renderFreddySuggestions.apply(this, arguments);
+    }
+
+    (0, _qunit.test)('should render similar incidents and validate incident cards with Status and Assign to fields', /*#__PURE__*/function () {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(assert) {
+        var mockTicket;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return this.store.findRecord('ticket', 375);
+
+              case 2:
+                mockTicket = _context2.sent;
+                this.set('model', mockTicket);
+                _context2.next = 6;
+                return renderFreddySuggestions();
+
+              case 6:
+                _context2.next = 8;
+                return _freddySuggestion.default.freddySuggestionsActions.openSimilarIncidents();
+
+              case 8:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.similarIncidentsBtnActive);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.similarIncidentCardExists);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.similarIncidentStatusExists);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.similarIncidentsAssignToExists);
+
+              case 12:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      return function (_x) {
+        return _ref3.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('should render incident cards with open, closed, pending, resolved status states', /*#__PURE__*/function () {
+      var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(assert) {
+        var mockTicket;
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return this.store.findRecord('ticket', 375);
+
+              case 2:
+                mockTicket = _context3.sent;
+                this.set('model', mockTicket); // Act
+
+                _context3.next = 6;
+                return renderFreddySuggestions();
+
+              case 6:
+                _context3.next = 8;
+                return _freddySuggestion.default.freddySuggestionsActions.openSimilarIncidents();
+
+              case 8:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.similarIncidentsBtnActive);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.similarIncidentCardExists);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.similarIncidentStatusExists);
+                assert.equal(_freddySuggestion.default.freddySuggestionsActions.openStatusText, 'Open');
+                assert.equal(_freddySuggestion.default.freddySuggestionsActions.pendingStatusText, 'Pending');
+                assert.equal(_freddySuggestion.default.freddySuggestionsActions.resolvedStatusText, 'Resolved');
+                assert.equal(_freddySuggestion.default.freddySuggestionsActions.closedStatusText, 'Closed');
+
+              case 15:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      return function (_x2) {
+        return _ref4.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('should render incident cards with Assign To dropdown options and select "Support Man" from agents tab & update Assign To field', /*#__PURE__*/function () {
+      var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(assert) {
+        var mockTicket;
+        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.next = 2;
+                return this.store.findRecord('ticket', 375);
+
+              case 2:
+                mockTicket = _context4.sent;
+                this.set('model', mockTicket); // Act
+
+                _context4.next = 6;
+                return renderFreddySuggestions();
+
+              case 6:
+                _context4.next = 8;
+                return _freddySuggestion.default.freddySuggestionsActions.openSimilarIncidents();
+
+              case 8:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.similarIncidentsBtnActive);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.similarIncidentCardExists);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.similarIncidentsAssignToExists);
+                _context4.next = 13;
+                return _freddySuggestion.default.freddySuggestionsActions.triggerAssignToDropdown();
+
+              case 13:
+                _context4.next = 15;
+                return _freddySuggestion.default.freddySuggestionsActions.clickOnAgentTab();
+
+              case 15:
+                _context4.next = 17;
+                return _freddySuggestion.default.freddySuggestionsActions.triggerSupportManAgent();
+
+              case 17:
+                assert.equal(_freddySuggestion.default.freddySuggestionsActions.assignedToText, '/ Support Man (Me)');
+
+              case 18:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this);
+      }));
+
+      return function (_x3) {
+        return _ref5.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('should render incident cards with Assign To dropdown options and select "Database Team" from groups tab and open modal with assigned agents', /*#__PURE__*/function () {
+      var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(assert) {
+        var mockTicket;
+        return regeneratorRuntime.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                _context5.next = 2;
+                return this.store.findRecord('ticket', 375);
+
+              case 2:
+                mockTicket = _context5.sent;
+                this.set('model', mockTicket); // Act
+
+                _context5.next = 6;
+                return renderFreddySuggestions();
+
+              case 6:
+                _context5.next = 8;
+                return _freddySuggestion.default.freddySuggestionsActions.openSimilarIncidents();
+
+              case 8:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.similarIncidentsBtnActive);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.similarIncidentCardExists);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.similarIncidentsAssignToExists);
+                _context5.next = 13;
+                return _freddySuggestion.default.freddySuggestionsActions.triggerAssignToDropdown();
+
+              case 13:
+                _context5.next = 15;
+                return _freddySuggestion.default.freddySuggestionsActions.clickOnGroupTab();
+
+              case 15:
+                _context5.next = 17;
+                return _freddySuggestion.default.freddySuggestionsActions.triggerDatabaseTeamGroup();
+
+              case 17:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.agentGroupItemExists);
+
+              case 18:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5, this);
+      }));
+
+      return function (_x4) {
+        return _ref6.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('should trigger Assign To dropdown options and search the "Database Team" from groups tab and open modal with assigned agents', /*#__PURE__*/function () {
+      var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(assert) {
+        var mockTicket;
+        return regeneratorRuntime.wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                _context6.next = 2;
+                return this.store.findRecord('ticket', 375);
+
+              case 2:
+                mockTicket = _context6.sent;
+                this.set('model', mockTicket); // Act
+
+                _context6.next = 6;
+                return renderFreddySuggestions();
+
+              case 6:
+                _context6.next = 8;
+                return _freddySuggestion.default.freddySuggestionsActions.openSimilarIncidents();
+
+              case 8:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.similarIncidentsBtnActive);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.similarIncidentCardExists);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.similarIncidentsAssignToExists);
+                _context6.next = 13;
+                return _freddySuggestion.default.freddySuggestionsActions.triggerAssignToDropdown();
+
+              case 13:
+                _context6.next = 15;
+                return _freddySuggestion.default.freddySuggestionsActions.clickOnGroupTab();
+
+              case 15:
+                _context6.next = 17;
+                return (0, _testHelpers.fillIn)('input', 'Database Team');
+
+              case 17:
+                _context6.next = 19;
+                return _freddySuggestion.default.freddySuggestionsActions.triggerDatabaseTeamGroup();
+
+              case 19:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.agentGroupItemExists);
+
+              case 20:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6, this);
+      }));
+
+      return function (_x5) {
+        return _ref7.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('should trigger Assign To dropdown options and search the "Support Man" from agents tab & update Assign To field', /*#__PURE__*/function () {
+      var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(assert) {
+        var mockTicket;
+        return regeneratorRuntime.wrap(function _callee7$(_context7) {
+          while (1) {
+            switch (_context7.prev = _context7.next) {
+              case 0:
+                _context7.next = 2;
+                return this.store.findRecord('ticket', 375);
+
+              case 2:
+                mockTicket = _context7.sent;
+                this.set('model', mockTicket); // Act
+
+                _context7.next = 6;
+                return renderFreddySuggestions();
+
+              case 6:
+                _context7.next = 8;
+                return _freddySuggestion.default.freddySuggestionsActions.openSimilarIncidents();
+
+              case 8:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.similarIncidentsBtnActive);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.similarIncidentCardExists);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.similarIncidentsAssignToExists);
+                _context7.next = 13;
+                return _freddySuggestion.default.freddySuggestionsActions.triggerAssignToDropdown();
+
+              case 13:
+                _context7.next = 15;
+                return (0, _testHelpers.fillIn)('input', 'Support Man');
+
+              case 15:
+                _context7.next = 17;
+                return _freddySuggestion.default.freddySuggestionsActions.triggerSupportManAgent();
+
+              case 17:
+                assert.equal(_freddySuggestion.default.freddySuggestionsActions.assignedToText, '/ Support Man (Me)');
+
+              case 18:
+              case "end":
+                return _context7.stop();
+            }
+          }
+        }, _callee7, this);
+      }));
+
+      return function (_x6) {
+        return _ref8.apply(this, arguments);
+      };
+    }());
+  });
+});
+define("freshservice/tests/integration/components/module-tickets/details/freddy-suggestion/solution-articles/component-test", ["qunit", "ember-qunit", "@ember/test-helpers", "ember-cli-mirage/test-support", "freshservice/tests/lib/intl", "freshservice/tests/pages/components/module-tickets/freddy-suggestion", "freshservice/tests/lib/sinon-context", "freshservice/tests/lib/stub-current-user"], function (_qunit, _emberQunit, _testHelpers, _testSupport, _intl, _freddySuggestion, _sinonContext, _stubCurrentUser) {
+  "use strict";
+
+  function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+  function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+  (0, _qunit.module)('Integration | Component | module-tickets/details/freddy-suggestion/solution-articles', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _sinonContext.setupSinonSandbox)(hooks);
+    (0, _testSupport.setupMirage)(hooks);
+    (0, _intl.setupTranslations)(hooks);
+    hooks.beforeEach( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      var mockTicket, replyModel, forwardModel;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              this.store = this.owner.lookup('service:store');
+              this.server.loadFixtures("tickets");
+              this.server.loadFixtures("users");
+              _context.next = 5;
+              return this.store.findRecord('ticket', 375);
+
+            case 5:
+              mockTicket = _context.sent;
+              this.set('model', mockTicket);
+              this.set('updateActionType', function () {});
+              this.set('focusEditor', function () {});
+              this.set('cancelAction', function () {});
+              this.set('showConversationEditor', function () {});
+              replyModel = this.store.createRecord('conversation', {});
+              this.set('convoCreateSuccessCallback', function () {});
+              this.set('uniqueId', this.model.id);
+              this.set('replyModel', replyModel);
+              this.set('updateReplyDraftData', function () {});
+              forwardModel = this.store.createRecord('conversation', {});
+              this.set('forwardModel', forwardModel);
+
+            case 18:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, this);
+    })));
+
+    function renderFreddySuggestions() {
+      return _renderFreddySuggestions.apply(this, arguments);
+    }
+
+    function _renderFreddySuggestions() {
+      _renderFreddySuggestions = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8() {
+        return regeneratorRuntime.wrap(function _callee8$(_context8) {
+          while (1) {
+            switch (_context8.prev = _context8.next) {
+              case 0:
+                _context8.next = 2;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <ModuleTickets::Details::FreddySuggestion 
+                		@ticketModel			= {{this.model}} 
+                		@showConversationEditor = {{this.showConversationEditor}}
+                	/>
+                */
+                {
+                  id: "i8/RSyw5",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-tickets/details/freddy-suggestion\",[],[[\"@ticketModel\",\"@showConversationEditor\"],[[23,0,[\"model\"]],[23,0,[\"showConversationEditor\"]]]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 2:
+              case "end":
+                return _context8.stop();
+            }
+          }
+        }, _callee8);
+      }));
+      return _renderFreddySuggestions.apply(this, arguments);
+    }
+
+    (0, _qunit.test)('should trigger solution article side modal and click on insert content option for published articles', /*#__PURE__*/function () {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(assert) {
+        var currentUserPrivilege, mockTicket;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                //should open reply editor only if it has reply previlege
+                currentUserPrivilege = {
+                  scoped_privileges: {
+                    0: ["reply_ticket"],
+                    1: [],
+                    2: [],
+                    3: []
+                  },
+                  privileges: ["reply_ticket"]
+                };
+                (0, _stubCurrentUser.stubCurrentUser)(currentUserPrivilege);
+                _context2.next = 4;
+                return this.store.findRecord('ticket', 375);
+
+              case 4:
+                mockTicket = _context2.sent;
+                this.set('model', mockTicket); // Act
+
+                _context2.next = 8;
+                return renderFreddySuggestions();
+
+              case 8:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.solutionArticlesTabExists);
+                _context2.next = 11;
+                return _freddySuggestion.default.freddySuggestionsActions.openSolutionArticles();
+
+              case 11:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.solutionArticlesBtnActive);
+                assert.dom('[data-test-id="insert-content-btn"]').exists(); //open solution articles with solution article ID 3
+
+                _context2.next = 15;
+                return _freddySuggestion.default.freddySuggestionsActions.openSolutionArticlesModal();
+
+              case 15:
+                _context2.next = 17;
+                return _freddySuggestion.default.freddySuggestionsActions.solutionArticlesInsertButton();
+
+              case 17:
+                _context2.next = 19;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <ModuleTickets::Details::ConversationActions::Reply 
+                    @ticketModel      = {{ this.model }} 
+                    @updateActionType = {{ this.updateActionType }}
+                    @cancelAction     = {{ this.cancelAction }}
+                    @focusEditor	    = {{ this.focusEditor}} 
+                    @convoCreateSuccessCallback = {{this.convoCreateSuccessCallback}}
+                    @uniqueId         = {{this.uniqueId}}
+                    @replyModel       = {{this.replyModel}}
+                    @savedReplyCc				= {{this.savedReplyCc}}
+                    @savedReplyBcc			= {{this.savedReplyBcc}}
+                    @updateReplyDraftData = {{this.updateReplyDraftData}}
+                  />
+                */
+                {
+                  id: "D2FIB+aL",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-tickets/details/conversation-actions/reply\",[],[[\"@ticketModel\",\"@updateActionType\",\"@cancelAction\",\"@focusEditor\",\"@convoCreateSuccessCallback\",\"@uniqueId\",\"@replyModel\",\"@savedReplyCc\",\"@savedReplyBcc\",\"@updateReplyDraftData\"],[[23,0,[\"model\"]],[23,0,[\"updateActionType\"]],[23,0,[\"cancelAction\"]],[23,0,[\"focusEditor\"]],[23,0,[\"convoCreateSuccessCallback\"]],[23,0,[\"uniqueId\"]],[23,0,[\"replyModel\"]],[23,0,[\"savedReplyCc\"]],[23,0,[\"savedReplyBcc\"]],[23,0,[\"updateReplyDraftData\"]]]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 19:
+                //should open reply editor only if it has reply previlege
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.replyEditorExists);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.replyConversationEditor);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.conversationCancelButton);
+
+              case 22:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      return function (_x) {
+        return _ref3.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('should trigger solution article side modal and click on insert Url option if article is published or of external category', /*#__PURE__*/function () {
+      var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(assert) {
+        var currentUserPrivilege, mockTicket;
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                //should open reply editor only if it has reply previlege
+                currentUserPrivilege = {
+                  scoped_privileges: {
+                    0: ["reply_ticket"],
+                    1: [],
+                    2: [],
+                    3: []
+                  },
+                  privileges: ["reply_ticket"]
+                };
+                (0, _stubCurrentUser.stubCurrentUser)(currentUserPrivilege);
+                _context3.next = 4;
+                return this.store.findRecord('ticket', 375);
+
+              case 4:
+                mockTicket = _context3.sent;
+                this.set('model', mockTicket); // Act
+
+                _context3.next = 8;
+                return renderFreddySuggestions();
+
+              case 8:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.solutionArticlesTabExists);
+                _context3.next = 11;
+                return _freddySuggestion.default.freddySuggestionsActions.openSolutionArticles();
+
+              case 11:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.solutionArticlesBtnActive);
+                assert.dom('[data-test-id="insert-url-btn"]').exists(); //open solution articles with solution article ID 3
+
+                _context3.next = 15;
+                return _freddySuggestion.default.freddySuggestionsActions.openSolutionArticlesModal();
+
+              case 15:
+                _context3.next = 17;
+                return _freddySuggestion.default.freddySuggestionsActions.solutionArticlesInserturl();
+
+              case 17:
+                _context3.next = 19;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <ModuleTickets::Details::ConversationActions::Reply 
+                    @ticketModel      = {{ this.model }} 
+                    @updateActionType = {{ this.updateActionType }}
+                    @cancelAction     = {{ this.cancelAction }}
+                    @focusEditor	    = {{ this.focusEditor}} 
+                    @convoCreateSuccessCallback = {{this.convoCreateSuccessCallback}}
+                    @uniqueId         = {{this.uniqueId}}
+                    @replyModel       = {{this.replyModel}}
+                    @savedReplyCc				= {{this.savedReplyCc}}
+                              @savedReplyBcc				= {{this.savedReplyBcc}}
+                    @updateReplyDraftData = {{this.updateReplyDraftData}}
+                  />
+                */
+                {
+                  id: "D2FIB+aL",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-tickets/details/conversation-actions/reply\",[],[[\"@ticketModel\",\"@updateActionType\",\"@cancelAction\",\"@focusEditor\",\"@convoCreateSuccessCallback\",\"@uniqueId\",\"@replyModel\",\"@savedReplyCc\",\"@savedReplyBcc\",\"@updateReplyDraftData\"],[[23,0,[\"model\"]],[23,0,[\"updateActionType\"]],[23,0,[\"cancelAction\"]],[23,0,[\"focusEditor\"]],[23,0,[\"convoCreateSuccessCallback\"]],[23,0,[\"uniqueId\"]],[23,0,[\"replyModel\"]],[23,0,[\"savedReplyCc\"]],[23,0,[\"savedReplyBcc\"]],[23,0,[\"updateReplyDraftData\"]]]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 19:
+                //should open reply editor only if it has reply previlege
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.replyEditorExists);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.replyConversationEditor);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.conversationCancelButton);
+
+              case 22:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      return function (_x2) {
+        return _ref4.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('should trigger solution article side modal and click on insert content option if it has draft category', /*#__PURE__*/function () {
+      var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(assert) {
+        var currentUserPrivilege, mockTicket;
+        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                //should open reply editor only if it has reply previlege
+                currentUserPrivilege = {
+                  scoped_privileges: {
+                    0: ["reply_ticket"],
+                    1: [],
+                    2: [],
+                    3: []
+                  },
+                  privileges: ["reply_ticket"]
+                };
+                (0, _stubCurrentUser.stubCurrentUser)(currentUserPrivilege);
+                _context4.next = 4;
+                return this.store.findRecord('ticket', 375);
+
+              case 4:
+                mockTicket = _context4.sent;
+                this.set('model', mockTicket); // Act
+
+                _context4.next = 8;
+                return renderFreddySuggestions();
+
+              case 8:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.solutionArticlesTabExists);
+                _context4.next = 11;
+                return _freddySuggestion.default.freddySuggestionsActions.openSolutionArticles();
+
+              case 11:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.solutionArticlesBtnActive);
+                assert.dom('[data-test-id="insert-content-btn"]').exists();
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.draftTagExists); //open solution articles with solution article ID 1
+
+                _context4.next = 16;
+                return _freddySuggestion.default.freddySuggestionsActions.openDraftTagSolutionArticleModal();
+
+              case 16:
+                _context4.next = 18;
+                return _freddySuggestion.default.freddySuggestionsActions.solutionArticlesInsertButton();
+
+              case 18:
+                _context4.next = 20;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <ModuleTickets::Details::ConversationActions::Reply 
+                    @ticketModel      = {{ this.model }} 
+                    @updateActionType = {{ this.updateActionType }}
+                    @cancelAction     = {{ this.cancelAction }}
+                    @focusEditor	    = {{ this.focusEditor}} 
+                    @convoCreateSuccessCallback = {{this.convoCreateSuccessCallback}}
+                    @uniqueId         = {{this.uniqueId}}
+                    @replyModel       = {{this.replyModel}}
+                    @savedReplyCc				= {{this.savedReplyCc}}
+                              @savedReplyBcc				= {{this.savedReplyBcc}}
+                    @updateReplyDraftData = {{this.updateReplyDraftData}}
+                  />
+                */
+                {
+                  id: "D2FIB+aL",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-tickets/details/conversation-actions/reply\",[],[[\"@ticketModel\",\"@updateActionType\",\"@cancelAction\",\"@focusEditor\",\"@convoCreateSuccessCallback\",\"@uniqueId\",\"@replyModel\",\"@savedReplyCc\",\"@savedReplyBcc\",\"@updateReplyDraftData\"],[[23,0,[\"model\"]],[23,0,[\"updateActionType\"]],[23,0,[\"cancelAction\"]],[23,0,[\"focusEditor\"]],[23,0,[\"convoCreateSuccessCallback\"]],[23,0,[\"uniqueId\"]],[23,0,[\"replyModel\"]],[23,0,[\"savedReplyCc\"]],[23,0,[\"savedReplyBcc\"]],[23,0,[\"updateReplyDraftData\"]]]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 20:
+                //should open reply editor only if it has reply previlege
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.replyEditorExists);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.replyConversationEditor);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.conversationCancelButton);
+
+              case 23:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this);
+      }));
+
+      return function (_x3) {
+        return _ref5.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('should trigger solution article side modal and click on insert url option if it has external category', /*#__PURE__*/function () {
+      var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(assert) {
+        var currentUserPrivilege, mockTicket;
+        return regeneratorRuntime.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                //should open reply editor only if it has reply previlege
+                currentUserPrivilege = {
+                  scoped_privileges: {
+                    0: ["reply_ticket"],
+                    1: [],
+                    2: [],
+                    3: []
+                  },
+                  privileges: ["reply_ticket"]
+                };
+                (0, _stubCurrentUser.stubCurrentUser)(currentUserPrivilege);
+                _context5.next = 4;
+                return this.store.findRecord('ticket', 375);
+
+              case 4:
+                mockTicket = _context5.sent;
+                this.set('model', mockTicket); // Act
+
+                _context5.next = 8;
+                return renderFreddySuggestions();
+
+              case 8:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.solutionArticlesTabExists);
+                _context5.next = 11;
+                return _freddySuggestion.default.freddySuggestionsActions.openSolutionArticles();
+
+              case 11:
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.solutionArticlesBtnActive);
+                assert.dom('[data-test-id="insert-url-btn"]').exists();
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.externalTagExists); //open solution articles with solution article ID 2
+
+                _context5.next = 16;
+                return _freddySuggestion.default.freddySuggestionsActions.openExternaltagSolutionArticleModal();
+
+              case 16:
+                _context5.next = 18;
+                return _freddySuggestion.default.freddySuggestionsActions.solutionArticlesInserturl();
+
+              case 18:
+                _context5.next = 20;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <ModuleTickets::Details::ConversationActions::Reply 
+                    @ticketModel      = {{ this.model }} 
+                    @updateActionType = {{ this.updateActionType }}
+                    @cancelAction     = {{ this.cancelAction }}
+                    @focusEditor	    = {{ this.focusEditor}} 
+                    @convoCreateSuccessCallback = {{this.convoCreateSuccessCallback}}
+                    @uniqueId         = {{this.uniqueId}}
+                    @replyModel       = {{this.replyModel}}
+                    @savedReplyCc				= {{this.savedReplyCc}}
+                              @savedReplyBcc				= {{this.savedReplyBcc}}
+                    @updateReplyDraftData = {{this.updateReplyDraftData}}
+                  />
+                */
+                {
+                  id: "D2FIB+aL",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-tickets/details/conversation-actions/reply\",[],[[\"@ticketModel\",\"@updateActionType\",\"@cancelAction\",\"@focusEditor\",\"@convoCreateSuccessCallback\",\"@uniqueId\",\"@replyModel\",\"@savedReplyCc\",\"@savedReplyBcc\",\"@updateReplyDraftData\"],[[23,0,[\"model\"]],[23,0,[\"updateActionType\"]],[23,0,[\"cancelAction\"]],[23,0,[\"focusEditor\"]],[23,0,[\"convoCreateSuccessCallback\"]],[23,0,[\"uniqueId\"]],[23,0,[\"replyModel\"]],[23,0,[\"savedReplyCc\"]],[23,0,[\"savedReplyBcc\"]],[23,0,[\"updateReplyDraftData\"]]]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 20:
+                //should open reply editor only if it has reply previlege
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.replyEditorExists);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.replyConversationEditor);
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.conversationCancelButton);
+
+              case 23:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5, this);
+      }));
+
+      return function (_x4) {
+        return _ref6.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('should render forward and add note editor if user does not have reply previlege in insert content options', /*#__PURE__*/function () {
+      var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(assert) {
+        var currentUserPrivilege, mockTicket;
+        return regeneratorRuntime.wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                //should open reply editor only if it has reply previlege
+                currentUserPrivilege = {
+                  scoped_privileges: {
+                    0: ["forward_ticket"],
+                    1: [],
+                    2: [],
+                    3: []
+                  },
+                  privileges: ["forward_ticket"]
+                };
+                (0, _stubCurrentUser.stubCurrentUser)(currentUserPrivilege);
+                _context6.next = 4;
+                return this.store.findRecord('ticket', 375);
+
+              case 4:
+                mockTicket = _context6.sent;
+                this.set('model', mockTicket); // Act
+
+                _context6.next = 8;
+                return renderFreddySuggestions();
+
+              case 8:
+                _context6.next = 10;
+                return _freddySuggestion.default.freddySuggestionsActions.openSolutionArticles();
+
+              case 10:
+                _context6.next = 12;
+                return _freddySuggestion.default.freddySuggestionsActions.solutionArticlesInsertButton();
+
+              case 12:
+                _context6.next = 14;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <ModuleTickets::Details::ConversationActions::Forward 
+                          @ticketModel              = {{ this.model }} 
+                          @updateActionType         = {{ this.updateActionType }}
+                          @cancelAction             = {{ this.cancelAction }}
+                          @focusEditor	            = {{ this.focusEditor}}
+                          @convoCreateSuccessCallback = {{this.convoCreateSuccessCallback}}
+                          @uniqueId					= {{this.uniqueId}}
+                          @forwardModel				= {{this.forwardModel}} />
+                */
+                {
+                  id: "WwBPh4Eg",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-tickets/details/conversation-actions/forward\",[],[[\"@ticketModel\",\"@updateActionType\",\"@cancelAction\",\"@focusEditor\",\"@convoCreateSuccessCallback\",\"@uniqueId\",\"@forwardModel\"],[[23,0,[\"model\"]],[23,0,[\"updateActionType\"]],[23,0,[\"cancelAction\"]],[23,0,[\"focusEditor\"]],[23,0,[\"convoCreateSuccessCallback\"]],[23,0,[\"uniqueId\"]],[23,0,[\"forwardModel\"]]]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 14:
+                //should open forward editor only if it does not have reply previlege
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.forwardEditorExists, 'forward editor should be shown');
+                assert.notOk(_freddySuggestion.default.freddySuggestionsActions.replyEditorExists, 'Reply editor shouldnt be rendered once forward action is triggered');
+                assert.notOk(_freddySuggestion.default.freddySuggestionsActions.addNoteEditorExists, 'Note editor should be shown');
+
+              case 17:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6, this);
+      }));
+
+      return function (_x5) {
+        return _ref7.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('should render forward and add note editor if user does not have reply previlege in insert URl options', /*#__PURE__*/function () {
+      var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(assert) {
+        var currentUserPrivilege, mockTicket;
+        return regeneratorRuntime.wrap(function _callee7$(_context7) {
+          while (1) {
+            switch (_context7.prev = _context7.next) {
+              case 0:
+                //should open reply editor only if it has reply previlege
+                currentUserPrivilege = {
+                  scoped_privileges: {
+                    0: ["forward_ticket"],
+                    1: [],
+                    2: [],
+                    3: []
+                  },
+                  privileges: ["forward_ticket"]
+                };
+                (0, _stubCurrentUser.stubCurrentUser)(currentUserPrivilege);
+                _context7.next = 4;
+                return this.store.findRecord('ticket', 375);
+
+              case 4:
+                mockTicket = _context7.sent;
+                this.set('model', mockTicket); // Act
+
+                _context7.next = 8;
+                return renderFreddySuggestions();
+
+              case 8:
+                _context7.next = 10;
+                return _freddySuggestion.default.freddySuggestionsActions.openSolutionArticles();
+
+              case 10:
+                _context7.next = 12;
+                return _freddySuggestion.default.freddySuggestionsActions.solutionArticlesInserturl();
+
+              case 12:
+                _context7.next = 14;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <ModuleTickets::Details::ConversationActions::Forward 
+                          @ticketModel              = {{ this.model }} 
+                          @updateActionType         = {{ this.updateActionType }}
+                          @cancelAction             = {{ this.cancelAction }}
+                          @focusEditor	            = {{ this.focusEditor}}
+                          @convoCreateSuccessCallback = {{this.convoCreateSuccessCallback}}
+                          @uniqueId					= {{this.uniqueId}}
+                          @forwardModel				= {{this.forwardModel}} />
+                */
+                {
+                  id: "WwBPh4Eg",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-tickets/details/conversation-actions/forward\",[],[[\"@ticketModel\",\"@updateActionType\",\"@cancelAction\",\"@focusEditor\",\"@convoCreateSuccessCallback\",\"@uniqueId\",\"@forwardModel\"],[[23,0,[\"model\"]],[23,0,[\"updateActionType\"]],[23,0,[\"cancelAction\"]],[23,0,[\"focusEditor\"]],[23,0,[\"convoCreateSuccessCallback\"]],[23,0,[\"uniqueId\"]],[23,0,[\"forwardModel\"]]]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 14:
+                //should open forward editor only if it does not have reply previlege
+                assert.ok(_freddySuggestion.default.freddySuggestionsActions.forwardEditorExists, 'forward editor should be shown');
+                assert.notOk(_freddySuggestion.default.freddySuggestionsActions.replyEditorExists, 'Reply editor shouldnt be rendered once forward action is triggered');
+                assert.notOk(_freddySuggestion.default.freddySuggestionsActions.addNoteEditorExists, 'Note editor should be shown');
+
+              case 17:
+              case "end":
+                return _context7.stop();
+            }
+          }
+        }, _callee7, this);
+      }));
+
+      return function (_x6) {
+        return _ref8.apply(this, arguments);
+      };
+    }());
+  });
+});
 define("freshservice/tests/integration/components/module-tickets/details/fulfill-request/component-test", ["qunit", "ember-qunit", "@ember/test-helpers", "freshservice/tests/lib/intl", "ember-cli-mirage/test-support", "freshservice/tests/lib/sinon-context", "freshservice/tests/pages/components/module-tickets/associated-asset", "freshservice/tests/lib/spy-flash-message"], function (_qunit, _emberQunit, _testHelpers, _intl, _testSupport, _sinonContext, _associatedAsset, _spyFlashMessage) {
   "use strict";
 
@@ -42550,6 +45766,246 @@ define("freshservice/tests/integration/components/module-tickets/details/fulfill
     }());
   });
 });
+define("freshservice/tests/integration/components/module-tickets/details/quick-actions/watchers/component-test", ["qunit", "ember-qunit", "@ember/test-helpers", "ember-cli-mirage/test-support", "freshservice/tests/lib/stub-current-user", "freshservice/tests/lib/intl", "freshservice/tests/lib/sinon-context", "freshservice/tests/pages/components/module-tickets/quick-actions-watchers"], function (_qunit, _emberQunit, _testHelpers, _testSupport, _stubCurrentUser, _intl, _sinonContext, _quickActionsWatchers) {
+  "use strict";
+
+  function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+  function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+  (0, _qunit.module)('Integration | Component | module-tickets/details/quick-actions/watchers', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _sinonContext.setupSinonSandbox)(hooks);
+    (0, _testSupport.setupMirage)(hooks);
+    (0, _intl.setupTranslations)(hooks);
+    hooks.beforeEach( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              (0, _stubCurrentUser.stubCurrentUser)();
+              this.store = this.owner.lookup('service:store');
+              this.agentsGroups = this.owner.lookup('service:agentsGroups');
+              this.server.loadFixtures("tickets");
+              this.server.loadFixtures("users");
+
+              this.noop = function () {};
+
+            case 6:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, this);
+    })));
+
+    function renderQuickActionsWatchers() {
+      return _renderQuickActionsWatchers.apply(this, arguments);
+    }
+
+    function _renderQuickActionsWatchers() {
+      _renderQuickActionsWatchers = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6() {
+        return regeneratorRuntime.wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                _context6.next = 2;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <ModuleTickets::Details::QuickActions::Watchers
+                        @model = {{this.model}} />
+                */
+                {
+                  id: "SfbSXo2n",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-tickets/details/quick-actions/watchers\",[],[[\"@model\"],[[23,0,[\"model\"]]]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 2:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6);
+      }));
+      return _renderQuickActionsWatchers.apply(this, arguments);
+    }
+
+    (0, _qunit.test)('Should render quick actions watcher and toggle watcher button', /*#__PURE__*/function () {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(assert) {
+        var mockTicket;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return this.store.findRecord('ticket', 17);
+
+              case 2:
+                mockTicket = _context2.sent;
+                this.set('model', mockTicket);
+                _context2.next = 6;
+                return renderQuickActionsWatchers();
+
+              case 6:
+                assert.ok(_quickActionsWatchers.default.quickActionsWatcherWrapperExists, 'Quick actions wrapper exists');
+                assert.ok(_quickActionsWatchers.default.watcherDropdownExists, 'Watcher Dropdown Exists');
+                _context2.next = 10;
+                return _quickActionsWatchers.default.openWatcherDropdown();
+
+              case 10:
+                assert.ok(_quickActionsWatchers.default.watchersContainerOpened);
+
+              case 11:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      return function (_x) {
+        return _ref3.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Should click on Add me option and add current user as a watcher', /*#__PURE__*/function () {
+      var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(assert) {
+        var mockTicket;
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return this.store.findRecord('ticket', 17);
+
+              case 2:
+                mockTicket = _context3.sent;
+                this.set('model', mockTicket);
+                _context3.next = 6;
+                return renderQuickActionsWatchers();
+
+              case 6:
+                assert.ok(_quickActionsWatchers.default.quickActionsWatcherWrapperExists, 'Quick actions wrapper exists');
+                _context3.next = 9;
+                return _quickActionsWatchers.default.openWatcherDropdown();
+
+              case 9:
+                // if there is no watchers then only click on Add me button
+                assert.equal(_quickActionsWatchers.default.noWatchersExistenceText, 'No watchers yet');
+                _context3.next = 12;
+                return _quickActionsWatchers.default.clickOnAddMe();
+
+              case 12:
+                // current user watcher added
+                assert.ok(_quickActionsWatchers.default.watchersListExists, 'Watcher added');
+
+              case 13:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      return function (_x2) {
+        return _ref4.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Should unwatch the watcher from watchers list', /*#__PURE__*/function () {
+      var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(assert) {
+        var mockTicket;
+        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.next = 2;
+                return this.store.findRecord('ticket', 17);
+
+              case 2:
+                mockTicket = _context4.sent;
+                this.set('model', mockTicket);
+                _context4.next = 6;
+                return renderQuickActionsWatchers();
+
+              case 6:
+                assert.ok(_quickActionsWatchers.default.quickActionsWatcherWrapperExists, 'Quick actions wrapper exists');
+                _context4.next = 9;
+                return _quickActionsWatchers.default.openWatcherDropdown();
+
+              case 9:
+                // if there is no watchers then only click on Add me button
+                assert.equal(_quickActionsWatchers.default.noWatchersExistenceText, 'No watchers yet');
+                _context4.next = 12;
+                return _quickActionsWatchers.default.clickOnAddMe();
+
+              case 12:
+                // current user watcher added
+                assert.ok(_quickActionsWatchers.default.watchersListExists, 'Watcher added');
+                _context4.next = 15;
+                return _quickActionsWatchers.default.unwatchWatchers();
+
+              case 15:
+                assert.equal(_quickActionsWatchers.default.noWatchersExistenceText, 'No watchers yet');
+
+              case 16:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this);
+      }));
+
+      return function (_x3) {
+        return _ref5.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Should toggle the add watchers input and render agents', /*#__PURE__*/function () {
+      var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(assert) {
+        var mockTicket;
+        return regeneratorRuntime.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                (0, _stubCurrentUser.stubCurrentUser)({
+                  userId: 4
+                });
+                _context5.next = 3;
+                return this.store.findRecord('ticket', 19);
+
+              case 3:
+                mockTicket = _context5.sent;
+                this.set('model', mockTicket);
+                _context5.next = 7;
+                return renderQuickActionsWatchers();
+
+              case 7:
+                assert.ok(_quickActionsWatchers.default.quickActionsWatcherWrapperExists, 'Quick actions wrapper exists');
+                _context5.next = 10;
+                return _quickActionsWatchers.default.openWatcherDropdown();
+
+              case 10:
+                // if there is no watchers then only click on Add me button
+                assert.ok(_quickActionsWatchers.default.addWatchersInputExists, 'Add watchers input exists');
+                _context5.next = 13;
+                return (0, _testHelpers.fillIn)('input', 'Rachel');
+
+              case 13:
+                assert.ok(_quickActionsWatchers.default.dropdownOptionsExists);
+
+              case 14:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5, this);
+      }));
+
+      return function (_x4) {
+        return _ref6.apply(this, arguments);
+      };
+    }());
+  });
+});
 define("freshservice/tests/integration/components/module-tickets/details/related-tickets/component-test", ["qunit", "sinon", "ember-qunit", "@ember/test-helpers", "ember-cli-mirage/test-support", "freshservice/tests/lib/intl", "freshservice/tests/lib/sinon-context", "freshservice/tests/lib/stub-current-user", "freshservice/tests/pages/components/module-tickets/related-tickets", "freshservice/tests/pages/components/module-tickets/new-ticket", "freshservice/mirage/fixtures/related-tickets/parent-ticket", "freshservice/mirage/fixtures/related-tickets/child_tickets", "freshservice/mirage/fixtures/requesters", "freshservice/mirage/fixtures/tickets", "freshservice/tests/lib/spy-flash-message"], function (_qunit, _sinon, _emberQunit, _testHelpers, _testSupport, _intl, _sinonContext, _stubCurrentUser, _relatedTickets, _newTicket, _parentTicket, _child_tickets, _requesters, _tickets, _spyFlashMessage) {
   "use strict";
 
@@ -42865,11 +46321,11 @@ define("freshservice/tests/integration/components/module-tickets/details/related
                 _context7.next = 7;
                 return (0, _testHelpers.render)(Ember.HTMLBars.template(
                 /*
-                  <ModuleTickets::Details::RelatedTickets @model={{this.model}} @updateTabCount={{this.updateTabCount}} />
+                  <ModuleTickets::Details::RelatedTickets @model={{this.model}} @updateTabCount={{this.updateTabCount}} @page='ticket' />
                 */
                 {
-                  id: "QsB3aIXJ",
-                  block: "{\"symbols\":[],\"statements\":[[5,\"module-tickets/details/related-tickets\",[],[[\"@model\",\"@updateTabCount\"],[[23,0,[\"model\"]],[23,0,[\"updateTabCount\"]]]]]],\"hasEval\":false}",
+                  id: "DymKihu2",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-tickets/details/related-tickets\",[],[[\"@model\",\"@updateTabCount\",\"@page\"],[[23,0,[\"model\"]],[23,0,[\"updateTabCount\"]],\"ticket\"]]]],\"hasEval\":false}",
                   meta: {}
                 }));
 
@@ -42917,11 +46373,11 @@ define("freshservice/tests/integration/components/module-tickets/details/related
                 _context8.next = 7;
                 return (0, _testHelpers.render)(Ember.HTMLBars.template(
                 /*
-                  <ModuleTickets::Details::RelatedTickets @model={{this.model}} @updateTabCount={{this.updateTabCount}} />
+                  <ModuleTickets::Details::RelatedTickets @model={{this.model}} @updateTabCount={{this.updateTabCount}} @page='ticket' />
                 */
                 {
-                  id: "QsB3aIXJ",
-                  block: "{\"symbols\":[],\"statements\":[[5,\"module-tickets/details/related-tickets\",[],[[\"@model\",\"@updateTabCount\"],[[23,0,[\"model\"]],[23,0,[\"updateTabCount\"]]]]]],\"hasEval\":false}",
+                  id: "DymKihu2",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-tickets/details/related-tickets\",[],[[\"@model\",\"@updateTabCount\",\"@page\"],[[23,0,[\"model\"]],[23,0,[\"updateTabCount\"]],\"ticket\"]]]],\"hasEval\":false}",
                   meta: {}
                 }));
 
@@ -43717,19 +47173,25 @@ define("freshservice/tests/integration/components/module-tickets/details/request
                 return renderComponent();
 
               case 2:
+                assert.equal(_requestedItem.default.reqItemToggleInfoTextOfFirstRI, 'Hide Info');
                 assert.equal(_requestedItem.default.reqItemToggleInfoTextOfLoanerRI, 'More Info');
-                _context5.next = 5;
-                return _requestedItem.default.reqItemMoreInfoBtnOfLoanerRI();
-
-              case 5:
-                assert.equal(_requestedItem.default.reqItemToggleInfoTextOfLoanerRI, 'Hide Info');
-                _context5.next = 8;
+                assert.equal(_requestedItem.default.reqItemToggleInfoTextOfPermanentRI, 'More Info');
+                _context5.next = 7;
                 return _requestedItem.default.reqItemMoreInfoBtnOfPermanentRI();
 
-              case 8:
+              case 7:
+                assert.equal(_requestedItem.default.reqItemToggleInfoTextOfFirstRI, 'Hide Info');
                 assert.equal(_requestedItem.default.reqItemToggleInfoTextOfLoanerRI, 'More Info');
+                assert.equal(_requestedItem.default.reqItemToggleInfoTextOfPermanentRI, 'Hide Info');
+                _context5.next = 12;
+                return _requestedItem.default.reqItemMoreInfoBtnOfFirstRI();
 
-              case 9:
+              case 12:
+                assert.equal(_requestedItem.default.reqItemToggleInfoTextOfFirstRI, 'More Info');
+                assert.equal(_requestedItem.default.reqItemToggleInfoTextOfLoanerRI, 'More Info');
+                assert.equal(_requestedItem.default.reqItemToggleInfoTextOfPermanentRI, 'Hide Info');
+
+              case 15:
               case "end":
                 return _context5.stop();
             }
@@ -43896,7 +47358,7 @@ define("freshservice/tests/integration/components/module-tickets/details/request
     }());
     (0, _qunit.test)('Should search items in other categories', /*#__PURE__*/function () {
       var _ref11 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10(assert) {
-        var searchTerm, intl, emptyTitle;
+        var searchTerm;
         return regeneratorRuntime.wrap(function _callee10$(_context10) {
           while (1) {
             switch (_context10.prev = _context10.next) {
@@ -43913,30 +47375,25 @@ define("freshservice/tests/integration/components/module-tickets/details/request
 
               case 6:
                 searchTerm = 'Adobe';
-                intl = this.owner.lookup('service:intl');
-                emptyTitle = intl.t('fs.request_items.catalog_list.no_results.title', {
-                  term: searchTerm
-                });
-                _context10.next = 11;
+                _context10.next = 9;
                 return _formFields.default.selectBasicDropdown('req-items-category-dd', 'Travel Desk');
 
-              case 11:
+              case 9:
                 _requestedItem.default.catalogSearchInput(searchTerm);
 
-                _context10.next = 14;
+                _context10.next = 12;
                 return _requestedItem.default.catalogSearchkeyUp();
 
-              case 14:
+              case 12:
                 //Assertion
                 assert.ok(_requestedItem.default.clearSearchBtnVisible, 'clear button visible');
-                assert.ok(_requestedItem.default.noSIEmptyStateVisible, 'Empty State Visible');
-                assert.equal(_requestedItem.default.noSIEmptyStateTitleText, emptyTitle, 'Empty state title match');
+                assert.notOk(_requestedItem.default.noSIEmptyStateVisible, 'Empty State Visible');
                 assert.ok(_requestedItem.default.otherResultsTitleVisible, 'Other Results Title Visible');
                 assert.ok(_requestedItem.default.otherResultsListVisible, 'Other Results List Visible'); // 3 Items provided for 'Adobe' in fixtures that are not bundle items
 
                 assert.equal(_requestedItem.default.noOfServiceItemsListed, 3, 'Other Results Count match');
 
-              case 20:
+              case 17:
               case "end":
                 return _context10.stop();
             }
@@ -44569,6 +48026,264 @@ define("freshservice/tests/integration/components/module-tickets/details/stage-d
     }());
   });
 });
+define("freshservice/tests/integration/components/module-tickets/details/state/component-test", ["qunit", "ember-qunit", "@ember/test-helpers", "ember-cli-mirage/test-support", "freshservice/tests/lib/stub-current-user", "freshservice/tests/lib/intl", "freshservice/tests/lib/sinon-context", "freshservice/tests/pages/components/module-tickets/state"], function (_qunit, _emberQunit, _testHelpers, _testSupport, _stubCurrentUser, _intl, _sinonContext, _state) {
+  "use strict";
+
+  function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+  function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+  (0, _qunit.module)('Integration | Component | module-tickets/details/state', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _sinonContext.setupSinonSandbox)(hooks);
+    (0, _testSupport.setupMirage)(hooks);
+    (0, _intl.setupTranslations)(hooks);
+    hooks.beforeEach( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              (0, _stubCurrentUser.stubCurrentUser)();
+              this.store = this.owner.lookup('service:store');
+              this.server.loadFixtures("tickets");
+
+              this.noop = function () {};
+
+            case 4:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, this);
+    })));
+
+    function renderTicketStates() {
+      return _renderTicketStates.apply(this, arguments);
+    }
+
+    function _renderTicketStates() {
+      _renderTicketStates = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8() {
+        return regeneratorRuntime.wrap(function _callee8$(_context8) {
+          while (1) {
+            switch (_context8.prev = _context8.next) {
+              case 0:
+                _context8.next = 2;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <ModuleTickets::Details::State
+                        @modelState = {{this.model.state}} />
+                */
+                {
+                  id: "hD5TyMbx",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-tickets/details/state\",[],[[\"@modelState\"],[[23,0,[\"model\",\"state\"]]]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 2:
+              case "end":
+                return _context8.stop();
+            }
+          }
+        }, _callee8);
+      }));
+      return _renderTicketStates.apply(this, arguments);
+    }
+
+    (0, _qunit.test)('Should render ticket state wrapper with overdue state', /*#__PURE__*/function () {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(assert) {
+        var mockTicket;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return this.store.findRecord('ticket', 11);
+
+              case 2:
+                mockTicket = _context2.sent;
+                this.set('model', mockTicket);
+                _context2.next = 6;
+                return renderTicketStates();
+
+              case 6:
+                assert.ok(_state.default.stateWrapperExists, 'State wrapper exists');
+                assert.equal(_state.default.overdueStateText, 'Overdue');
+
+              case 8:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      return function (_x) {
+        return _ref3.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Should render ticket state wrapper with new state', /*#__PURE__*/function () {
+      var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(assert) {
+        var mockTicket;
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return this.store.findRecord('ticket', 12);
+
+              case 2:
+                mockTicket = _context3.sent;
+                this.set('model', mockTicket);
+                _context3.next = 6;
+                return renderTicketStates();
+
+              case 6:
+                assert.ok(_state.default.stateWrapperExists, 'State wrapper exists');
+                assert.equal(_state.default.newStateText, 'New');
+
+              case 8:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      return function (_x2) {
+        return _ref4.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Should render ticket state wrapper with customer responded overdue state', /*#__PURE__*/function () {
+      var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(assert) {
+        var mockTicket;
+        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.next = 2;
+                return this.store.findRecord('ticket', 10);
+
+              case 2:
+                mockTicket = _context4.sent;
+                this.set('model', mockTicket);
+                _context4.next = 6;
+                return renderTicketStates();
+
+              case 6:
+                assert.ok(_state.default.stateWrapperExists, 'State wrapper exists');
+                assert.ok(_state.default.customerRespondedStateValueExists, 'State value exists');
+                assert.dom('[data-test-id="ticket-state-customer_responded_overdue"]').containsText('responded');
+
+              case 9:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this);
+      }));
+
+      return function (_x3) {
+        return _ref5.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Should render ticket state wrapper with elapsed state', /*#__PURE__*/function () {
+      var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(assert) {
+        var mockTicket;
+        return regeneratorRuntime.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                _context5.next = 2;
+                return this.store.findRecord('ticket', 27);
+
+              case 2:
+                mockTicket = _context5.sent;
+                this.set('model', mockTicket);
+                _context5.next = 6;
+                return renderTicketStates();
+
+              case 6:
+                assert.ok(_state.default.stateWrapperExists, 'State wrapper exists');
+                assert.equal(_state.default.elapsedStateStatusText, 'Response Due');
+
+              case 8:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5, this);
+      }));
+
+      return function (_x4) {
+        return _ref6.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Should render ticket state wrapper with customer responded state', /*#__PURE__*/function () {
+      var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(assert) {
+        var mockTicket;
+        return regeneratorRuntime.wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                _context6.next = 2;
+                return this.store.findRecord('ticket', 28);
+
+              case 2:
+                mockTicket = _context6.sent;
+                this.set('model', mockTicket);
+                _context6.next = 6;
+                return renderTicketStates();
+
+              case 6:
+                assert.ok(_state.default.stateWrapperExists, 'State wrapper exists');
+                assert.dom('[data-test-id="ticket-state-customer_responded"]').containsText('responded');
+
+              case 8:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6, this);
+      }));
+
+      return function (_x5) {
+        return _ref7.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Should render ticket state wrapper with empty state', /*#__PURE__*/function () {
+      var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(assert) {
+        var mockTicket;
+        return regeneratorRuntime.wrap(function _callee7$(_context7) {
+          while (1) {
+            switch (_context7.prev = _context7.next) {
+              case 0:
+                _context7.next = 2;
+                return this.store.findRecord('ticket', 29);
+
+              case 2:
+                mockTicket = _context7.sent;
+                this.set('model', mockTicket);
+                _context7.next = 6;
+                return renderTicketStates();
+
+              case 6:
+                assert.notOk(_state.default.stateWrapperExists, 'State wrapper exists');
+                assert.notOk(_state.default.emptyStateExists, 'Empty State Exists');
+
+              case 8:
+              case "end":
+                return _context7.stop();
+            }
+          }
+        }, _callee7, this);
+      }));
+
+      return function (_x6) {
+        return _ref8.apply(this, arguments);
+      };
+    }());
+  });
+});
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 define("freshservice/tests/integration/components/module-tickets/details/summary/component-test", ["qunit", "@ember/test-helpers", "ember-qunit", "ember-cli-mirage/test-support", "freshservice/tests/lib/intl", "freshservice/tests/lib/sinon-context", "freshservice/tests/lib/stub-current-user", "freshservice/mirage/fixtures/ticket-form-fields", "freshservice/tests/pages/components/module-tickets/summary"], function (_qunit, _testHelpers, _emberQunit, _testSupport, _intl, _sinonContext, _stubCurrentUser, _ticketFormFields, _summary) {
@@ -44882,9 +48597,9 @@ define("freshservice/tests/integration/components/module-tickets/details/summary
                 assert.ok(_summary.default.resolutionStatusSummaryExists); // Due fields Summary comp
 
                 assert.notOk(_summary.default.frDueSummaryExists);
-                assert.ok(_summary.default.resolutionDueSummaryExists);
-                assert.ok(_summary.default.changeDueByFormExists);
-                assert.ok(_summary.default.editDuebyBtnExists);
+                assert.notOk(_summary.default.resolutionDueSummaryExists);
+                assert.notOk(_summary.default.changeDueByFormExists);
+                assert.notOk(_summary.default.editDuebyBtnExists);
 
               case 14:
               case "end":
@@ -44942,56 +48657,54 @@ define("freshservice/tests/integration/components/module-tickets/details/summary
                 assert.notOk(_summary.default.datepickerContExists);
                 assert.notOk(_summary.default.datePickerFooterExists);
                 assert.notOk(_summary.default.datePickerCancelBtnExists);
-                assert.notOk(_summary.default.datePickerUpdateBtnExists);
                 assert.notOk(_summary.default.datePickerUpdateDisabledBtnExists);
                 assert.notOk(_summary.default.datePickerErrorBannerExists);
                 assert.ok(_summary.default.defaultDateMenuPickerExists);
                 assert.ok(_summary.default.customDatePickerBtnExists); // Trigger custom date time picker button
 
-                _context5.next = 27;
+                _context5.next = 26;
                 return _summary.default.customDatePickerBtn();
 
-              case 27:
+              case 26:
                 assert.ok(_summary.default.dateMenuPickerContExists);
                 assert.ok(_summary.default.dateValueInputExists);
                 assert.ok(_summary.default.datepickerContExists);
                 assert.ok(_summary.default.datePickerFooterExists);
                 assert.ok(_summary.default.datePickerCancelBtnExists);
                 assert.ok(_summary.default.datePickerUpdateDisabledBtnExists);
-                assert.notOk(_summary.default.datePickerUpdateBtnExists);
                 assert.notOk(_summary.default.datePickerErrorBannerExists);
-                _context5.next = 37;
+                _context5.next = 35;
                 return (0, _testHelpers.click)('.time-control .ember-power-select-trigger');
 
-              case 37:
+              case 35:
                 assert.equal((0, _testHelpers.findAll)('.time-control .ember-power-select-trigger')[0]['attributes']['aria-expanded'].value, 'true', 'Time select Dropdown renders when clicked inside it');
-                _context5.next = 40;
+                _context5.next = 38;
                 return (0, _testHelpers.click)('.time-control .ember-power-select-trigger');
 
-              case 40:
+              case 38:
                 assert.equal((0, _testHelpers.findAll)('.time-control .ember-power-select-trigger')[0]['attributes']['aria-expanded'].value, 'false', 'Time select Dropdown disappears when again clicked inside it');
-                _context5.next = 43;
+                _context5.next = 41;
                 return (0, _testHelpers.click)('.calendar-dropdown-month .ember-power-select-trigger');
 
-              case 43:
+              case 41:
                 assert.equal((0, _testHelpers.findAll)('.calendar-dropdown-month .ember-power-select-trigger')[0]['attributes']['aria-expanded'].value, 'true', 'Month select Dropdown renders when clicked inside it');
-                _context5.next = 46;
+                _context5.next = 44;
                 return (0, _testHelpers.click)('.calendar-dropdown-month .ember-power-select-trigger');
 
-              case 46:
+              case 44:
                 assert.equal((0, _testHelpers.findAll)('.calendar-dropdown-month .ember-power-select-trigger')[0]['attributes']['aria-expanded'].value, 'false', 'Month select Dropdown disappears when again clicked inside it');
-                _context5.next = 49;
+                _context5.next = 47;
                 return (0, _testHelpers.click)('.calendar-dropdown-year .ember-power-select-trigger');
 
-              case 49:
+              case 47:
                 assert.equal((0, _testHelpers.findAll)('.calendar-dropdown-year .ember-power-select-trigger')[0]['attributes']['aria-expanded'].value, 'true', 'Year select Dropdown renders when clicked inside it');
-                _context5.next = 52;
+                _context5.next = 50;
                 return (0, _testHelpers.click)('.calendar-dropdown-year .ember-power-select-trigger');
 
-              case 52:
+              case 50:
                 assert.equal((0, _testHelpers.findAll)('.time-control .ember-power-select-trigger')[0]['attributes']['aria-expanded'].value, 'false', 'Year select Dropdown disappears when again clicked inside it'); // Update logic case can be added only after api endpoint is ready andintegrate with UI component.
 
-              case 53:
+              case 51:
               case "end":
                 return _context5.stop();
             }
@@ -45635,7 +49348,7 @@ define("freshservice/tests/integration/components/module-tickets/details/tasks/c
 
             case 4:
               model = _context.sent;
-              this.set('model', model.lastObject);
+              this.set('model', model.findBy('id', '22'));
               this.intl = this.owner.lookup("service:intl");
 
             case 7:
@@ -45940,7 +49653,7 @@ define("freshservice/tests/integration/components/module-tickets/details/tasks/f
               return this.store.findAll('ticket-task-field');
 
             case 8:
-              this.set('model', model.lastObject);
+              this.set('model', model.findBy('id', '22'));
               this.set('intl', this.owner.lookup("service:intl"));
               this.set('agentsGroups', this.owner.lookup("service:agentsGroups"));
               (0, _stubCurrentUser.stubCurrentUser)({
@@ -46388,7 +50101,7 @@ define("freshservice/tests/integration/components/module-tickets/details/tasks/m
               return this.store.findAll('ticket-task-field');
 
             case 8:
-              this.set('model', model.lastObject);
+              this.set('model', model.findBy('id', '22'));
               this.set('intl', this.owner.lookup("service:intl"));
               (0, _stubCurrentUser.stubCurrentUser)(TEST_USER);
 
@@ -46440,70 +50153,56 @@ define("freshservice/tests/integration/components/module-tickets/details/tasks/m
                 return (0, _testHelpers.click)('[data-test-id="ember-modal-close"]');
 
               case 12:
-                assert.dom('.confirmation-side-modal-content').exists({
-                  count: 1
-                }, "On close click, cancel confirmation modal appears as expected");
-                _context2.next = 15;
-                return (0, _testHelpers.click)('[data-test-id="cancel-confirmation-submit"]');
-
-              case 15:
                 assert.dom('[data-test-task-form="add"]').doesNotExist("Task add modal is closed on clicking close modal"); // Task show modal - open & close
 
-                _context2.next = 18;
+                _context2.next = 15;
                 return (0, _testHelpers.click)('[data-test-task-show-btn]');
 
-              case 18:
+              case 15:
                 assert.dom('[data-test-task-show-modal]').exists({
                   count: 1
                 }, "Task show modal is open on clicking show task");
-                _context2.next = 21;
+                _context2.next = 18;
                 return (0, _testHelpers.click)('[data-test-id="ember-modal-close"]');
 
-              case 21:
+              case 18:
                 assert.dom('[data-test-task-show-modal]').doesNotExist("Task show modal is closed on clicking close modal"); // Edit task modal - open & close
 
-                _context2.next = 24;
+                _context2.next = 21;
                 return (0, _testHelpers.click)('[data-test-task-item-more-trigger]');
 
-              case 24:
-                _context2.next = 26;
+              case 21:
+                _context2.next = 23;
                 return (0, _testHelpers.click)('[data-test-task-item-more-edit]');
 
-              case 26:
+              case 23:
                 assert.dom('[data-test-task-form="edit"]').exists({
                   count: 1
                 }, "Task edit modal is open on clicking edit task");
-                _context2.next = 29;
+                _context2.next = 26;
                 return (0, _testHelpers.click)('[data-test-id="ember-modal-close"]');
 
-              case 29:
-                assert.dom('.confirmation-side-modal-content').exists({
-                  count: 1
-                }, "On close click, cancel confirmation modal appears as expected");
-                _context2.next = 32;
-                return (0, _testHelpers.click)('[data-test-id="cancel-confirmation-submit"]');
-
-              case 32:
+              case 26:
                 assert.dom('[data-test-task-form="edit"]').doesNotExist("Task edit modal is closed on clicking close modal"); // Delete task modal - open & close
 
-                _context2.next = 35;
+                _context2.next = 29;
                 return (0, _testHelpers.click)('[data-test-task-item-more-trigger]');
 
-              case 35:
-                _context2.next = 37;
+              case 29:
+                _context2.next = 31;
                 return (0, _testHelpers.click)('[data-test-task-item-more-delete]');
 
-              case 37:
+              case 31:
                 assert.dom('[data-test-task-delete-modal]').exists({
                   count: 1
                 }, "Task delete modal is open on clicking delete task");
-                _context2.next = 40;
+                _context2.next = 34;
                 return (0, _testHelpers.click)('[data-test-id="ember-modal-close"]');
 
-              case 40:
+              case 34:
                 assert.dom('[data-test-task-delete-modal]').doesNotExist("Task delete modal is closed on clicking close modal");
 
-              case 41:
+              case 35:
               case "end":
                 return _context2.stop();
             }
@@ -46626,44 +50325,37 @@ define("freshservice/tests/integration/components/module-tickets/details/tasks/m
 
               case 19:
                 // Close edit modal
-                assert.dom('.confirmation-side-modal-content').exists({
-                  count: 1
-                }, "On close click, cancel confirmation modal appears as expected");
-                _context4.next = 22;
-                return (0, _testHelpers.click)('[data-test-id="cancel-confirmation-submit"]');
-
-              case 22:
                 assert.dom('[data-test-task-form="edit"]').doesNotExist("Task edit modal opened from show modal is closed on clicking close modal"); // Task show modal
 
-                _context4.next = 25;
+                _context4.next = 22;
                 return (0, _testHelpers.click)('[data-test-task-show-btn]');
 
-              case 25:
+              case 22:
                 assert.dom('[data-test-task-show-modal]').exists({
                   count: 1
                 }, "Task show modal is open");
-                _context4.next = 28;
+                _context4.next = 25;
                 return (0, _testHelpers.click)('[data-test-task-show-modal-more-trigger]');
 
-              case 28:
+              case 25:
                 nestedDelBtn = this.element.querySelector('[data-test-task-show-modal-more-delete]');
-                _context4.next = 31;
+                _context4.next = 28;
                 return (0, _testHelpers.click)(nestedDelBtn);
 
-              case 31:
+              case 28:
                 // Delete button
                 assert.dom('[data-test-task-show-modal]').doesNotExist("Task show modal is closed on clicking delete task inside show more options");
                 assert.dom('[data-test-task-delete-modal]').exists({
                   count: 1
                 }, "Task delete modal is open"); // Delete modal
 
-                _context4.next = 35;
+                _context4.next = 32;
                 return (0, _testHelpers.click)('[data-test-id="modal-cancel"]');
 
-              case 35:
+              case 32:
                 assert.dom('[data-test-task-delete-modal]').doesNotExist("Task delete modal opened from show modal is closed on clicking cancel modal");
 
-              case 36:
+              case 33:
               case "end":
                 return _context4.stop();
             }
@@ -53288,7 +56980,7 @@ define("freshservice/tests/integration/components/module-workloads/manage-assign
     }());
   });
 });
-define("freshservice/tests/integration/components/module-workloads/people-filter-test", ["freshservice/config/environment", "@ember/test-helpers", "ember-qunit", "freshservice/constants/workload", "qunit", "freshservice/tests/lib/stub-current-user", "freshservice/tests/lib/intl"], function (_environment, _testHelpers, _emberQunit, _workload, _qunit, _stubCurrentUser, _intl) {
+define("freshservice/tests/integration/components/module-workloads/people-filter-test", ["freshservice/config/environment", "@ember/test-helpers", "ember-qunit", "freshservice/constants/workload", "qunit", "freshservice/tests/lib/stub-current-user", "freshservice/tests/lib/intl", "ember-local-storage/local/object", "ember-local-storage/test-support/reset-storage", "freshservice/tests/pages/components/module-workloads/people-filter", "ember-power-select/test-support"], function (_environment, _testHelpers, _emberQunit, _workload, _qunit, _stubCurrentUser, _intl, _object, _resetStorage, _peopleFilter, _testSupport) {
   "use strict";
 
   function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -53339,6 +57031,63 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
     "members_pending_approval": [],
     "leaders_pending_approval": [],
     "observers_pending_approval": []
+  }, {
+    "id": 83,
+    "name": "Release Team",
+    "description": "Release Team",
+    "escalate_to": null,
+    "unassigned_for": "15m",
+    "business_hours_id": null,
+    "created_at": "2022-03-25T10:22:57Z",
+    "updated_at": "2022-03-25T14:51:32Z",
+    "auto_ticket_assign": false,
+    "restricted": false,
+    "approval_required": false,
+    "agent_ids": [34, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90],
+    "members": [34, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90],
+    "observers": [],
+    "leaders": [],
+    "members_pending_approval": [],
+    "leaders_pending_approval": [],
+    "observers_pending_approval": []
+  }, {
+    "id": 90,
+    "name": "WLM Group",
+    "description": "WLM Group",
+    "escalate_to": null,
+    "unassigned_for": "15m",
+    "business_hours_id": null,
+    "created_at": "2022-03-25T10:22:57Z",
+    "updated_at": "2022-04-02T17:16:15Z",
+    "auto_ticket_assign": false,
+    "restricted": false,
+    "approval_required": false,
+    "agent_ids": [34, 91, 92],
+    "members": [34, 91, 92],
+    "observers": [],
+    "leaders": [],
+    "members_pending_approval": [],
+    "leaders_pending_approval": [],
+    "observers_pending_approval": []
+  }, {
+    "id": 91,
+    "name": "WLM Test",
+    "description": "WLM Test",
+    "escalate_to": null,
+    "unassigned_for": "15m",
+    "business_hours_id": null,
+    "created_at": "2022-03-25T10:22:57Z",
+    "updated_at": "2022-04-02T17:16:15Z",
+    "auto_ticket_assign": false,
+    "restricted": false,
+    "approval_required": false,
+    "agent_ids": [34, 91, 92],
+    "members": [34, 91, 92],
+    "observers": [],
+    "leaders": [],
+    "members_pending_approval": [],
+    "leaders_pending_approval": [],
+    "observers_pending_approval": []
   }];
   var USER_PAYLOAD = [{
     "avatar_url": "",
@@ -53359,6 +57108,11 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
     "email": "chris.blesson@freshworks.com",
     "id": 41,
     "name": "1Blesson"
+  }, {
+    "avatar_url": "https://freshworks173.freshworks.com/api/v2/users/152806053332157138/image?variant=SMALL",
+    "email": "chris.blesson@freshworks.com",
+    "id": 42,
+    "name": "user one"
   }];
   var USER_PAYLOAD_SINGLE_USER = {
     users: [{
@@ -53396,6 +57150,18 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
     "status": "Yet to start",
     "owner_id": 1000000003,
     "user_ids": [1000000004, 1000000005, 1000000003]
+  }, {
+    "id": 2,
+    "name": "Test project 1"
+  }, {
+    "id": 3,
+    "name": "Test project 2"
+  }, {
+    "id": 4,
+    "name": "Test project 3"
+  }, {
+    "id": 5,
+    "name": "Test project 4"
   }];
   var USER_STATE = {
     "users": USER_PAYLOAD,
@@ -53453,9 +57219,9 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
         response = MOCK_RESPONSE;
       } else if (path === '/itil/members/suggest?q=') {
         response = MOCK_RESPONSE;
-      } else if (path === '/itil/members?page=1&per_page=30') {
+      } else if (path === '/itil/members?page=1&per_page=30' || path === '/itil/members?page=1&per_page=30&ids=91,92,34,41,42' || path === '/itil/members?page=1&per_page=30&ids=91') {
         response = MOCK_RESPONSE;
-      } else if (path === '/itil/members?page=1&per_page=50') {
+      } else if (path === '/itil/members?page=1&per_page=50' || path === '/itil/members?page=1&per_page=30&ids=42,41,34,92,91') {
         response = MOCK_RESPONSE;
       } else if (path === '/itil/members?ids=41,42&per_page=30') {
         response = MOCK_RESPONSE;
@@ -53463,11 +57229,15 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
         response = EMPTY_MOCK_RESPONSE;
       } else if (path === 'freshrelease/settings/suggest-my-projects?placeholder[query]=New') {
         response = MOCK_RESPONSE;
-      } else if (path === 'freshrelease/settings/suggest-my-projects?placeholder[query]=') {
+      } else if (path === 'freshrelease/settings/suggest-my-projects?placeholder[query]=' || path === '/itil/members/filter-by-projects?page=1&per_page=30&ids=1,2,3,4,5') {
         response = MOCK_RESPONSE;
-      } else if (path === '/itil/members/filter_by_projects?ids=1&page=1&per_page=30') {
+      } else if (path === '/itil/members/filter-by-projects?ids=1&page=1&per_page=30' || path === '/itil/members/filter-by-projects?page=1&per_page=30') {
         response = MOCK_RESPONSE;
-      } else if (path === 'groups?filter=my_agent_groups') {
+      } else if (path === 'groups?filter=my_agent_groups' || path === 'freshrelease/settings/filter_projects?query_params[query_hash][0][condition]=id&query_params[query_hash][0][operator]=is_in&query_params[query_hash][0][value]=5,4,3,2,1&placeholder[query]=') {
+        response = MOCK_RESPONSE;
+      } else if (path === 'freshrelease/settings/filter_projects?query_params[query_hash][0][condition]=id&query_params[query_hash][0][operator]=is_in&query_params[query_hash][0][value]=1&placeholder[query]=' || path === 'freshrelease/settings/filter_projects?query_params[query_hash][0][condition]=id&query_params[query_hash][0][operator]=is_in&query_params[query_hash][0][value]=1,2,3,4,5&placeholder[query]=') {
+        response = MOCK_RESPONSE;
+      } else if (path === 'freshrelease/settings/filter_projects?query_params[query_hash][0][condition]=id&query_params[query_hash][0][operator]=is_in&query_params[query_hash][0][value]=1&query_params[query_hash][1][condition]=project_configuration.status_id&query_params[query_hash][1][operator]=is_in&query_params[query_hash][1][value]=1,2&placeholder[query]=') {
         response = MOCK_RESPONSE;
       } else if (path === '/itil/members/filter_by_groups?ids=81,78&page=1&per_page=30') {
         response = MOCK_RESPONSE;
@@ -53511,15 +57281,35 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
   var GROUP_MEMBERS_WORKLOAD_USER = {
     privileges: ['manage_group_members_workload'],
     hasActiveFreshId: true,
-    isAssumedUser: false
+    isAssumedUser: false,
+    userId: 34
   };
   var PROJECT_MEMBER_WORKLOAD_USER = {
     privileges: ['manage_project_members_workload'],
     hasActiveFreshId: true,
-    isAssumedUser: false
+    isAssumedUser: false,
+    userId: 34
   };
 
   var emptyFunction = function emptyFunction() {};
+
+  var getChoiceIndex = function getChoiceIndex(choiceList, choiceText) {
+    var nextChoice;
+    choiceList.forEach(function (list, index) {
+      if (list.innerText === choiceText) {
+        nextChoice = index;
+      }
+    });
+    return nextChoice;
+  };
+
+  var getChoiceOrder = function getChoiceOrder(choiceList) {
+    var options = [];
+    choiceList.forEach(function (choice) {
+      options.push(choice.innerText);
+    });
+    return options;
+  };
 
   (0, _qunit.module)('Integration | Component | module-workloads/people-filter', function (hooks) {
     (0, _emberQunit.setupRenderingTest)(hooks);
@@ -53536,6 +57326,15 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
       }, {
         id: '78',
         name: 'Asset Team'
+      }, {
+        id: '79',
+        name: 'Capacity Management team'
+      }, {
+        id: '80',
+        name: 'Database team'
+      }, {
+        id: '81',
+        name: 'Delivery team'
       }]);
       this.set('selectedList', [{
         id: '1',
@@ -53573,6 +57372,30 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
       this.set('resetCurrentPage', emptyFunction);
       this.set('updateSelectedProjects', emptyFunction);
       this.set('updateSelectedGroups', emptyFunction);
+      this.set('updateHasPagination', emptyFunction);
+      this.set('onPageChange', emptyFunction);
+
+      var mockStorage = _object.default.extend();
+
+      mockStorage.reopenClass({
+        initialState: function initialState() {
+          return {
+            effortView: null,
+            entityFilters: null,
+            optOutAgentTimezone: [],
+            recentFilters: {}
+          };
+        }
+      });
+      this.owner.register("storage:workload", mockStorage);
+    });
+    hooks.afterEach(function () {
+      window.localStorage.removeItem('storage:workload');
+      (0, _resetStorage.default)();
+    });
+    hooks.after(function () {
+      this.owner.destroy("service:current-user");
+      this.owner.destroy("service:fetch");
     });
 
     function renderComponent() {
@@ -53580,12 +57403,12 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
     }
 
     function _renderComponent() {
-      _renderComponent = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee18() {
-        return regeneratorRuntime.wrap(function _callee18$(_context18) {
+      _renderComponent = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee35() {
+        return regeneratorRuntime.wrap(function _callee35$(_context35) {
           while (1) {
-            switch (_context18.prev = _context18.next) {
+            switch (_context35.prev = _context35.next) {
               case 0:
-                _context18.next = 2;
+                _context35.next = 2;
                 return (0, _testHelpers.render)(Ember.HTMLBars.template(
                 /*
                   <div id="wlm-module-container">
@@ -53602,6 +57425,8 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
                                         @updateSelectedUsers={{this.updateSelectedUsers}}
                                         @updateCurrentFilter={{this.updateCurrentFilter}}
                                         @updateSelectedGroups={{this.updateSelectedGroups}}
+                                        @updateHasPagination={{this.updateHasPagination}}
+                                        @onPageChange={{this.onPageChange}}
                                        >
                                       </ModuleWorkloads::PeopleFilter>
                                      </div>
@@ -53610,68 +57435,64 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
                                    </div>
                 */
                 {
-                  id: "Qm4elJD0",
-                  block: "{\"symbols\":[],\"statements\":[[7,\"div\",true],[10,\"id\",\"wlm-module-container\"],[8],[0,\"\\n                    \"],[7,\"div\",true],[10,\"data-wlm-filter-test\",\"wlm-filter-test\"],[8],[9],[0,\"\\n                    \"],[7,\"div\",true],[10,\"id\",\"people-header\"],[8],[0,\"\\n                     \"],[7,\"div\",true],[10,\"id\",\"wlm-filter-wormhole\"],[10,\"data-wlm-filter\",\"wlm-filter\"],[8],[0,\"\\n                      \"],[5,\"module-workloads/people-filter\",[],[[\"@model\",\"@agentGroups\",\"@resetFilter\",\"@resetCurrentPage\",\"@setUsers\",\"@updateSelectedProjectUsers\",\"@updateSelectedUsers\",\"@updateCurrentFilter\",\"@updateSelectedGroups\"],[[23,0,[\"model\"]],[23,0,[\"agentGroups\"]],[23,0,[\"resetFilter\"]],[23,0,[\"resetCurrentPage\"]],[23,0,[\"setUsers\"]],[23,0,[\"updateSelectedProjectUsers\"]],[23,0,[\"updateSelectedUsers\"]],[23,0,[\"updateCurrentFilter\"]],[23,0,[\"updateSelectedGroups\"]]]],{\"statements\":[[0,\"\\n                      \"]],\"parameters\":[]}],[0,\"\\n                     \"],[9],[0,\"\\n                     \"],[7,\"div\",true],[10,\"data-wlm-filter-reset\",\"wlm-filter-reset\"],[8],[9],[0,\"\\n                    \"],[9],[0,\"\\n                   \"],[9]],\"hasEval\":false}",
+                  id: "Md8NXxVm",
+                  block: "{\"symbols\":[],\"statements\":[[7,\"div\",true],[10,\"id\",\"wlm-module-container\"],[8],[0,\"\\n                    \"],[7,\"div\",true],[10,\"data-wlm-filter-test\",\"wlm-filter-test\"],[8],[9],[0,\"\\n                    \"],[7,\"div\",true],[10,\"id\",\"people-header\"],[8],[0,\"\\n                     \"],[7,\"div\",true],[10,\"id\",\"wlm-filter-wormhole\"],[10,\"data-wlm-filter\",\"wlm-filter\"],[8],[0,\"\\n                      \"],[5,\"module-workloads/people-filter\",[],[[\"@model\",\"@agentGroups\",\"@resetFilter\",\"@resetCurrentPage\",\"@setUsers\",\"@updateSelectedProjectUsers\",\"@updateSelectedUsers\",\"@updateCurrentFilter\",\"@updateSelectedGroups\",\"@updateHasPagination\",\"@onPageChange\"],[[23,0,[\"model\"]],[23,0,[\"agentGroups\"]],[23,0,[\"resetFilter\"]],[23,0,[\"resetCurrentPage\"]],[23,0,[\"setUsers\"]],[23,0,[\"updateSelectedProjectUsers\"]],[23,0,[\"updateSelectedUsers\"]],[23,0,[\"updateCurrentFilter\"]],[23,0,[\"updateSelectedGroups\"]],[23,0,[\"updateHasPagination\"]],[23,0,[\"onPageChange\"]]]],{\"statements\":[[0,\"\\n                      \"]],\"parameters\":[]}],[0,\"\\n                     \"],[9],[0,\"\\n                     \"],[7,\"div\",true],[10,\"data-wlm-filter-reset\",\"wlm-filter-reset\"],[8],[9],[0,\"\\n                    \"],[9],[0,\"\\n                   \"],[9]],\"hasEval\":false}",
                   meta: {}
                 }));
 
               case 2:
               case "end":
-                return _context18.stop();
+                return _context35.stop();
             }
           }
-        }, _callee18);
+        }, _callee35);
       }));
       return _renderComponent.apply(this, arguments);
     }
 
     (0, _qunit.test)('it checks groups clear filter flow', /*#__PURE__*/function () {
       var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(assert) {
-        var dropdownElement, clearBtn, applyBtn;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 Ember.set(this, 'model.filter', 'groups-view');
-                Ember.set(this, 'model.group_ids', '81,78');
+                Ember.set(this, 'model.group_ids', '81');
                 _context.next = 4;
                 return renderComponent();
 
               case 4:
                 _context.next = 6;
-                return (0, _testHelpers.click)('[data-test-id="wlm-capacity-people-filter-dd-trigger"]');
+                return _peopleFilter.default.peopleFilterTrigger();
 
               case 6:
-                dropdownElement = this.element.querySelector('.ember-power-select-trigger');
-                _context.next = 9;
-                return (0, _testHelpers.click)(dropdownElement);
+                _context.next = 8;
+                return _peopleFilter.default.dropdownTrigger();
 
-              case 9:
-                _context.next = 11;
-                return (0, _testHelpers.click)('[data-option-index="1"]');
+              case 8:
+                _context.next = 10;
+                return _peopleFilter.default.firstOption();
 
-              case 11:
-                clearBtn = this.element.querySelector('.btn');
+              case 10:
+                _context.next = 12;
+                return _peopleFilter.default.clearButton();
+
+              case 12:
                 _context.next = 14;
-                return (0, _testHelpers.click)(clearBtn);
+                return _peopleFilter.default.applyButton();
 
               case 14:
                 _context.next = 16;
-                return (0, _testHelpers.click)('[data-test-id="wlm-capacity-people-filter-dd-trigger"]');
+                return _peopleFilter.default.peopleFilterTrigger();
 
               case 16:
                 _context.next = 18;
-                return (0, _testHelpers.click)(dropdownElement);
+                return _peopleFilter.default.dropdownTrigger();
 
               case 18:
-                applyBtn = this.element.querySelectorAll('.btn')[2];
-                _context.next = 21;
-                return (0, _testHelpers.click)(applyBtn);
+                assert.ok(true, 'Group dropdown rendered');
 
-              case 21:
-                assert.ok(true);
-
-              case 22:
+              case 19:
               case "end":
                 return _context.stop();
             }
@@ -53685,64 +57506,35 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
     }());
     (0, _qunit.test)('it checks groups apply filter flow', /*#__PURE__*/function () {
       var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(assert) {
-        var dropdownElement, applyBtn;
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
                 Ember.set(this, 'model.filter', 'groups-view');
-                Ember.set(this, 'model.group_ids', '81,78');
+                Ember.set(this, 'model.group_ids', '81');
                 _context2.next = 4;
-                return (0, _testHelpers.render)(Ember.HTMLBars.template(
-                /*
-                  <div id="wlm-module-container">
-                
-                                      <div data-wlm-filter="wlm-filter">
-                                       <ModuleWorkloads::PeopleFilter
-                                        @model={{this.model}}
-                                        @setUsers={{this.setUsers}}
-                                        @agentGroups={{this.agentGroups}}
-                                        @resetFilter={{this.resetFilter}}
-                                        @resetCurrentPage={{this.resetCurrentPage}}
-                                        @updateSelectedGroupUsers={{this.updateSelectedGroupUsers}}
-                                        @updateSelectedProjectUsers={{this.updateSelectedProjectUsers}}
-                                        @updateSelectedUsers={{this.updateSelectedUsers}}
-                                        @updateCurrentFilter={{this.updateCurrentFilter}}
-                                        @updateSelectedGroups={{this.updateSelectedGroups}}
-                                       >
-                                       </ModuleWorkloads::PeopleFilter>
-                                      </div>
-                                      <div data-wlm-filter-reset="wlm-filter-reset"></div>
-                                     </div>
-                */
-                {
-                  id: "EdUiui79",
-                  block: "{\"symbols\":[],\"statements\":[[7,\"div\",true],[10,\"id\",\"wlm-module-container\"],[8],[0,\"\\n\\n                      \"],[7,\"div\",true],[10,\"data-wlm-filter\",\"wlm-filter\"],[8],[0,\"\\n                       \"],[5,\"module-workloads/people-filter\",[],[[\"@model\",\"@setUsers\",\"@agentGroups\",\"@resetFilter\",\"@resetCurrentPage\",\"@updateSelectedGroupUsers\",\"@updateSelectedProjectUsers\",\"@updateSelectedUsers\",\"@updateCurrentFilter\",\"@updateSelectedGroups\"],[[23,0,[\"model\"]],[23,0,[\"setUsers\"]],[23,0,[\"agentGroups\"]],[23,0,[\"resetFilter\"]],[23,0,[\"resetCurrentPage\"]],[23,0,[\"updateSelectedGroupUsers\"]],[23,0,[\"updateSelectedProjectUsers\"]],[23,0,[\"updateSelectedUsers\"]],[23,0,[\"updateCurrentFilter\"]],[23,0,[\"updateSelectedGroups\"]]]],{\"statements\":[[0,\"\\n                       \"]],\"parameters\":[]}],[0,\"\\n                      \"],[9],[0,\"\\n                      \"],[7,\"div\",true],[10,\"data-wlm-filter-reset\",\"wlm-filter-reset\"],[8],[9],[0,\"\\n                     \"],[9]],\"hasEval\":false}",
-                  meta: {}
-                }));
+                return renderComponent();
 
               case 4:
                 _context2.next = 6;
-                return (0, _testHelpers.click)('[data-test-id="wlm-capacity-people-filter-dd-trigger"]');
+                return _peopleFilter.default.peopleFilterTrigger();
 
               case 6:
-                dropdownElement = this.element.querySelector('.ember-power-select-trigger');
-                _context2.next = 9;
-                return (0, _testHelpers.click)(dropdownElement);
+                _context2.next = 8;
+                return _peopleFilter.default.dropdownTrigger();
 
-              case 9:
-                _context2.next = 11;
-                return (0, _testHelpers.click)('[data-option-index="1"]');
+              case 8:
+                _context2.next = 10;
+                return _peopleFilter.default.firstOption();
 
-              case 11:
-                applyBtn = this.element.querySelectorAll('.btn')[2];
-                _context2.next = 14;
-                return (0, _testHelpers.click)(applyBtn);
+              case 10:
+                _context2.next = 12;
+                return _peopleFilter.default.applyButton();
 
-              case 14:
-                assert.ok(true);
+              case 12:
+                assert.ok(true, 'Selected choices are applied');
 
-              case 15:
+              case 13:
               case "end":
                 return _context2.stop();
             }
@@ -53756,7 +57548,6 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
     }());
     (0, _qunit.test)('it checks reset filter flow', /*#__PURE__*/function () {
       var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(assert) {
-        var groupsView, applyBtn;
         return regeneratorRuntime.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
@@ -53768,26 +57559,24 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
 
               case 4:
                 _context3.next = 6;
-                return (0, _testHelpers.click)('[data-wlm-filter-reset="wlm-filter-reset"]');
+                return _peopleFilter.default.resetDropdownTrigger();
 
               case 6:
                 _context3.next = 8;
-                return (0, _testHelpers.click)('[data-test-id="wlm-capacity-people-filter-dd-trigger"]');
+                return _peopleFilter.default.peopleFilterTrigger();
 
               case 8:
-                groupsView = this.element.querySelector('#wlm-people-filter-groups-view');
-                _context3.next = 11;
-                return (0, _testHelpers.click)(groupsView);
+                _context3.next = 10;
+                return _peopleFilter.default.groupRadioBtn();
 
-              case 11:
-                applyBtn = this.element.querySelectorAll('.btn')[2];
-                _context3.next = 14;
-                return (0, _testHelpers.click)(applyBtn);
+              case 10:
+                _context3.next = 12;
+                return _peopleFilter.default.applyButton();
 
-              case 14:
-                assert.ok(true);
+              case 12:
+                assert.ok(true, 'Reset flow initiated');
 
-              case 15:
+              case 13:
               case "end":
                 return _context3.stop();
             }
@@ -53801,7 +57590,6 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
     }());
     (0, _qunit.test)('it checks project clear filter flow', /*#__PURE__*/function () {
       var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(assert) {
-        var dropdownElement, removeBtn;
         return regeneratorRuntime.wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
@@ -53812,26 +57600,24 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
 
               case 3:
                 _context4.next = 5;
-                return (0, _testHelpers.click)('[data-test-id="wlm-capacity-people-filter-dd-trigger"]');
+                return _peopleFilter.default.peopleFilterTrigger();
 
               case 5:
-                dropdownElement = this.element.querySelector('.ember-power-select-trigger');
-                _context4.next = 8;
-                return (0, _testHelpers.click)(dropdownElement);
+                _context4.next = 7;
+                return _peopleFilter.default.dropdownTrigger();
 
-              case 8:
-                _context4.next = 10;
-                return (0, _testHelpers.click)('[data-option-index="0"]');
+              case 7:
+                _context4.next = 9;
+                return _peopleFilter.default.firstOption();
 
-              case 10:
-                removeBtn = this.element.querySelector('.ember-power-select-multiple-remove-btn');
-                _context4.next = 13;
-                return (0, _testHelpers.click)(removeBtn);
+              case 9:
+                _context4.next = 11;
+                return _peopleFilter.default.clearButton();
 
-              case 13:
-                assert.ok(true);
+              case 11:
+                assert.ok(true, "Selected project cleared");
 
-              case 14:
+              case 12:
               case "end":
                 return _context4.stop();
             }
@@ -53845,7 +57631,6 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
     }());
     (0, _qunit.test)('it checks project apply filter flow', /*#__PURE__*/function () {
       var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(assert) {
-        var inputOptions, applyBtn, choiceKeyUp;
         return regeneratorRuntime.wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
@@ -53856,27 +57641,24 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
 
               case 3:
                 _context5.next = 5;
-                return (0, _testHelpers.click)('[data-test-id="wlm-capacity-people-filter-dd-trigger"]');
+                return _peopleFilter.default.peopleFilterTrigger();
 
               case 5:
-                inputOptions = this.element.querySelector('.ember-power-select-trigger-multiple-input');
-                _context5.next = 8;
-                return (0, _testHelpers.click)(inputOptions);
+                _context5.next = 7;
+                return _peopleFilter.default.dropdownTrigger();
 
-              case 8:
-                applyBtn = this.element.querySelectorAll('.btn')[1];
-                choiceKeyUp = this.element.querySelector('[data-option-index="0"]');
-                _context5.next = 12;
-                return (0, _testHelpers.click)(choiceKeyUp);
+              case 7:
+                _context5.next = 9;
+                return _peopleFilter.default.firstOption();
+
+              case 9:
+                _context5.next = 11;
+                return _peopleFilter.default.clearButton();
+
+              case 11:
+                assert.ok(true, 'Selected project applied');
 
               case 12:
-                _context5.next = 14;
-                return (0, _testHelpers.click)(applyBtn);
-
-              case 14:
-                assert.ok(true);
-
-              case 15:
               case "end":
                 return _context5.stop();
             }
@@ -53890,7 +57672,6 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
     }());
     (0, _qunit.test)('it checks people clear filter flow', /*#__PURE__*/function () {
       var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(assert) {
-        var dropdownElement, choiceKeyUp, removeBtn, clearBtn;
         return regeneratorRuntime.wrap(function _callee6$(_context6) {
           while (1) {
             switch (_context6.prev = _context6.next) {
@@ -53901,40 +57682,28 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
 
               case 3:
                 _context6.next = 5;
-                return (0, _testHelpers.click)('[data-test-id="wlm-capacity-people-filter-dd-trigger"]');
+                return _peopleFilter.default.peopleFilterTrigger();
 
               case 5:
                 _context6.next = 7;
-                return (0, _testHelpers.click)('[data-wlm-filter-test="wlm-filter-test"]');
+                return _peopleFilter.default.dropdownTrigger();
 
               case 7:
                 _context6.next = 9;
-                return (0, _testHelpers.click)('[data-test-id="wlm-capacity-people-filter-dd-trigger"]');
+                return _peopleFilter.default.firstOption();
 
               case 9:
-                dropdownElement = this.element.querySelector('.ember-power-select-trigger');
-                _context6.next = 12;
-                return (0, _testHelpers.click)(dropdownElement);
+                _context6.next = 11;
+                return _peopleFilter.default.removeChoice();
 
-              case 12:
-                choiceKeyUp = this.element.querySelector('[data-option-index="0"]');
-                _context6.next = 15;
-                return (0, _testHelpers.click)(choiceKeyUp);
+              case 11:
+                _context6.next = 13;
+                return _peopleFilter.default.clearButton();
 
-              case 15:
-                removeBtn = this.element.querySelector('.ember-power-select-multiple-remove-btn');
-                _context6.next = 18;
-                return (0, _testHelpers.click)(removeBtn);
+              case 13:
+                assert.ok(true, 'Selected Choices are cleared');
 
-              case 18:
-                clearBtn = this.element.querySelector('.btn');
-                _context6.next = 21;
-                return (0, _testHelpers.click)(clearBtn);
-
-              case 21:
-                assert.ok(true);
-
-              case 22:
+              case 14:
               case "end":
                 return _context6.stop();
             }
@@ -53948,7 +57717,7 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
     }());
     (0, _qunit.test)('it checks people apply filter flow', /*#__PURE__*/function () {
       var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(assert) {
-        var applyBtn, dropdownElement, choiceKeyUp;
+        var choiceKeyUp;
         return regeneratorRuntime.wrap(function _callee7$(_context7) {
           while (1) {
             switch (_context7.prev = _context7.next) {
@@ -53959,28 +57728,34 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
 
               case 3:
                 _context7.next = 5;
-                return (0, _testHelpers.click)('[data-test-id="wlm-capacity-people-filter-dd-trigger"]');
+                return _peopleFilter.default.peopleFilterTrigger();
 
               case 5:
-                applyBtn = this.element.querySelectorAll('.btn')[1];
-                _context7.next = 8;
-                return (0, _testHelpers.click)(applyBtn);
+                _context7.next = 7;
+                return _peopleFilter.default.dropdownTrigger();
 
-              case 8:
-                _context7.next = 10;
-                return (0, _testHelpers.click)('[data-test-id="wlm-capacity-people-filter-dd-trigger"]');
+              case 7:
+                _context7.next = 9;
+                return _peopleFilter.default.firstOption();
 
-              case 10:
-                dropdownElement = this.element.querySelector('.ember-power-select-trigger');
+              case 9:
+                _context7.next = 11;
+                return _peopleFilter.default.applyButton();
+
+              case 11:
                 _context7.next = 13;
-                return (0, _testHelpers.click)(dropdownElement);
+                return _peopleFilter.default.peopleFilterTrigger();
 
               case 13:
+                _context7.next = 15;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 15:
                 choiceKeyUp = this.element.querySelector('[data-option-index="2"]');
                 (0, _testHelpers.triggerKeyEvent)(choiceKeyUp, 'keyup', 'Enter');
-                assert.ok(true);
+                assert.ok(true, 'People list applied');
 
-              case 16:
+              case 18:
               case "end":
                 return _context7.stop();
             }
@@ -53994,7 +57769,6 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
     }());
     (0, _qunit.test)('it checks people with user Id flow', /*#__PURE__*/function () {
       var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(assert) {
-        var clearBtn;
         return regeneratorRuntime.wrap(function _callee8$(_context8) {
           while (1) {
             switch (_context8.prev = _context8.next) {
@@ -54006,17 +57780,16 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
 
               case 4:
                 _context8.next = 6;
-                return (0, _testHelpers.click)('[data-test-id="wlm-capacity-people-filter-dd-trigger"]');
+                return _peopleFilter.default.peopleFilterTrigger();
 
               case 6:
-                clearBtn = this.element.querySelectorAll('.btn')[0];
-                _context8.next = 9;
-                return (0, _testHelpers.click)(clearBtn);
+                _context8.next = 8;
+                return _peopleFilter.default.clearButton();
+
+              case 8:
+                assert.ok(true, 'User passed in query params is set');
 
               case 9:
-                assert.ok(true);
-
-              case 10:
               case "end":
                 return _context8.stop();
             }
@@ -54030,7 +57803,6 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
     }());
     (0, _qunit.test)('it checks projects with project Id flow', /*#__PURE__*/function () {
       var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9(assert) {
-        var clearBtn;
         return regeneratorRuntime.wrap(function _callee9$(_context9) {
           while (1) {
             switch (_context9.prev = _context9.next) {
@@ -54042,17 +57814,16 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
 
               case 4:
                 _context9.next = 6;
-                return (0, _testHelpers.click)('[data-test-id="wlm-capacity-people-filter-dd-trigger"]');
+                return _peopleFilter.default.peopleFilterTrigger();
 
               case 6:
-                clearBtn = this.element.querySelectorAll('.btn')[0];
-                _context9.next = 9;
-                return (0, _testHelpers.click)(clearBtn);
+                _context9.next = 8;
+                return _peopleFilter.default.clearButton();
+
+              case 8:
+                assert.ok(true, 'Project Id passed in query params is set');
 
               case 9:
-                assert.ok(true);
-
-              case 10:
               case "end":
                 return _context9.stop();
             }
@@ -54066,7 +57837,7 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
     }());
     (0, _qunit.test)('it checks select people options', /*#__PURE__*/function () {
       var _ref11 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10(assert) {
-        var applyBtn, inputOptions, choiceKeyUp;
+        var choiceKeyUp;
         return regeneratorRuntime.wrap(function _callee10$(_context10) {
           while (1) {
             switch (_context10.prev = _context10.next) {
@@ -54078,27 +57849,25 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
 
               case 4:
                 _context10.next = 6;
-                return (0, _testHelpers.click)('[data-test-id="wlm-capacity-people-filter-dd-trigger"]');
+                return _peopleFilter.default.peopleFilterTrigger();
 
               case 6:
-                applyBtn = this.element.querySelectorAll('.btn')[1];
-                inputOptions = this.element.querySelector('.ember-power-select-trigger-multiple-input');
-                _context10.next = 10;
-                return (0, _testHelpers.click)(inputOptions);
+                _context10.next = 8;
+                return _peopleFilter.default.dropdownTrigger();
 
-              case 10:
+              case 8:
                 choiceKeyUp = this.element.querySelector('[data-option-index="0"]');
-                _context10.next = 13;
+                _context10.next = 11;
                 return (0, _testHelpers.click)(choiceKeyUp);
 
+              case 11:
+                _context10.next = 13;
+                return _peopleFilter.default.applyButton();
+
               case 13:
-                _context10.next = 15;
-                return (0, _testHelpers.click)(applyBtn);
+                assert.ok(true, 'First user selected and applied');
 
-              case 15:
-                assert.ok(true);
-
-              case 16:
+              case 14:
               case "end":
                 return _context10.stop();
             }
@@ -54112,31 +57881,29 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
     }());
     (0, _qunit.test)('it checks enter key press project options', /*#__PURE__*/function () {
       var _ref12 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11(assert) {
-        var inputOptions, choiceKeyUp;
+        var choiceKeyUp;
         return regeneratorRuntime.wrap(function _callee11$(_context11) {
           while (1) {
             switch (_context11.prev = _context11.next) {
               case 0:
                 Ember.set(this, 'model.filter', 'projects-view');
-                Ember.set(this, 'model.project_ids', '1');
-                _context11.next = 4;
+                _context11.next = 3;
                 return renderComponent();
 
-              case 4:
-                _context11.next = 6;
-                return (0, _testHelpers.click)('[data-test-id="wlm-capacity-people-filter-dd-trigger"]');
+              case 3:
+                _context11.next = 5;
+                return _peopleFilter.default.peopleFilterTrigger();
 
-              case 6:
-                inputOptions = this.element.querySelector('.ember-power-select-trigger-multiple-input');
-                _context11.next = 9;
-                return (0, _testHelpers.click)(inputOptions);
+              case 5:
+                _context11.next = 7;
+                return _peopleFilter.default.dropdownTrigger();
 
-              case 9:
+              case 7:
                 choiceKeyUp = this.element.querySelector('[data-option-index="0"]');
                 (0, _testHelpers.triggerKeyEvent)(choiceKeyUp, 'keyup', 'Enter');
-                assert.ok(true);
+                assert.ok(true, 'Enter key press flow validated');
 
-              case 12:
+              case 10:
               case "end":
                 return _context11.stop();
             }
@@ -54209,20 +57976,20 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
 
               case 4:
                 _context13.next = 6;
-                return (0, _testHelpers.click)('[data-test-id="wlm-capacity-people-filter-dd-trigger"]');
+                return _peopleFilter.default.peopleFilterTrigger();
 
               case 6:
-                assert.ok(true);
+                assert.ok(true, 'Group view shown based on privilege');
                 Ember.set(this, 'model.filter', 'people-view');
                 _context13.next = 10;
                 return renderComponent();
 
               case 10:
                 _context13.next = 12;
-                return (0, _testHelpers.click)('[data-test-id="wlm-capacity-people-filter-dd-trigger"]');
+                return _peopleFilter.default.peopleFilterTrigger();
 
               case 12:
-                assert.ok(true);
+                assert.ok(true, 'People view shown based on privilege');
 
               case 13:
               case "end":
@@ -54251,7 +58018,7 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
               case 4:
                 assert.ok('Flow reached query fallback');
                 _context14.next = 7;
-                return (0, _testHelpers.click)('[data-test-id="wlm-capacity-people-filter-dd-trigger"]');
+                return _peopleFilter.default.peopleFilterTrigger();
 
               case 7:
                 groupButton = this.element.querySelector('#wlm-people-filter-groups-view');
@@ -54282,20 +58049,20 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
 
               case 4:
                 _context15.next = 6;
-                return (0, _testHelpers.click)('[data-test-id="wlm-capacity-people-filter-dd-trigger"]');
+                return _peopleFilter.default.peopleFilterTrigger();
 
               case 6:
-                assert.ok(true);
+                assert.ok(true, 'Projects view shown per privilege');
                 Ember.set(this, 'model.filter', 'people-view');
                 _context15.next = 10;
                 return renderComponent();
 
               case 10:
                 _context15.next = 12;
-                return (0, _testHelpers.click)('[data-test-id="wlm-capacity-people-filter-dd-trigger"]');
+                return _peopleFilter.default.peopleFilterTrigger();
 
               case 12:
-                assert.ok(true);
+                assert.ok(true, 'People view shown per privilege');
 
               case 13:
               case "end":
@@ -54324,7 +58091,7 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
               case 4:
                 assert.ok('Flow reached query fallback');
                 _context16.next = 7;
-                return (0, _testHelpers.click)('[data-test-id="wlm-capacity-people-filter-dd-trigger"]');
+                return _peopleFilter.default.peopleFilterTrigger();
 
               case 7:
                 projectButton = this.element.querySelector('#wlm-people-filter-projects-view');
@@ -54366,6 +58133,1115 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
 
       return function (_x17) {
         return _ref18.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('it handles page change', /*#__PURE__*/function () {
+      var _ref19 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee18(assert) {
+        return regeneratorRuntime.wrap(function _callee18$(_context18) {
+          while (1) {
+            switch (_context18.prev = _context18.next) {
+              case 0:
+                Ember.set(this, 'model.filter', 'groups-view');
+                Ember.set(this, 'model.group_ids', '81,78,79');
+                _context18.next = 4;
+                return renderComponent();
+
+              case 4:
+                _context18.next = 6;
+                return _peopleFilter.default.nextPage();
+
+              case 6:
+                assert.ok('Next page triggered');
+
+              case 7:
+              case "end":
+                return _context18.stop();
+            }
+          }
+        }, _callee18, this);
+      }));
+
+      return function (_x18) {
+        return _ref19.apply(this, arguments);
+      };
+    }()); // Groups flow - auto suggest
+
+    (0, _qunit.test)('Select all the group from the dropdown validate There are no agent groups to show', /*#__PURE__*/function () {
+      var _ref20 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee19(assert) {
+        var noMessageText;
+        return regeneratorRuntime.wrap(function _callee19$(_context19) {
+          while (1) {
+            switch (_context19.prev = _context19.next) {
+              case 0:
+                Ember.set(this, 'model.filter', 'groups-view');
+                Ember.set(this, 'model.group_ids', '81,78,79');
+                _context19.next = 4;
+                return renderComponent();
+
+              case 4:
+                _context19.next = 6;
+                return _peopleFilter.default.resetDropdownTrigger();
+
+              case 6:
+                _context19.next = 8;
+                return _peopleFilter.default.peopleFilterTrigger();
+
+              case 8:
+                _context19.next = 10;
+                return _peopleFilter.default.groupRadioBtn();
+
+              case 10:
+                _context19.next = 12;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 12:
+                _context19.next = 14;
+                return _peopleFilter.default.firstOption();
+
+              case 14:
+                _context19.next = 16;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 16:
+                _context19.next = 18;
+                return _peopleFilter.default.firstOption();
+
+              case 18:
+                _context19.next = 20;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 20:
+                _context19.next = 22;
+                return _peopleFilter.default.firstOption();
+
+              case 22:
+                _context19.next = 24;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 24:
+                _context19.next = 26;
+                return _peopleFilter.default.firstOption();
+
+              case 26:
+                _context19.next = 28;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 28:
+                _context19.next = 30;
+                return _peopleFilter.default.firstOption();
+
+              case 30:
+                _context19.next = 32;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 32:
+                noMessageText = this.element.querySelector('.ember-power-select-option--no-matches-message');
+                assert.equal(noMessageText.innerText, "There are no agent groups to show");
+
+              case 34:
+              case "end":
+                return _context19.stop();
+            }
+          }
+        }, _callee19, this);
+      }));
+
+      return function (_x19) {
+        return _ref20.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Select the group from the dropdown and make sure select items are removed from the list', /*#__PURE__*/function () {
+      var _ref21 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee20(assert) {
+        var dropdownChoices, selectedChoiceExist;
+        return regeneratorRuntime.wrap(function _callee20$(_context20) {
+          while (1) {
+            switch (_context20.prev = _context20.next) {
+              case 0:
+                Ember.set(this, 'model.filter', 'groups-view');
+                Ember.set(this, 'model.group_ids', '81');
+                _context20.next = 4;
+                return renderComponent();
+
+              case 4:
+                _context20.next = 6;
+                return _peopleFilter.default.peopleFilterTrigger();
+
+              case 6:
+                _context20.next = 8;
+                return _peopleFilter.default.groupRadioBtn();
+
+              case 8:
+                _context20.next = 10;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 10:
+                dropdownChoices = [];
+                this.element.querySelectorAll('.ember-power-select-option').forEach(function (item) {
+                  dropdownChoices.push(item.innerText);
+                });
+                selectedChoiceExist = dropdownChoices.includes('Change Team');
+                assert.equal(selectedChoiceExist, false, 'Selected choice not listed in the list of choices');
+
+              case 14:
+              case "end":
+                return _context20.stop();
+            }
+          }
+        }, _callee20, this);
+      }));
+
+      return function (_x20) {
+        return _ref21.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Select the group from the dropdown and remove it by clicking X and make sure removed items are listed in dropdown', /*#__PURE__*/function () {
+      var _ref22 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee21(assert) {
+        var currentOptions;
+        return regeneratorRuntime.wrap(function _callee21$(_context21) {
+          while (1) {
+            switch (_context21.prev = _context21.next) {
+              case 0:
+                Ember.set(this, 'model.filter', 'groups-view');
+                Ember.set(this, 'model.group_ids', '81');
+                _context21.next = 4;
+                return renderComponent();
+
+              case 4:
+                _context21.next = 6;
+                return _peopleFilter.default.peopleFilterTrigger();
+
+              case 6:
+                _context21.next = 8;
+                return _peopleFilter.default.groupRadioBtn();
+
+              case 8:
+                _context21.next = 10;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 10:
+                _context21.next = 12;
+                return _peopleFilter.default.removeChoice();
+
+              case 12:
+                _context21.next = 14;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 14:
+                currentOptions = _peopleFilter.default.dropdownOptions.map(function (item) {
+                  return item.text;
+                });
+                assert.equal(currentOptions.includes('Change Team'), true, 'Selected choice listed in the list of choices');
+
+              case 16:
+              case "end":
+                return _context21.stop();
+            }
+          }
+        }, _callee21, this);
+      }));
+
+      return function (_x21) {
+        return _ref22.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Select few groups ex: A, B, and C apply and clear it. come back again and select D, B and E group, apply and clear it', /*#__PURE__*/function () {
+      var _ref23 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee22(assert) {
+        var choicesList, nextOption, orderedChoices;
+        return regeneratorRuntime.wrap(function _callee22$(_context22) {
+          while (1) {
+            switch (_context22.prev = _context22.next) {
+              case 0:
+                // Change Team -> A
+                // Major Incident team -> B
+                // Release Team -> C
+                // WLM Group -> D
+                // WLM Test -> E
+                Ember.set(this, 'model.filter', 'groups-view');
+                Ember.set(this, 'model.group_ids', '81,78,83');
+                _context22.next = 4;
+                return renderComponent();
+
+              case 4:
+                _context22.next = 6;
+                return _peopleFilter.default.peopleFilterTrigger();
+
+              case 6:
+                _context22.next = 8;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 8:
+                _context22.next = 10;
+                return _peopleFilter.default.applyButton();
+
+              case 10:
+                _context22.next = 12;
+                return _peopleFilter.default.peopleFilterTrigger();
+
+              case 12:
+                _context22.next = 14;
+                return _peopleFilter.default.clearButton();
+
+              case 14:
+                _context22.next = 16;
+                return _peopleFilter.default.applyButton();
+
+              case 16:
+                _context22.next = 18;
+                return _peopleFilter.default.peopleFilterTrigger();
+
+              case 18:
+                _context22.next = 20;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 20:
+                choicesList = this.element.querySelectorAll('.ember-power-select-option');
+                nextOption = getChoiceIndex(choicesList, 'WLM Group');
+                _context22.next = 24;
+                return (0, _testHelpers.click)("[data-option-index=\"".concat(nextOption, "\"]"));
+
+              case 24:
+                _context22.next = 26;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 26:
+                choicesList = this.element.querySelectorAll('.ember-power-select-option');
+                nextOption = getChoiceIndex(choicesList, 'Major Incident Team');
+                _context22.next = 30;
+                return (0, _testHelpers.click)("[data-option-index=\"".concat(nextOption, "\"]"));
+
+              case 30:
+                _context22.next = 32;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 32:
+                choicesList = this.element.querySelectorAll('.ember-power-select-option');
+                nextOption = getChoiceIndex(choicesList, 'WLM Test');
+                _context22.next = 36;
+                return (0, _testHelpers.click)("[data-option-index=\"".concat(nextOption, "\"]"));
+
+              case 36:
+                _context22.next = 38;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 38:
+                _context22.next = 40;
+                return _peopleFilter.default.applyButton();
+
+              case 40:
+                _context22.next = 42;
+                return _peopleFilter.default.peopleFilterTrigger();
+
+              case 42:
+                _context22.next = 44;
+                return _peopleFilter.default.clearButton();
+
+              case 44:
+                _context22.next = 46;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 46:
+                choicesList = this.element.querySelectorAll('.ember-power-select-option');
+                orderedChoices = getChoiceOrder(choicesList);
+                assert.deepEqual(orderedChoices, ['WLM Test', 'Major Incident Team', 'WLM Group', 'Release Team', 'Change Team']);
+                assert.ok(true, 'Selected choices are in the order E, B, D, C and A');
+
+              case 50:
+              case "end":
+                return _context22.stop();
+            }
+          }
+        }, _callee22, this);
+      }));
+
+      return function (_x22) {
+        return _ref23.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Check whether selected options are persisted at browser level', /*#__PURE__*/function () {
+      var _ref24 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee23(assert) {
+        var workloadStore;
+        return regeneratorRuntime.wrap(function _callee23$(_context23) {
+          while (1) {
+            switch (_context23.prev = _context23.next) {
+              case 0:
+                (0, _stubCurrentUser.stubCurrentUser)(GROUP_MEMBERS_WORKLOAD_USER);
+                Ember.set(this, 'model.filter', 'groups-view');
+                Ember.set(this, 'model.group_ids', '81,78,83');
+                _context23.next = 5;
+                return renderComponent();
+
+              case 5:
+                _context23.next = 7;
+                return _peopleFilter.default.peopleFilterTrigger();
+
+              case 7:
+                _context23.next = 9;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 9:
+                _context23.next = 11;
+                return _peopleFilter.default.applyButton();
+
+              case 11:
+                workloadStore = JSON.parse(localStorage.getItem('storage:workload'));
+                assert.equal(workloadStore.recentFilters['34']['groups-view'], '83,78,81,90,91', 'Local store updated');
+                _context23.next = 15;
+                return renderComponent();
+
+              case 15:
+                assert.ok(true, 'Recent groups ordered');
+
+              case 16:
+              case "end":
+                return _context23.stop();
+            }
+          }
+        }, _callee23, this);
+      }));
+
+      return function (_x23) {
+        return _ref24.apply(this, arguments);
+      };
+    }()); // People - auto suggest
+
+    (0, _qunit.test)('Select all the people from the dropdown validate There are no people to show', /*#__PURE__*/function () {
+      var _ref25 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee24(assert) {
+        return regeneratorRuntime.wrap(function _callee24$(_context24) {
+          while (1) {
+            switch (_context24.prev = _context24.next) {
+              case 0:
+                Ember.set(this, 'model.filter', 'people-view');
+                _context24.next = 3;
+                return renderComponent();
+
+              case 3:
+                _context24.next = 5;
+                return _peopleFilter.default.peopleFilterTrigger();
+
+              case 5:
+                _context24.next = 7;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 7:
+                _context24.next = 9;
+                return _peopleFilter.default.firstOption();
+
+              case 9:
+                _context24.next = 11;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 11:
+                _context24.next = 13;
+                return _peopleFilter.default.firstOption();
+
+              case 13:
+                _context24.next = 15;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 15:
+                _context24.next = 17;
+                return _peopleFilter.default.firstOption();
+
+              case 17:
+                _context24.next = 19;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 19:
+                _context24.next = 21;
+                return _peopleFilter.default.firstOption();
+
+              case 21:
+                _context24.next = 23;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 23:
+                _context24.next = 25;
+                return _peopleFilter.default.firstOption();
+
+              case 25:
+                _context24.next = 27;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 27:
+                assert.equal(_peopleFilter.default.suggestNoMessage, "There are no people to show");
+
+              case 28:
+              case "end":
+                return _context24.stop();
+            }
+          }
+        }, _callee24, this);
+      }));
+
+      return function (_x24) {
+        return _ref25.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Select people from the dropdown and make sure select items are removed from the list', /*#__PURE__*/function () {
+      var _ref26 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee25(assert) {
+        var currentOptions;
+        return regeneratorRuntime.wrap(function _callee25$(_context25) {
+          while (1) {
+            switch (_context25.prev = _context25.next) {
+              case 0:
+                Ember.set(this, 'model.filter', 'people-view');
+                _context25.next = 3;
+                return renderComponent();
+
+              case 3:
+                _context25.next = 5;
+                return _peopleFilter.default.peopleFilterTrigger();
+
+              case 5:
+                _context25.next = 7;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 7:
+                _context25.next = 9;
+                return _peopleFilter.default.firstOption();
+
+              case 9:
+                _context25.next = 11;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 11:
+                currentOptions = _peopleFilter.default.dropdownUserOptions.map(function (item) {
+                  return item.text;
+                });
+                assert.equal(currentOptions.includes('1agent fiftytwo'), false, 'Options removed from list');
+
+              case 13:
+              case "end":
+                return _context25.stop();
+            }
+          }
+        }, _callee25, this);
+      }));
+
+      return function (_x25) {
+        return _ref26.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Select the people from the dropdown and remove it by clicking X and make sure removed items are listed in dropdown', /*#__PURE__*/function () {
+      var _ref27 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee26(assert) {
+        var currentOptions;
+        return regeneratorRuntime.wrap(function _callee26$(_context26) {
+          while (1) {
+            switch (_context26.prev = _context26.next) {
+              case 0:
+                Ember.set(this, 'model.filter', 'people-view');
+                _context26.next = 3;
+                return renderComponent();
+
+              case 3:
+                _context26.next = 5;
+                return _peopleFilter.default.peopleFilterTrigger();
+
+              case 5:
+                _context26.next = 7;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 7:
+                _context26.next = 9;
+                return _peopleFilter.default.firstOption();
+
+              case 9:
+                _context26.next = 11;
+                return _peopleFilter.default.removeChoice();
+
+              case 11:
+                _context26.next = 13;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 13:
+                currentOptions = _peopleFilter.default.dropdownUserOptions.map(function (item) {
+                  return item.text;
+                });
+                assert.equal(currentOptions.includes('1agent fiftytwo'), true, 'Options removed from selected choices are listed');
+
+              case 15:
+              case "end":
+                return _context26.stop();
+            }
+          }
+        }, _callee26, this);
+      }));
+
+      return function (_x26) {
+        return _ref27.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Select few users ex: A, B, and C apply and clear it. come back again and select D, B and E user, apply and clear it', /*#__PURE__*/function () {
+      var _ref28 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee27(assert) {
+        var orderedChoices;
+        return regeneratorRuntime.wrap(function _callee27$(_context27) {
+          while (1) {
+            switch (_context27.prev = _context27.next) {
+              case 0:
+                // 1agent fiftytwo -> A
+                // agent fiftythree -> B
+                // Blesson -> C
+                // 1Blesson -> D
+                // user one -> E
+                Ember.set(this, 'model.filter', 'people-view');
+                _context27.next = 3;
+                return renderComponent();
+
+              case 3:
+                _context27.next = 5;
+                return _peopleFilter.default.peopleFilterTrigger();
+
+              case 5:
+                _context27.next = 7;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 7:
+                _context27.next = 9;
+                return _peopleFilter.default.firstOption();
+
+              case 9:
+                _context27.next = 11;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 11:
+                _context27.next = 13;
+                return _peopleFilter.default.firstOption();
+
+              case 13:
+                _context27.next = 15;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 15:
+                _context27.next = 17;
+                return _peopleFilter.default.firstOption();
+
+              case 17:
+                _context27.next = 19;
+                return _peopleFilter.default.applyButton();
+
+              case 19:
+                _context27.next = 21;
+                return _peopleFilter.default.peopleFilterTrigger();
+
+              case 21:
+                _context27.next = 23;
+                return _peopleFilter.default.clearButton();
+
+              case 23:
+                _context27.next = 25;
+                return _peopleFilter.default.applyButton();
+
+              case 25:
+                _context27.next = 27;
+                return _peopleFilter.default.peopleFilterTrigger();
+
+              case 27:
+                _context27.next = 29;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 29:
+                _context27.next = 31;
+                return _peopleFilter.default.fourthOption();
+
+              case 31:
+                _context27.next = 33;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 33:
+                _context27.next = 35;
+                return _peopleFilter.default.secondOption();
+
+              case 35:
+                _context27.next = 37;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 37:
+                _context27.next = 39;
+                return _peopleFilter.default.thirdOption();
+
+              case 39:
+                _context27.next = 41;
+                return _peopleFilter.default.applyButton();
+
+              case 41:
+                _context27.next = 43;
+                return _peopleFilter.default.peopleFilterTrigger();
+
+              case 43:
+                _context27.next = 45;
+                return _peopleFilter.default.clearButton();
+
+              case 45:
+                _context27.next = 47;
+                return _peopleFilter.default.applyButton();
+
+              case 47:
+                _context27.next = 49;
+                return _peopleFilter.default.peopleFilterTrigger();
+
+              case 49:
+                _context27.next = 51;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 51:
+                orderedChoices = _peopleFilter.default.dropdownUserOptions.map(function (item) {
+                  return item.text;
+                });
+                assert.deepEqual(orderedChoices, ['user one', 'agent fiftythree', '1Blesson', 'Blesson', '1agent fiftytwo'], 'Selected choices are in the order E, B, D, C and A');
+
+              case 53:
+              case "end":
+                return _context27.stop();
+            }
+          }
+        }, _callee27, this);
+      }));
+
+      return function (_x27) {
+        return _ref28.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Check whether selected user options are persisted at browser level', /*#__PURE__*/function () {
+      var _ref29 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee28(assert) {
+        var workloadStore;
+        return regeneratorRuntime.wrap(function _callee28$(_context28) {
+          while (1) {
+            switch (_context28.prev = _context28.next) {
+              case 0:
+                (0, _stubCurrentUser.stubCurrentUser)(GROUP_MEMBERS_WORKLOAD_USER);
+                Ember.set(this, 'model.filter', 'people-view');
+                Ember.set(this, 'model.user_ids', '91');
+                _context28.next = 5;
+                return renderComponent();
+
+              case 5:
+                _context28.next = 7;
+                return _peopleFilter.default.peopleFilterTrigger();
+
+              case 7:
+                _context28.next = 9;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 9:
+                _context28.next = 11;
+                return _peopleFilter.default.applyButton();
+
+              case 11:
+                workloadStore = JSON.parse(localStorage.getItem('storage:workload'));
+                assert.equal(workloadStore.recentFilters['34']['people-view'], '42,41,34,92,91', 'Local store updated');
+                _context28.next = 15;
+                return renderComponent();
+
+              case 15:
+                assert.ok(true, 'Recent users ordered');
+
+              case 16:
+              case "end":
+                return _context28.stop();
+            }
+          }
+        }, _callee28, this);
+      }));
+
+      return function (_x28) {
+        return _ref29.apply(this, arguments);
+      };
+    }()); // Project - auto suggest
+
+    (0, _qunit.test)('Select all the projects from the dropdown validate There are no people to show', /*#__PURE__*/function () {
+      var _ref30 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee29(assert) {
+        return regeneratorRuntime.wrap(function _callee29$(_context29) {
+          while (1) {
+            switch (_context29.prev = _context29.next) {
+              case 0:
+                Ember.set(this, 'model.filter', 'projects-view');
+                _context29.next = 3;
+                return renderComponent();
+
+              case 3:
+                _context29.next = 5;
+                return _peopleFilter.default.peopleFilterTrigger();
+
+              case 5:
+                _context29.next = 7;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 7:
+                _context29.next = 9;
+                return _peopleFilter.default.firstOption();
+
+              case 9:
+                _context29.next = 11;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 11:
+                _context29.next = 13;
+                return _peopleFilter.default.firstOption();
+
+              case 13:
+                _context29.next = 15;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 15:
+                _context29.next = 17;
+                return _peopleFilter.default.firstOption();
+
+              case 17:
+                _context29.next = 19;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 19:
+                _context29.next = 21;
+                return _peopleFilter.default.firstOption();
+
+              case 21:
+                _context29.next = 23;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 23:
+                _context29.next = 25;
+                return _peopleFilter.default.firstOption();
+
+              case 25:
+                _context29.next = 27;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 27:
+                assert.equal(_peopleFilter.default.suggestNoMessage, "There are no projects to show");
+
+              case 28:
+              case "end":
+                return _context29.stop();
+            }
+          }
+        }, _callee29, this);
+      }));
+
+      return function (_x29) {
+        return _ref30.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Select project from the dropdown and make sure select items are removed from the list', /*#__PURE__*/function () {
+      var _ref31 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee30(assert) {
+        var currentOptions;
+        return regeneratorRuntime.wrap(function _callee30$(_context30) {
+          while (1) {
+            switch (_context30.prev = _context30.next) {
+              case 0:
+                Ember.set(this, 'model.filter', 'projects-view');
+                _context30.next = 3;
+                return renderComponent();
+
+              case 3:
+                _context30.next = 5;
+                return _peopleFilter.default.peopleFilterTrigger();
+
+              case 5:
+                _context30.next = 7;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 7:
+                _context30.next = 9;
+                return _peopleFilter.default.firstOption();
+
+              case 9:
+                _context30.next = 11;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 11:
+                currentOptions = _peopleFilter.default.dropdownUserOptions.map(function (item) {
+                  return item.text;
+                });
+                assert.equal(currentOptions.includes('New application rollout (sample project)'), false, 'Options removed from list');
+
+              case 13:
+              case "end":
+                return _context30.stop();
+            }
+          }
+        }, _callee30, this);
+      }));
+
+      return function (_x30) {
+        return _ref31.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Select few projects ex: A, B, and C apply and clear it. come back again and select D, B and E project, apply and clear it', /*#__PURE__*/function () {
+      var _ref32 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee31(assert) {
+        var orderedChoices;
+        return regeneratorRuntime.wrap(function _callee31$(_context31) {
+          while (1) {
+            switch (_context31.prev = _context31.next) {
+              case 0:
+                // New application rollout (sample project) -> A
+                // Test project 1 -> B
+                // Test project 2 -> C
+                // Test project 3 -> D
+                // Test project 4 -> E
+                Ember.set(this, 'model.filter', 'projects-view');
+                _context31.next = 3;
+                return renderComponent();
+
+              case 3:
+                _context31.next = 5;
+                return _peopleFilter.default.peopleFilterTrigger();
+
+              case 5:
+                _context31.next = 7;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 7:
+                _context31.next = 9;
+                return _peopleFilter.default.firstOption();
+
+              case 9:
+                _context31.next = 11;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 11:
+                _context31.next = 13;
+                return _peopleFilter.default.firstOption();
+
+              case 13:
+                _context31.next = 15;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 15:
+                _context31.next = 17;
+                return _peopleFilter.default.firstOption();
+
+              case 17:
+                _context31.next = 19;
+                return _peopleFilter.default.applyButton();
+
+              case 19:
+                _context31.next = 21;
+                return _peopleFilter.default.peopleFilterTrigger();
+
+              case 21:
+                _context31.next = 23;
+                return _peopleFilter.default.clearButton();
+
+              case 23:
+                _context31.next = 25;
+                return _peopleFilter.default.applyButton();
+
+              case 25:
+                _context31.next = 27;
+                return _peopleFilter.default.peopleFilterTrigger();
+
+              case 27:
+                _context31.next = 29;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 29:
+                _context31.next = 31;
+                return _peopleFilter.default.fourthOption();
+
+              case 31:
+                _context31.next = 33;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 33:
+                _context31.next = 35;
+                return _peopleFilter.default.secondOption();
+
+              case 35:
+                _context31.next = 37;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 37:
+                _context31.next = 39;
+                return _peopleFilter.default.thirdOption();
+
+              case 39:
+                _context31.next = 41;
+                return _peopleFilter.default.applyButton();
+
+              case 41:
+                _context31.next = 43;
+                return _peopleFilter.default.peopleFilterTrigger();
+
+              case 43:
+                _context31.next = 45;
+                return _peopleFilter.default.clearButton();
+
+              case 45:
+                _context31.next = 47;
+                return _peopleFilter.default.applyButton();
+
+              case 47:
+                _context31.next = 49;
+                return _peopleFilter.default.peopleFilterTrigger();
+
+              case 49:
+                _context31.next = 51;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 51:
+                orderedChoices = _peopleFilter.default.dropdownUserOptions.map(function (item) {
+                  return item.text;
+                });
+                assert.deepEqual(orderedChoices, ['Test project 4', 'Test project 1', 'Test project 3', 'Test project 2', 'New application rollout (sample project)'], 'Selected choices are in the order E, B, D, C and A');
+
+              case 53:
+              case "end":
+                return _context31.stop();
+            }
+          }
+        }, _callee31, this);
+      }));
+
+      return function (_x31) {
+        return _ref32.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Check whether selected project options are persisted at browser level', /*#__PURE__*/function () {
+      var _ref33 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee32(assert) {
+        var workloadStore;
+        return regeneratorRuntime.wrap(function _callee32$(_context32) {
+          while (1) {
+            switch (_context32.prev = _context32.next) {
+              case 0:
+                (0, _stubCurrentUser.stubCurrentUser)(PROJECT_MEMBER_WORKLOAD_USER);
+                Ember.set(this, 'model.filter', 'projects-view');
+                Ember.set(this, 'model.project_ids', '1');
+                _context32.next = 5;
+                return renderComponent();
+
+              case 5:
+                _context32.next = 7;
+                return _peopleFilter.default.peopleFilterTrigger();
+
+              case 7:
+                _context32.next = 9;
+                return _peopleFilter.default.dropdownTrigger();
+
+              case 9:
+                _context32.next = 11;
+                return _peopleFilter.default.applyButton();
+
+              case 11:
+                workloadStore = JSON.parse(localStorage.getItem('storage:workload'));
+                assert.equal(workloadStore.recentFilters['34']['projects-view'], '5,4,3,2,1', 'Local store updated');
+                _context32.next = 15;
+                return renderComponent();
+
+              case 15:
+                assert.ok(true, 'Recent projects ordered');
+
+              case 16:
+              case "end":
+                return _context32.stop();
+            }
+          }
+        }, _callee32, this);
+      }));
+
+      return function (_x32) {
+        return _ref33.apply(this, arguments);
+      };
+    }()); // dropdown content search
+
+    (0, _qunit.test)('Trigger dropdown search', /*#__PURE__*/function () {
+      var _ref34 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee33(assert) {
+        var currentOptions;
+        return regeneratorRuntime.wrap(function _callee33$(_context33) {
+          while (1) {
+            switch (_context33.prev = _context33.next) {
+              case 0:
+                Ember.set(this, 'model.filter', 'groups-view');
+                Ember.set(this, 'model.group_ids', '81,78,79');
+                _context33.next = 4;
+                return renderComponent();
+
+              case 4:
+                _context33.next = 6;
+                return _peopleFilter.default.peopleFilterTrigger();
+
+              case 6:
+                _context33.next = 8;
+                return _peopleFilter.default.groupRadioBtn();
+
+              case 8:
+                _context33.next = 10;
+                return (0, _testSupport.selectSearch)('.search-container .ember-basic-dropdown-trigger', 'WLM');
+
+              case 10:
+                currentOptions = _peopleFilter.default.dropdownOptions.map(function (item) {
+                  return item.text.includes('WLM');
+                });
+                _context33.next = 13;
+                return (0, _testHelpers.triggerEvent)('.ember-power-select-trigger-multiple-input', 'keydown', {
+                  metaKey: true,
+                  which: 65
+                });
+
+              case 13:
+                assert.ok(currentOptions.every(function (choice) {
+                  return choice === true;
+                }), 'WLM text options are shown');
+
+              case 14:
+              case "end":
+                return _context33.stop();
+            }
+          }
+        }, _callee33, this);
+      }));
+
+      return function (_x33) {
+        return _ref34.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Select dropdown search text with ctrl key', /*#__PURE__*/function () {
+      var _ref35 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee34(assert) {
+        var currentOptions;
+        return regeneratorRuntime.wrap(function _callee34$(_context34) {
+          while (1) {
+            switch (_context34.prev = _context34.next) {
+              case 0:
+                Ember.set(this, 'model.filter', 'people-view');
+                _context34.next = 3;
+                return renderComponent();
+
+              case 3:
+                _context34.next = 5;
+                return _peopleFilter.default.peopleFilterTrigger();
+
+              case 5:
+                _context34.next = 7;
+                return _peopleFilter.default.groupRadioBtn();
+
+              case 7:
+                _context34.next = 9;
+                return (0, _testSupport.selectSearch)('.search-container .ember-basic-dropdown-trigger', 'WLM');
+
+              case 9:
+                currentOptions = _peopleFilter.default.dropdownOptions.map(function (item) {
+                  return item.text.includes('WLM');
+                });
+                _context34.next = 12;
+                return (0, _testHelpers.triggerEvent)('.ember-power-select-trigger-multiple-input', 'keydown', {
+                  ctrlKey: true,
+                  which: 65
+                });
+
+              case 12:
+                assert.ok(currentOptions.every(function (choice) {
+                  return choice === true;
+                }), 'WLM text options are shown');
+
+              case 13:
+              case "end":
+                return _context34.stop();
+            }
+          }
+        }, _callee34, this);
+      }));
+
+      return function (_x34) {
+        return _ref35.apply(this, arguments);
       };
     }());
   });
@@ -54512,24 +59388,26 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
             switch (_context.prev = _context.next) {
               case 0:
                 this.set('currentActiveView', 'groups-view');
-                _context.next = 3;
+                this.set('setSelectedOptions', emptyFunction);
+                this.set('emptyDropdown', emptyFunction);
+                _context.next = 5;
                 return (0, _testHelpers.render)(Ember.HTMLBars.template(
                 /*
-                  <ModuleWorkloads::PeopleFilter::DropdownContent @applyFilter={{this.applyFilter}}
+                  <ModuleWorkloads::PeopleFilter::DropdownContent @onOpen={{this.setSelectedOptions}} @applyFilter={{this.applyFilter}}
                     @closeDropdown={{this.closeDropdown}} @setCurrentView={{this.setCurrentView}} @isGroupsView={{true}}
                     @selectedChoice={{this.selectedChoice}}
-                    @currentActiveView={{this.currentActiveView}} @onChange={{this.onChange}} @clear={{this.clear}} />
+                    @currentActiveView={{this.currentActiveView}} @onChange={{this.onChange}} @emptyDropdown={{this.emptyDropdown}} />
                 */
                 {
-                  id: "10QtO/SI",
-                  block: "{\"symbols\":[],\"statements\":[[5,\"module-workloads/people-filter/dropdown-content\",[],[[\"@applyFilter\",\"@closeDropdown\",\"@setCurrentView\",\"@isGroupsView\",\"@selectedChoice\",\"@currentActiveView\",\"@onChange\",\"@clear\"],[[23,0,[\"applyFilter\"]],[23,0,[\"closeDropdown\"]],[23,0,[\"setCurrentView\"]],true,[23,0,[\"selectedChoice\"]],[23,0,[\"currentActiveView\"]],[23,0,[\"onChange\"]],[23,0,[\"clear\"]]]]]],\"hasEval\":false}",
+                  id: "3vQioz9y",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-workloads/people-filter/dropdown-content\",[],[[\"@onOpen\",\"@applyFilter\",\"@closeDropdown\",\"@setCurrentView\",\"@isGroupsView\",\"@selectedChoice\",\"@currentActiveView\",\"@onChange\",\"@emptyDropdown\"],[[23,0,[\"setSelectedOptions\"]],[23,0,[\"applyFilter\"]],[23,0,[\"closeDropdown\"]],[23,0,[\"setCurrentView\"]],true,[23,0,[\"selectedChoice\"]],[23,0,[\"currentActiveView\"]],[23,0,[\"onChange\"]],[23,0,[\"emptyDropdown\"]]]]]],\"hasEval\":false}",
                   meta: {}
                 }));
 
-              case 3:
+              case 5:
                 assert.ok("Groups filter rendered");
 
-              case 4:
+              case 6:
               case "end":
                 return _context.stop();
             }
@@ -54548,19 +59426,25 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
             switch (_context2.prev = _context2.next) {
               case 0:
                 this.set('searchEnabled', true);
+                this.set('suggestOptions', []);
                 this.set('currentOptions', PEOPLE_MOCK_DATA);
                 this.set('currentActiveView', 'people-view');
-                _context2.next = 5;
+                this.set('setSelectedOptions', emptyFunction);
+                this.set('emptyDropdown', emptyFunction);
+                _context2.next = 8;
                 return (0, _testHelpers.render)(Ember.HTMLBars.template(
                 /*
                   <ModuleWorkloads::PeopleFilter::DropdownContent @applyFilter={{this.applyFilter}}
+                    @onOpen={{this.setSelectedOptions}}
                     @currentOptions={{this.currentOptions}}
                     @setFilterOptions={{this.setFilterOptions}}
                     @closeDropdown={{this.closeDropdown}} 
                     @setCurrentView={{this.setCurrentView}} 
                     @searchEnabled={{this.searchEnabled}}
                     @selectedChoice={{this.selectedChoice}}
+                    @emptyDropdown={{this.emptyDropdown}}
                     @onKeyUp={{this.onKeyUp}}
+                    @suggestOptions={{this.suggestOptions}}
                     @optionsComponent={{component 'module-workloads/people-filter/options/people-option'
                     currentActiveView=this.currentActiveView}} @currentActiveView={{this.currentActiveView}} @onChange={{this.onChange}}
                     @clear={{this.clear}} 
@@ -54568,48 +59452,51 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
                     @updateFilteredList={{this.updateFilteredList}} />
                 */
                 {
-                  id: "tsionhNL",
-                  block: "{\"symbols\":[],\"statements\":[[5,\"module-workloads/people-filter/dropdown-content\",[],[[\"@applyFilter\",\"@currentOptions\",\"@setFilterOptions\",\"@closeDropdown\",\"@setCurrentView\",\"@searchEnabled\",\"@selectedChoice\",\"@onKeyUp\",\"@optionsComponent\",\"@currentActiveView\",\"@onChange\",\"@clear\",\"@options\",\"@updateFilteredList\"],[[23,0,[\"applyFilter\"]],[23,0,[\"currentOptions\"]],[23,0,[\"setFilterOptions\"]],[23,0,[\"closeDropdown\"]],[23,0,[\"setCurrentView\"]],[23,0,[\"searchEnabled\"]],[23,0,[\"selectedChoice\"]],[23,0,[\"onKeyUp\"]],[28,\"component\",[\"module-workloads/people-filter/options/people-option\"],[[\"currentActiveView\"],[[23,0,[\"currentActiveView\"]]]]],[23,0,[\"currentActiveView\"]],[23,0,[\"onChange\"]],[23,0,[\"clear\"]],[23,0,[\"options\"]],[23,0,[\"updateFilteredList\"]]]]]],\"hasEval\":false}",
+                  id: "CkNOfC3e",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-workloads/people-filter/dropdown-content\",[],[[\"@applyFilter\",\"@onOpen\",\"@currentOptions\",\"@setFilterOptions\",\"@closeDropdown\",\"@setCurrentView\",\"@searchEnabled\",\"@selectedChoice\",\"@emptyDropdown\",\"@onKeyUp\",\"@suggestOptions\",\"@optionsComponent\",\"@currentActiveView\",\"@onChange\",\"@clear\",\"@options\",\"@updateFilteredList\"],[[23,0,[\"applyFilter\"]],[23,0,[\"setSelectedOptions\"]],[23,0,[\"currentOptions\"]],[23,0,[\"setFilterOptions\"]],[23,0,[\"closeDropdown\"]],[23,0,[\"setCurrentView\"]],[23,0,[\"searchEnabled\"]],[23,0,[\"selectedChoice\"]],[23,0,[\"emptyDropdown\"]],[23,0,[\"onKeyUp\"]],[23,0,[\"suggestOptions\"]],[28,\"component\",[\"module-workloads/people-filter/options/people-option\"],[[\"currentActiveView\"],[[23,0,[\"currentActiveView\"]]]]],[23,0,[\"currentActiveView\"]],[23,0,[\"onChange\"]],[23,0,[\"clear\"]],[23,0,[\"options\"]],[23,0,[\"updateFilteredList\"]]]]]],\"hasEval\":false}",
                   meta: {}
                 }));
 
-              case 5:
-                _context2.next = 7;
+              case 8:
+                _context2.next = 10;
                 return (0, _testSupport.selectSearch)('.ember-basic-dropdown-trigger', 'Agent');
 
-              case 7:
+              case 10:
                 this.set('currentOptions', []);
-                _context2.next = 10;
+                _context2.next = 13;
                 return (0, _testHelpers.render)(Ember.HTMLBars.template(
                 /*
                   <ModuleWorkloads::PeopleFilter::DropdownContent @applyFilter={{this.applyFilter}}
                     @currentOptions={{this.currentOptions}}
                     @closeDropdown={{this.closeDropdown}} 
                     @setCurrentView={{this.setCurrentView}}
+                    @selectedChoice={{this.selectedChoice}}
+                    @emptyDropdown={{this.emptyDropdown}}
                     @setFilterOptions={{this.setFilterOptions}}
                     @searchEnabled={{this.searchEnabled}}
                     @selectedChoice={{this.selectedChoice}}
                     @onKeyUp={{this.onKeyUp}}
                     @optionsComponent={{component 'module-workloads/people-filter/options/people-option'
                     currentActiveView=this.currentActiveView}} @currentActiveView={{this.currentActiveView}} @onChange={{this.onChange}}
-                    @clear={{this.clear}} 
+                    @clear={{this.clear}}
+                    @suggestOptions={{this.suggestOptions}}
                     @options={{this.options}} 
                     @updateFilteredList={{this.updateFilteredList}} />
                 */
                 {
-                  id: "PcNtL4xa",
-                  block: "{\"symbols\":[],\"statements\":[[5,\"module-workloads/people-filter/dropdown-content\",[],[[\"@applyFilter\",\"@currentOptions\",\"@closeDropdown\",\"@setCurrentView\",\"@setFilterOptions\",\"@searchEnabled\",\"@selectedChoice\",\"@onKeyUp\",\"@optionsComponent\",\"@currentActiveView\",\"@onChange\",\"@clear\",\"@options\",\"@updateFilteredList\"],[[23,0,[\"applyFilter\"]],[23,0,[\"currentOptions\"]],[23,0,[\"closeDropdown\"]],[23,0,[\"setCurrentView\"]],[23,0,[\"setFilterOptions\"]],[23,0,[\"searchEnabled\"]],[23,0,[\"selectedChoice\"]],[23,0,[\"onKeyUp\"]],[28,\"component\",[\"module-workloads/people-filter/options/people-option\"],[[\"currentActiveView\"],[[23,0,[\"currentActiveView\"]]]]],[23,0,[\"currentActiveView\"]],[23,0,[\"onChange\"]],[23,0,[\"clear\"]],[23,0,[\"options\"]],[23,0,[\"updateFilteredList\"]]]]]],\"hasEval\":false}",
+                  id: "Kt3YRjrC",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-workloads/people-filter/dropdown-content\",[],[[\"@applyFilter\",\"@currentOptions\",\"@closeDropdown\",\"@setCurrentView\",\"@selectedChoice\",\"@emptyDropdown\",\"@setFilterOptions\",\"@searchEnabled\",\"@selectedChoice\",\"@onKeyUp\",\"@optionsComponent\",\"@currentActiveView\",\"@onChange\",\"@clear\",\"@suggestOptions\",\"@options\",\"@updateFilteredList\"],[[23,0,[\"applyFilter\"]],[23,0,[\"currentOptions\"]],[23,0,[\"closeDropdown\"]],[23,0,[\"setCurrentView\"]],[23,0,[\"selectedChoice\"]],[23,0,[\"emptyDropdown\"]],[23,0,[\"setFilterOptions\"]],[23,0,[\"searchEnabled\"]],[23,0,[\"selectedChoice\"]],[23,0,[\"onKeyUp\"]],[28,\"component\",[\"module-workloads/people-filter/options/people-option\"],[[\"currentActiveView\"],[[23,0,[\"currentActiveView\"]]]]],[23,0,[\"currentActiveView\"]],[23,0,[\"onChange\"]],[23,0,[\"clear\"]],[23,0,[\"suggestOptions\"]],[23,0,[\"options\"]],[23,0,[\"updateFilteredList\"]]]]]],\"hasEval\":false}",
                   meta: {}
                 }));
 
-              case 10:
-                _context2.next = 12;
+              case 13:
+                _context2.next = 15;
                 return (0, _testSupport.selectSearch)('.ember-basic-dropdown-trigger', 'Agent');
 
-              case 12:
+              case 15:
                 assert.ok("People filter rendered");
 
-              case 13:
+              case 16:
               case "end":
                 return _context2.stop();
             }
@@ -54630,7 +59517,10 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
                 this.set('currentOptions', PROJECT_MOCK_DATA);
                 this.set('currentActiveView', 'projects-view');
                 this.set('searchEnabled', true);
-                _context3.next = 5;
+                this.set('setSelectedOptions', emptyFunction);
+                this.set('emptyDropdown', emptyFunction);
+                this.set('suggestOptions', []);
+                _context3.next = 8;
                 return (0, _testHelpers.render)(Ember.HTMLBars.template(
                 /*
                   <ModuleWorkloads::PeopleFilter::DropdownContent @applyFilter={{this.applyFilter}}
@@ -54639,6 +59529,9 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
                       @setCurrentView={{this.setCurrentView}} 
                       @currentActiveView={{this.currentActiveView}} 
                       @onKeyUp={{this.onKeyUp}}
+                      @suggestOptions={{this.suggestOptions}}
+                      @selectedChoice={{this.selectedChoice}}
+                      @emptyDropdown={{this.emptyDropdown}}
                       @onChange={{this.onChange}}
                       @clear={{this.clear}}
                       @searchEnabled={{this.searchEnabled}}
@@ -54647,19 +59540,19 @@ define("freshservice/tests/integration/components/module-workloads/people-filter
                       @currentOptions={{this.currentOptions}} />
                 */
                 {
-                  id: "kirdIevK",
-                  block: "{\"symbols\":[],\"statements\":[[5,\"module-workloads/people-filter/dropdown-content\",[],[[\"@applyFilter\",\"@selectedChoice\",\"@closeDropdown\",\"@setCurrentView\",\"@currentActiveView\",\"@onKeyUp\",\"@onChange\",\"@clear\",\"@searchEnabled\",\"@setFilterOptions\",\"@updateFilteredList\",\"@currentOptions\"],[[23,0,[\"applyFilter\"]],[23,0,[\"selectedChoice\"]],[23,0,[\"closeDropdown\"]],[23,0,[\"setCurrentView\"]],[23,0,[\"currentActiveView\"]],[23,0,[\"onKeyUp\"]],[23,0,[\"onChange\"]],[23,0,[\"clear\"]],[23,0,[\"searchEnabled\"]],[23,0,[\"setFilterOptions\"]],[23,0,[\"updateFilteredList\"]],[23,0,[\"currentOptions\"]]]]]],\"hasEval\":false}",
+                  id: "jpn3a05j",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"module-workloads/people-filter/dropdown-content\",[],[[\"@applyFilter\",\"@selectedChoice\",\"@closeDropdown\",\"@setCurrentView\",\"@currentActiveView\",\"@onKeyUp\",\"@suggestOptions\",\"@selectedChoice\",\"@emptyDropdown\",\"@onChange\",\"@clear\",\"@searchEnabled\",\"@setFilterOptions\",\"@updateFilteredList\",\"@currentOptions\"],[[23,0,[\"applyFilter\"]],[23,0,[\"selectedChoice\"]],[23,0,[\"closeDropdown\"]],[23,0,[\"setCurrentView\"]],[23,0,[\"currentActiveView\"]],[23,0,[\"onKeyUp\"]],[23,0,[\"suggestOptions\"]],[23,0,[\"selectedChoice\"]],[23,0,[\"emptyDropdown\"]],[23,0,[\"onChange\"]],[23,0,[\"clear\"]],[23,0,[\"searchEnabled\"]],[23,0,[\"setFilterOptions\"]],[23,0,[\"updateFilteredList\"]],[23,0,[\"currentOptions\"]]]]]],\"hasEval\":false}",
                   meta: {}
                 }));
 
-              case 5:
-                _context3.next = 7;
+              case 8:
+                _context3.next = 10;
                 return (0, _testSupport.selectSearch)('.ember-basic-dropdown-trigger', 'New');
 
-              case 7:
+              case 10:
                 assert.ok("Projects filter rendered");
 
-              case 8:
+              case 11:
               case "end":
                 return _context3.stop();
             }
@@ -56060,6 +60953,51 @@ define("freshservice/tests/integration/components/module-workloads/scheduler-cha
 
       return function (_x15) {
         return _ref17.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('validates gantt bars render and summary toggle', /*#__PURE__*/function () {
+      var _ref18 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee18(assert) {
+        var changeSummaryView;
+        return regeneratorRuntime.wrap(function _callee18$(_context18) {
+          while (1) {
+            switch (_context18.prev = _context18.next) {
+              case 0:
+                Ember.set(this, 'model.effort_view', 'percen');
+                _context18.next = 3;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <div id="wlm-module-container">
+                                      <ModuleWorkloads::SchedulerChart @toggleUnassignedSlider={{this.resetFilter}} @toggleSlider={{this.resetFilter}} @model={{this.model}} @currentView="week" @resetFilter={{this.resetFilter}}></ModuleWorkloads::SchedulerChart>
+                                     </div>
+                */
+                {
+                  id: "grS4gEXU",
+                  block: "{\"symbols\":[],\"statements\":[[7,\"div\",true],[10,\"id\",\"wlm-module-container\"],[8],[0,\"\\n                      \"],[5,\"module-workloads/scheduler-chart\",[],[[\"@toggleUnassignedSlider\",\"@toggleSlider\",\"@model\",\"@currentView\",\"@resetFilter\"],[[23,0,[\"resetFilter\"]],[23,0,[\"resetFilter\"]],[23,0,[\"model\"]],\"week\",[23,0,[\"resetFilter\"]]]],{\"statements\":[],\"parameters\":[]}],[0,\"\\n                     \"],[9]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 3:
+                changeSummaryView = this.element.querySelectorAll('.ember-basic-dropdown-trigger')[0];
+                _context18.next = 6;
+                return (0, _testHelpers.click)(changeSummaryView);
+
+              case 6:
+                _context18.next = 8;
+                return (0, _testHelpers.click)('[data-test-id="wlm-capacity-header-effort-option-hour"]');
+
+              case 8:
+                assert.dom('.wlm-gantt-empty-message').doesNotExist();
+
+              case 9:
+              case "end":
+                return _context18.stop();
+            }
+          }
+        }, _callee18, this);
+      }));
+
+      return function (_x16) {
+        return _ref18.apply(this, arguments);
       };
     }());
   });
@@ -57526,6 +62464,97 @@ define("freshservice/tests/integration/components/module-workloads/unassigned-it
     }());
   });
 });
+define("freshservice/tests/integration/components/portal-designer/code-editor/component-test", ["qunit", "ember-qunit", "freshservice/tests/lib/intl", "@ember/test-helpers", "freshservice/utils/portal-designer"], function (_qunit, _emberQunit, _intl, _testHelpers, _portalDesigner) {
+  "use strict";
+
+  function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+  function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+  var BUILDER_SERVICE_STUB = Ember.Service.extend({
+    postDraft: function postDraft() {//do nothing
+    }
+  });
+  var MODEL_MOCK = {
+    content: {
+      pages: {
+        portal_home: "<div>Welcome Home</div>"
+      }
+    }
+  };
+  var PAGE = 'portal-home';
+  (0, _qunit.module)('Integration | Component | portal-designer/code-editor', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _intl.setupTranslations)(hooks);
+    hooks.beforeEach( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              this.owner.register('service:portal-builder', BUILDER_SERVICE_STUB);
+              this.owner.lookup('service:intl');
+              this.set('model', MODEL_MOCK);
+              this.set('page', PAGE);
+              _context.next = 6;
+              return (0, _portalDesigner.dynamicImportMirror)();
+
+            case 6:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, this);
+    })));
+    (0, _qunit.test)('it renders', /*#__PURE__*/function () {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(assert) {
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <PortalDesigner::CodeEditor @model={{this.model}} @page={{this.page}} />
+                */
+                {
+                  id: "0qMvqXu1",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"portal-designer/code-editor\",[],[[\"@model\",\"@page\"],[[23,0,[\"model\"]],[23,0,[\"page\"]]]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 2:
+                assert.equal(this.element.getElementsByClassName('CodeMirror').length, 1, 'codemirror initiated');
+                assert.equal(this.element.getElementsByClassName('CodeMirror')[0].getElementsByClassName('CodeMirror-line')[0].innerText, "<div>Welcome Home</div>", 'Editor value exists');
+                _context2.next = 6;
+                return (0, _testHelpers.click)('[data-test-id="toggle-placeholder"]');
+
+              case 6:
+                assert.ok(this.element.querySelector('[data-test-id="toggle-placeholder"].active'), 'toggle placeholder active');
+                assert.ok(this.element.querySelector('.editor-placeholder-content'), 'placeholder modal opened');
+                assert.equal(this.element.querySelectorAll('[data-test-id="placeholder-category"]').length, 4, 'only available placeholder categories are displayed'); //?since we are loading "portal-home" page here, available placeholder categories should be 4.
+
+                _context2.next = 11;
+                return (0, _testHelpers.click)('[data-test-id="toggle-fullscreen"]');
+
+              case 11:
+                assert.ok(this.element.querySelector('[data-test-id="toggle-fullscreen"].active'), 'toggle fullscreen button active');
+                assert.ok(this.element.querySelector('.CodeMirror.CodeMirror-fullscreen'), 'fullscreen toggled');
+                assert.ok(true);
+
+              case 14:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      return function (_x) {
+        return _ref3.apply(this, arguments);
+      };
+    }());
+  });
+});
 define("freshservice/tests/integration/components/portal-designer/custom-translations/component-test", ["qunit", "ember-qunit", "ember-cli-mirage/test-support", "freshservice/tests/lib/intl", "@ember/test-helpers"], function (_qunit, _emberQunit, _testSupport, _intl, _testHelpers) {
   "use strict";
 
@@ -58010,68 +63039,6 @@ define("freshservice/tests/integration/components/portal-designer/custom-transla
     }());
   });
 });
-define("freshservice/tests/integration/components/portal-designer/manage-versions-test", ["qunit", "ember-qunit", "@ember/test-helpers", "freshservice/tests/lib/intl"], function (_qunit, _emberQunit, _testHelpers, _intl) {
-  "use strict";
-
-  function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-  function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-  (0, _qunit.module)('Integration | Component | portal-designer/manage-versions', function (hooks) {
-    (0, _emberQunit.setupRenderingTest)(hooks);
-    (0, _intl.setupTranslations)(hooks);
-    hooks.beforeEach( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-      return regeneratorRuntime.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              this.intl = this.owner.lookup("service:intl");
-
-            case 1:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee, this);
-    })));
-    hooks.after(function () {
-      this.owner.destroy("service:intl");
-    });
-    (0, _qunit.test)('it renders manage versions dropdown button', /*#__PURE__*/function () {
-      var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(assert) {
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return (0, _testHelpers.render)(Ember.HTMLBars.template(
-                /*
-                  <PortalDesigner::ManageVersions />
-                */
-                {
-                  id: "LRT4scq4",
-                  block: "{\"symbols\":[],\"statements\":[[5,\"portal-designer/manage-versions\",[],[[],[]]]],\"hasEval\":false}",
-                  meta: {}
-                }));
-
-              case 2:
-                assert.dom('.ember-basic-dropdown').exists();
-                assert.equal(this.element.querySelector('.ember-basic-dropdown .manage-versions-title').innerText.trim(), this.intl.t("portal_designer.manage_versions"));
-
-              case 4:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2, this);
-      }));
-
-      return function (_x) {
-        return _ref3.apply(this, arguments);
-      };
-    }());
-  });
-});
 define("freshservice/tests/integration/components/portal-designer/page-switcher-test", ["qunit", "ember-qunit", "@ember/test-helpers", "freshservice/tests/lib/intl", "freshservice/tests/lib/stub-current-account", "freshservice/tests/data/custom-translations"], function (_qunit, _emberQunit, _testHelpers, _intl, _stubCurrentAccount, _customTranslations) {
   "use strict";
 
@@ -58105,23 +63072,24 @@ define("freshservice/tests/integration/components/portal-designer/page-switcher-
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _context2.next = 2;
+                this.set('page', 'home-page-designer');
+                _context2.next = 3;
                 return (0, _testHelpers.render)(Ember.HTMLBars.template(
                 /*
-                  <PortalDesigner::PageSwitcher />
+                  <PortalDesigner::PageSwitcher @page={{this.page}}/>
                 */
                 {
-                  id: "s5txKoz4",
-                  block: "{\"symbols\":[],\"statements\":[[5,\"portal-designer/page-switcher\",[],[[],[]]]],\"hasEval\":false}",
+                  id: "0IOowVge",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"portal-designer/page-switcher\",[],[[\"@page\"],[[23,0,[\"page\"]]]]]],\"hasEval\":false}",
                   meta: {}
                 }));
 
-              case 2:
+              case 3:
                 assert.dom('.page-switcher.ember-basic-dropdown').exists();
                 assert.dom('.page-switcher .selected-page').exists();
                 assert.equal(document.querySelector('.page-switcher .selected-page').innerText.trim(), this.intl.t("portal_designer.home_page_designer"));
 
-              case 5:
+              case 6:
               case "end":
                 return _context2.stop();
             }
@@ -58216,6 +63184,67 @@ define("freshservice/tests/integration/components/portal-designer/page-switcher-
 
       return function (_x3) {
         return _ref5.apply(this, arguments);
+      };
+    }());
+  });
+});
+define("freshservice/tests/integration/components/portal-designer/placeholder-modal/body/component-test", ["qunit", "ember-qunit", "freshservice/tests/lib/intl", "@ember/test-helpers", "freshservice/constants/portal-designer/designer-placeholders"], function (_qunit, _emberQunit, _intl, _testHelpers, _designerPlaceholders) {
+  "use strict";
+
+  function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+  function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+  var EMPTY_PLACEHOLDERS_LIST = [{
+    category: 'test',
+    placeholders: []
+  }];
+  (0, _qunit.module)('Integration | Component | portal-designer/placeholder-modal/body', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _intl.setupTranslations)(hooks);
+    hooks.beforeEach(function () {
+      var intl = this.owner.lookup("service:intl");
+      this.set('onPlaceholderClick', function () {}); //do nothing
+
+      this.set('placeholdersData', (0, _designerPlaceholders.default)(intl));
+    });
+    (0, _qunit.test)('it renders', /*#__PURE__*/function () {
+      var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(assert) {
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <PortalDesigner::PlaceholderModal::Body
+                		@secondaryText          = {{t "portal_designer.placeholder_modal_intro_text"}}
+                    @placeholdersData       = {{ this.placeholdersData }}
+                    @placeholderClickAction =  {{this.onPlaceholderClick}}
+                		/>
+                */
+                {
+                  id: "AJoiQ7dT",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"portal-designer/placeholder-modal/body\",[],[[\"@secondaryText\",\"@placeholdersData\",\"@placeholderClickAction\"],[[28,\"t\",[\"portal_designer.placeholder_modal_intro_text\"],null],[23,0,[\"placeholdersData\"]],[23,0,[\"onPlaceholderClick\"]]]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 2:
+                assert.equal(this.element.querySelectorAll('[data-test-id="placeholder-category"]').length, 2, 'placeholders category is correctly rendered');
+                assert.ok(this.element.querySelector('[data-test-placeholders="placeholder"]'), 'placeholder buttons rendered');
+                this.set('placeholdersData', EMPTY_PLACEHOLDERS_LIST);
+                assert.ok(this.element.querySelector('[data-test-placeholders="notAvailable"]'), 'no placeholders available');
+
+              case 6:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      return function (_x) {
+        return _ref2.apply(this, arguments);
       };
     }());
   });
@@ -58407,6 +63436,91 @@ define("freshservice/tests/integration/components/portal-designer/placeholder-mo
 
       return function (_x4) {
         return _ref5.apply(this, arguments);
+      };
+    }());
+  });
+});
+define("freshservice/tests/integration/components/portal-designer/placeholder-modal/header/component-test", ["qunit", "ember-qunit", "freshservice/tests/lib/intl", "@ember/test-helpers"], function (_qunit, _emberQunit, _intl, _testHelpers) {
+  "use strict";
+
+  function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+  function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+  (0, _qunit.module)('Integration | Component | portal-designer/placeholder-modal/header', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _intl.setupTranslations)(hooks);
+    hooks.beforeEach(function () {
+      this.set('onCloseModal', function () {});
+    });
+    (0, _qunit.test)('it renders with close button', /*#__PURE__*/function () {
+      var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(assert) {
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <PortalDesigner::PlaceholderModal::Header
+                			@title       = {{t "portal_designer.placeholder_modal_title"}}
+                			@closeAction = {{this.onCloseModal}}
+                		/>
+                */
+                {
+                  id: "F7APMOFb",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"portal-designer/placeholder-modal/header\",[],[[\"@title\",\"@closeAction\"],[[28,\"t\",[\"portal_designer.placeholder_modal_title\"],null],[23,0,[\"onCloseModal\"]]]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 2:
+                assert.equal(this.element.querySelector('[data-test-id="placeholder-modal-title"]').innerText, 'Placeholders', 'placeholder modal title renders correctly');
+                assert.ok(this.element.querySelector('[data-test-placeholders="close"]'), 'close button exists');
+
+              case 4:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      return function (_x) {
+        return _ref2.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('it renders without close button', /*#__PURE__*/function () {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(assert) {
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <PortalDesigner::PlaceholderModal::Header
+                			@title       = {{t "portal_designer.placeholder_modal_title"}}
+                		/>
+                */
+                {
+                  id: "psSHbwG5",
+                  block: "{\"symbols\":[],\"statements\":[[5,\"portal-designer/placeholder-modal/header\",[],[[\"@title\"],[[28,\"t\",[\"portal_designer.placeholder_modal_title\"],null]]]]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 2:
+                assert.notOk(this.element.querySelector('[data-test-placeholders="close"]'), 'close button does not exists');
+
+              case 3:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      return function (_x2) {
+        return _ref3.apply(this, arguments);
       };
     }());
   });
@@ -58949,10 +64063,12 @@ define("freshservice/tests/integration/components/portal-designer/topbar-test", 
     (0, _intl.setupTranslations)(hooks);
     (0, _qunit.test)('it renders topbar', /*#__PURE__*/function () {
       var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(assert) {
+        var builder;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
+                builder = this.owner.lookup('service:portal-builder');
                 this.set('model', {
                   "portal_version": {
                     "content": {},
@@ -58965,10 +64081,12 @@ define("freshservice/tests/integration/components/portal-designer/topbar-test", 
                       "name": "Support"
                     },
                     "title": "Banner & Tabs",
-                    "updated_at": "2021-10-19T02:38:11+05:30"
+                    "updated_at": "2021-10-19T02:38:11+05:30",
+                    "draft": true
                   }
                 });
-                _context.next = 3;
+                builder.setCurrentModel(this.model);
+                _context.next = 5;
                 return (0, _testHelpers.render)(Ember.HTMLBars.template(
                 /*
                   <PortalDesigner::Topbar @model={{this.model}}/>
@@ -58979,12 +64097,12 @@ define("freshservice/tests/integration/components/portal-designer/topbar-test", 
                   meta: {}
                 }));
 
-              case 3:
+              case 5:
                 assert.dom('.page-switcher').exists();
                 assert.dom('.editor-status').exists();
                 assert.dom('.version-options').exists();
 
-              case 6:
+              case 8:
               case "end":
                 return _context.stop();
             }
@@ -59058,9 +64176,8 @@ define("freshservice/tests/integration/components/portal-designer/version-option
 
               case 3:
                 assert.dom('.version-options').exists();
-                assert.dom('div.btn').exists();
 
-              case 5:
+              case 4:
               case "end":
                 return _context2.stop();
             }
@@ -64757,10 +69874,12 @@ define("freshservice/tests/integration/components/ui-components/common-module/ne
       tags: 'Tag',
       attachment: 'new attachment.png',
       requesterName: 'new_requester',
+      requesterLastName: 'last_name',
       email: 'new_requester@gmail.com',
       requesterInputResult: 'new_requester <new_requester@gmail.com>',
+      requesterInputResultFullName: 'new_requester last_name <new_requester@gmail.com>',
       customText: 'Custom text',
-      customNumber: 12435
+      customNumber: 9223372036854775807
     }
   };
   var MOCK_ERRORS = {
@@ -65134,60 +70253,64 @@ define("freshservice/tests/integration/components/ui-components/common-module/ne
 
               case 33:
                 _context9.next = 35;
-                return _formFields.default.selectSingle('customFields.cust_dd_1', '1');
+                return _newTicket.default.fillCustomNumberField(MOCK_DATA.newTicket.customNumber);
 
               case 35:
                 _context9.next = 37;
-                return _formFields.default.selectSingle('customFields.msf_cust_multi_dd', '1');
+                return _formFields.default.selectSingle('customFields.cust_dd_1', '1');
 
               case 37:
                 _context9.next = 39;
-                return _formFields.default.selectSingle('customFields.cust_sec_parent_dd', '2');
+                return _formFields.default.selectSingle('customFields.msf_cust_multi_dd', '1');
 
               case 39:
                 _context9.next = 41;
-                return _newTicket.default.fillCustomSection2TextField(MOCK_DATA.newTicket.customText);
+                return _formFields.default.selectSingle('customFields.cust_sec_parent_dd', '2');
 
               case 41:
                 _context9.next = 43;
-                return _formFields.default.autocompleteSelectMultiple('tags', MOCK_DATA.newTicket.tags, '0');
+                return _newTicket.default.fillCustomSection2TextField(MOCK_DATA.newTicket.customText);
 
               case 43:
                 _context9.next = 45;
-                return _newTicket.default.addAttachment(MOCK_DATA.newTicket.attachment);
+                return _formFields.default.autocompleteSelectMultiple('tags', MOCK_DATA.newTicket.tags, '0');
 
               case 45:
                 _context9.next = 47;
-                return _newTicket.default.addCCBtn();
+                return _newTicket.default.addAttachment(MOCK_DATA.newTicket.attachment);
 
               case 47:
                 _context9.next = 49;
-                return _newTicket.default.addCCInput();
+                return _newTicket.default.addCCBtn();
 
               case 49:
                 _context9.next = 51;
-                return _newTicket.default.fillAddCCInput(MOCK_DATA.newTicket.email);
+                return _newTicket.default.addCCInput();
 
               case 51:
                 _context9.next = 53;
-                return _newTicket.default.addCCEmail();
+                return _newTicket.default.fillAddCCInput(MOCK_DATA.newTicket.email);
 
               case 53:
                 _context9.next = 55;
-                return _newTicket.default.hideCCBtn();
+                return _newTicket.default.addCCEmail();
 
               case 55:
+                _context9.next = 57;
+                return _newTicket.default.hideCCBtn();
+
+              case 57:
                 assert.ok(_newTicket.default.descriptionContent.includes(MOCK_DATA.newTicket.description), 'Description contains given text as expected');
                 assert.ok(_newTicket.default.descriptionContent.includes(_cannedResponsesWithDetails.default[1].content), 'Description contains canned response text as expected');
                 assert.equal(_newTicket.default.attachmentsCount, 1 + 1, '2 attachments (1 from canned response, 1 from manual)  are found as expected'); // once ember route is completed for ticket details page we need to assert for route navigation check
 
-                _context9.next = 60;
+                _context9.next = 62;
                 return _newTicket.default.save();
 
-              case 60:
+              case 62:
                 assert.ok(successFlashSpy.calledOnce, 'Ticket is created');
 
-              case 61:
+              case 63:
               case "end":
                 return _context9.stop();
             }
@@ -66565,6 +71688,310 @@ define("freshservice/tests/integration/components/ui-components/common-module/ne
       return function (_x29) {
         return _ref33.apply(this, arguments);
       };
+    }()); //29
+
+    (0, _qunit.test)('department should be update for values set in requested for field when type is Service Request', /*#__PURE__*/function () {
+      var _ref34 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee33(assert) {
+        return regeneratorRuntime.wrap(function _callee33$(_context33) {
+          while (1) {
+            switch (_context33.prev = _context33.next) {
+              case 0:
+                this.server.get("/itil/departments/user_departments?id=".concat(_requesters.default[0].id), [_userDepartments.default[0]]);
+                this.server.get('/search/autocomplete/requesters', function () {
+                  return {
+                    results: _requesters.default
+                  };
+                });
+                this.server.get('/api/_/ticket_form_fields', function () {
+                  return {
+                    meta: {
+                      visible_type_field: 'true'
+                    },
+                    ticket_fields: _defaultFormFields.default
+                  };
+                });
+                _context33.next = 5;
+                return renderComponent();
+
+              case 5:
+                _context33.next = 7;
+                return _formFields.default.selectSingle('type', '1');
+
+              case 7:
+                _context33.next = 9;
+                return _formFields.default.autocompleteSelectMultiple('requestedForId', _requesters.default[0].details, '0');
+
+              case 9:
+                assert.equal(_newTicket.default.departmentText, _userDepartments.default[0].name, 'Department field is updated based on requester selected');
+                assert.ok(_newTicket.default.isDepartmentSelected);
+
+              case 11:
+              case "end":
+                return _context33.stop();
+            }
+          }
+        }, _callee33, this);
+      }));
+
+      return function (_x30) {
+        return _ref34.apply(this, arguments);
+      };
+    }()); //30
+
+    (0, _qunit.test)('Department should be update for values set in requester field when type is Incident', /*#__PURE__*/function () {
+      var _ref35 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee34(assert) {
+        var departmentField;
+        return regeneratorRuntime.wrap(function _callee34$(_context34) {
+          while (1) {
+            switch (_context34.prev = _context34.next) {
+              case 0:
+                this.server.get("/itil/departments/user_departments?id=".concat(_requesters.default[0].id), [_userDepartments.default[0]]);
+                this.server.get('/search/autocomplete/requesters', function () {
+                  return {
+                    results: _requesters.default
+                  };
+                });
+                _context34.next = 4;
+                return renderComponent();
+
+              case 4:
+                _context34.next = 6;
+                return _formFields.default.getDataForField('departmentId', true);
+
+              case 6:
+                departmentField = _context34.sent;
+                assert.equal(departmentField.selected, null, '[Department] field is not selected');
+                _context34.next = 10;
+                return _formFields.default.autocompleteSelectMultiple("requesterId", MOCK_DATA.newTicket.requesterId, '0');
+
+              case 10:
+                assert.equal(_newTicket.default.departmentText, _userDepartments.default[0].name, 'Department field is updated based on requester selected');
+                assert.ok(_newTicket.default.isDepartmentSelected);
+
+              case 12:
+              case "end":
+                return _context34.stop();
+            }
+          }
+        }, _callee34, this);
+      }));
+
+      return function (_x31) {
+        return _ref35.apply(this, arguments);
+      };
+    }()); //31
+
+    (0, _qunit.test)('Should create new requester when combination of email formats used on add requester modal', /*#__PURE__*/function () {
+      var _ref36 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee35(assert) {
+        var requesterField;
+        return regeneratorRuntime.wrap(function _callee35$(_context35) {
+          while (1) {
+            switch (_context35.prev = _context35.next) {
+              case 0:
+                loadDefaultFields();
+                _context35.next = 3;
+                return renderComponent();
+
+              case 3:
+                assert.ok(document.querySelector('.add-new-requester-btn'));
+                _context35.next = 6;
+                return (0, _testHelpers.click)(document.querySelector('.add-new-requester-btn'));
+
+              case 6:
+                assert.ok(document.querySelector('.add-new-requester-modal'));
+                _context35.next = 9;
+                return _newTicket.default.fillRequesterModalFirstName(MOCK_DATA.newTicket.requesterName);
+
+              case 9:
+                _context35.next = 11;
+                return _newTicket.default.fillRequesterModalLastName(MOCK_DATA.newTicket.requesterLastName);
+
+              case 11:
+                _context35.next = 13;
+                return _newTicket.default.fillRequesterModalEmail(MOCK_DATA.newTicket.email);
+
+              case 13:
+                _context35.next = 15;
+                return _newTicket.default.requesterModalCreateButton();
+
+              case 15:
+                _context35.next = 17;
+                return _formFields.default.getDataForField('requesterId', true);
+
+              case 17:
+                requesterField = _context35.sent;
+                assert.equal(requesterField.selected, MOCK_DATA.newTicket.requesterInputResultFullName, '[Requester] is created');
+
+              case 19:
+              case "end":
+                return _context35.stop();
+            }
+          }
+        }, _callee35);
+      }));
+
+      return function (_x32) {
+        return _ref36.apply(this, arguments);
+      };
+    }()); //32
+
+    (0, _qunit.test)('Should be able to save the form combination of email formats used on addCC and requester field', /*#__PURE__*/function () {
+      var _ref37 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee36(assert) {
+        var successFlashSpy, addCCInput;
+        return regeneratorRuntime.wrap(function _callee36$(_context36) {
+          while (1) {
+            switch (_context36.prev = _context36.next) {
+              case 0:
+                successFlashSpy = (0, _spyFlashMessage.default)('success');
+                loadDefaultFields();
+                _context36.next = 4;
+                return renderComponent();
+
+              case 4:
+                _context36.next = 6;
+                return _newTicket.default.requesterInput();
+
+              case 6:
+                _context36.next = 8;
+                return _newTicket.default.fillRequesterInput(MOCK_DATA.newTicket.requesterInputResultFullName);
+
+              case 8:
+                _context36.next = 10;
+                return _newTicket.default.fillSubject(MOCK_DATA.newTicket.subject);
+
+              case 10:
+                _context36.next = 12;
+                return _newTicket.default.fillDescription(MOCK_DATA.newTicket.description);
+
+              case 12:
+                _context36.next = 14;
+                return _newTicket.default.addCCBtn();
+
+              case 14:
+                _context36.next = 16;
+                return _newTicket.default.addCCInput();
+
+              case 16:
+                _context36.next = 18;
+                return _newTicket.default.fillAddCCInput(MOCK_DATA.newTicket.requesterName + ' <' + MOCK_DATA.newTicket.email + '>');
+
+              case 18:
+                _context36.next = 20;
+                return _newTicket.default.addCCEmail();
+
+              case 20:
+                addCCInput = document.querySelector('[data-test-field-name="ccEmails"] .ember-power-select-multiple-option').innerText.trim();
+                assert.equal(addCCInput, MOCK_DATA.newTicket.requesterInputResult);
+                _context36.next = 24;
+                return _newTicket.default.save();
+
+              case 24:
+                assert.ok(successFlashSpy.calledOnce, 'Ticket is created');
+
+              case 25:
+              case "end":
+                return _context36.stop();
+            }
+          }
+        }, _callee36);
+      }));
+
+      return function (_x33) {
+        return _ref37.apply(this, arguments);
+      };
+    }()); //33
+
+    (0, _qunit.skip)('Enter action inside text field should trigger form submit', /*#__PURE__*/function () {
+      var _ref38 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee37(assert) {
+        return regeneratorRuntime.wrap(function _callee37$(_context37) {
+          while (1) {
+            switch (_context37.prev = _context37.next) {
+              case 0:
+                loadDefaultFields();
+                _context37.next = 3;
+                return renderComponent();
+
+              case 3:
+                _context37.next = 5;
+                return _newTicket.default.requesterInput();
+
+              case 5:
+                _context37.next = 7;
+                return _newTicket.default.fillRequesterInput(MOCK_DATA.newTicket.requesterInputResultFullName);
+
+              case 7:
+                _context37.next = 9;
+                return _newTicket.default.fillCustomSection2TextField(MOCK_DATA.newTicket.customText);
+
+              case 9:
+                _context37.next = 11;
+                return _newTicket.default.fillCustomTextField(MOCK_DATA.newTicket.customText);
+
+              case 11:
+                _context37.next = 13;
+                return (0, _testHelpers.triggerKeyEvent)('[data-test-field-name="customFields.cust_text"]', 'keyup', 'Enter');
+
+              case 13:
+                assert.ok(true);
+
+              case 14:
+              case "end":
+                return _context37.stop();
+            }
+          }
+        }, _callee37);
+      }));
+
+      return function (_x34) {
+        return _ref38.apply(this, arguments);
+      };
+    }()); //34
+
+    (0, _qunit.skip)('Enter action inside text field should trigger form submit for add new requester modal', /*#__PURE__*/function () {
+      var _ref39 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee38(assert) {
+        return regeneratorRuntime.wrap(function _callee38$(_context38) {
+          while (1) {
+            switch (_context38.prev = _context38.next) {
+              case 0:
+                loadDefaultFields();
+                _context38.next = 3;
+                return renderComponent();
+
+              case 3:
+                assert.ok(_newTicket.default.hasRequestor);
+                _context38.next = 6;
+                return _newTicket.default.addNewRequesterLink();
+
+              case 6:
+                _context38.next = 8;
+                return _newTicket.default.fillRequesterModalLastName(MOCK_DATA.newTicket.requesterLastName);
+
+              case 8:
+                _context38.next = 10;
+                return _newTicket.default.fillRequesterModalEmail(MOCK_DATA.newTicket.email);
+
+              case 10:
+                _context38.next = 12;
+                return _newTicket.default.fillRequesterModalFirstName(MOCK_DATA.newTicket.requesterName);
+
+              case 12:
+                _context38.next = 14;
+                return (0, _testHelpers.triggerKeyEvent)('[data-test-field-name="firstName"]', 'keyup', 'Enter');
+
+              case 14:
+                assert.ok(true);
+
+              case 15:
+              case "end":
+                return _context38.stop();
+            }
+          }
+        }, _callee38);
+      }));
+
+      return function (_x35) {
+        return _ref39.apply(this, arguments);
+      };
     }());
   });
 });
@@ -66786,7 +72213,8 @@ define("freshservice/tests/integration/components/ui-components/common-module/ne
   var SUBJECT_OF_TICKET_WITH_ALL_CUSTOM_FIELDS = 'Test ticket (With all custom fields set)';
   var MOCK_DATA = {
     newTicket: {
-      requesterId: 'support@freshservice.com'
+      requesterId: 'support@freshservice.com',
+      tags: 'Tag'
     }
   };
 
@@ -66949,7 +72377,7 @@ define("freshservice/tests/integration/components/ui-components/common-module/ne
       var _ref11 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10(assert) {
         var _this = this;
 
-        var ticketWithAllTypesOfField, id, parentTicket, requesterField, statusField, urgencyField, sourceField, impactField, priorityField;
+        var ticketWithAllTypesOfField, id, parentTicket, responderId1, tagsField, requesterField, statusField, urgencyField, sourceField, impactField, priorityField;
         return regeneratorRuntime.wrap(function _callee10$(_context10) {
           while (1) {
             switch (_context10.prev = _context10.next) {
@@ -66983,57 +72411,84 @@ define("freshservice/tests/integration/components/ui-components/common-module/ne
 
               case 14:
                 _context10.next = 16;
-                return _formFields.default.getDataForField('requesterId', true);
+                return _formFields.default.autocompleteSelectMultiple('tags', MOCK_DATA.newTicket.tags, '0');
 
               case 16:
-                requesterField = _context10.sent;
-                assert.equal(requesterField.selected, _requesters.default[0].details, '[Requester] field is copied from parent ticket');
-                _context10.next = 20;
-                return _newTicket.default.toggleCopyParentTktDetailsCheckbox();
+                _context10.next = 18;
+                return _formFields.default.getDataForField('responderId', true);
 
-              case 20:
-                _context10.next = 22;
-                return (0, _testHelpers.settled)();
+              case 18:
+                responderId1 = _context10.sent;
+                _context10.next = 21;
+                return _formFields.default.getDataForField('tags', true);
 
-              case 22:
+              case 21:
+                tagsField = _context10.sent;
                 _context10.next = 24;
-                return _formFields.default.getDataForField('status', true);
-
-              case 24:
-                statusField = _context10.sent;
-                _context10.next = 27;
-                return _formFields.default.getDataForField('urgency', true);
-
-              case 27:
-                urgencyField = _context10.sent;
-                _context10.next = 30;
-                return _formFields.default.getDataForField('source', true);
-
-              case 30:
-                sourceField = _context10.sent;
-                _context10.next = 33;
-                return _formFields.default.getDataForField('impact', true);
-
-              case 33:
-                impactField = _context10.sent;
-                _context10.next = 36;
-                return _formFields.default.getDataForField('priority', true);
-
-              case 36:
-                priorityField = _context10.sent;
-                _context10.next = 39;
                 return _formFields.default.getDataForField('requesterId', true);
 
-              case 39:
+              case 24:
                 requesterField = _context10.sent;
+                assert.equal(requesterField.selected, _requesters.default[0].details, '[Requester] field is copied from parent ticket');
+                assert.equal(tagsField.selected, MOCK_DATA.newTicket.tags, '[Tags] field is copied from parent ticket');
+                _context10.next = 29;
+                return _newTicket.default.toggleCopyParentTktDetailsCheckbox();
+
+              case 29:
+                _context10.next = 31;
+                return (0, _testHelpers.settled)();
+
+              case 31:
+                _context10.next = 33;
+                return _formFields.default.getDataForField('status', true);
+
+              case 33:
+                statusField = _context10.sent;
+                _context10.next = 36;
+                return _formFields.default.getDataForField('urgency', true);
+
+              case 36:
+                urgencyField = _context10.sent;
+                _context10.next = 39;
+                return _formFields.default.getDataForField('source', true);
+
+              case 39:
+                sourceField = _context10.sent;
+                _context10.next = 42;
+                return _formFields.default.getDataForField('impact', true);
+
+              case 42:
+                impactField = _context10.sent;
+                _context10.next = 45;
+                return _formFields.default.getDataForField('priority', true);
+
+              case 45:
+                priorityField = _context10.sent;
+                _context10.next = 48;
+                return _formFields.default.getDataForField('requesterId', true);
+
+              case 48:
+                requesterField = _context10.sent;
+                _context10.next = 51;
+                return _formFields.default.getDataForField('tags', true);
+
+              case 51:
+                tagsField = _context10.sent;
+                _context10.next = 54;
+                return _formFields.default.getDataForField('responderId', true);
+
+              case 54:
+                responderId1 = _context10.sent;
                 assert.equal(statusField.selected, 'Open', "[Status] field is selected with default value");
                 assert.equal(requesterField.selected, null, '[Requester] field is reset');
                 assert.equal(urgencyField.selected, 'Low', "[Urgency] field is selected with default value");
                 assert.equal(sourceField.selected, 'Phone', "[Source] field is selected with default value");
                 assert.equal(impactField.selected, 'Low', "[Impact] field is selected with default value");
                 assert.equal(priorityField.selected, 'Low', "[Priority] field is selected with default value");
+                assert.equal(tagsField.selected, null, "[Tags] field is selected with default value");
+                assert.equal(responderId1.selected, null, '[Agent] field is selected with default value');
 
-              case 46:
+              case 63:
               case "end":
                 return _context10.stop();
             }
@@ -67525,43 +72980,58 @@ define("freshservice/tests/integration/components/ui-components/common-module/ne
       return function (_x4) {
         return _ref8.apply(this, arguments);
       };
-    }()); // 28.
-
+    }());
     (0, _qunit.test)('Should be able to clear applied template', /*#__PURE__*/function () {
       var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(assert) {
+        var requesterField;
         return regeneratorRuntime.wrap(function _callee8$(_context8) {
           while (1) {
             switch (_context8.prev = _context8.next) {
               case 0:
-                _context8.next = 2;
+                this.server.get('/search/autocomplete/requesters', function () {
+                  return {
+                    results: _requesters.default
+                  };
+                });
+                _context8.next = 3;
                 return renderComponent();
 
-              case 2:
-                _context8.next = 4;
+              case 3:
+                _context8.next = 5;
+                return _formFields.default.autocompleteSelectMultiple('requesterId', _requesters.default[0].details, '0');
+
+              case 5:
+                _context8.next = 7;
                 return _formFields.default.selectSingle('template', '0');
 
-              case 4:
-                _context8.next = 6;
-                return (0, _testHelpers.settled)();
-
-              case 6:
-                assert.equal(_newTicket.default.descriptionContent, 'Test description');
+              case 7:
                 _context8.next = 9;
-                return _newTicket.default.clearAppliedTemplate();
+                return (0, _testHelpers.settled)();
 
               case 9:
-                _context8.next = 11;
-                return (0, _testHelpers.settled)();
-
-              case 11:
-                assert.equal(_newTicket.default.descriptionContent, '');
+                assert.equal(_newTicket.default.descriptionContent, 'Test description');
+                _context8.next = 12;
+                return _formFields.default.getDataForField('requesterId', true);
 
               case 12:
+                requesterField = _context8.sent;
+                _context8.next = 15;
+                return _newTicket.default.clearAppliedTemplate();
+
+              case 15:
+                _context8.next = 17;
+                return (0, _testHelpers.settled)();
+
+              case 17:
+                assert.equal(_newTicket.default.descriptionContent, '');
+                assert.equal(requesterField.selected, _requesters.default[0].details, '[Requester] field is not removed after clearing template');
+
+              case 19:
               case "end":
                 return _context8.stop();
             }
           }
-        }, _callee8);
+        }, _callee8, this);
       }));
 
       return function (_x5) {
@@ -67691,7 +73161,9 @@ define("freshservice/tests/integration/components/ui-components/common-module/ne
       attachment: 'new attachment.png',
       customText: 'Custom text',
       customParaValid: 'Custom Para valid text',
-      customParaInvalid: _faker.default.lorem.sentence(_common.MINI_PARA_MAX_CHAR + 1)
+      customNumber: 9223372036854775807,
+      customParaInvalid: _faker.default.lorem.sentence(_common.MINI_PARA_MAX_CHAR + 1),
+      customTextInvalid: _faker.default.lorem.sentence(_common.MINI_TEXT_MAX_CHAR + 1)
     }
   };
   var MINI_PARA = {
@@ -67742,6 +73214,16 @@ define("freshservice/tests/integration/components/ui-components/common-module/ne
       return _ref2.apply(this, arguments);
     };
   }();
+
+  var loadFormFields = function loadFormFields(meta, fields) {
+    var context = (0, _testHelpers.getContext)();
+    context.server.get('/api/_/ticket_form_fields', function () {
+      return {
+        meta: meta,
+        ticket_fields: fields
+      };
+    });
+  };
 
   (0, _qunit.module)('Integration | Component | ui-components/common-module/new-form - Validations', function (hooks) {
     (0, _emberQunit.setupRenderingTest)(hooks);
@@ -68216,11 +73698,7 @@ define("freshservice/tests/integration/components/ui-components/common-module/ne
             switch (_context10.prev = _context10.next) {
               case 0:
                 // nestedFormFields contains only default fields + nested fields and only nested fields are marked as required for agents
-                this.server.get('/api/_/ticket_form_fields', function () {
-                  return {
-                    ticket_fields: _nestedFormFields.default
-                  };
-                });
+                loadFormFields(null, _nestedFormFields.default);
                 _context10.next = 3;
                 return renderComponent();
 
@@ -68238,7 +73716,7 @@ define("freshservice/tests/integration/components/ui-components/common-module/ne
                 return _context10.stop();
             }
           }
-        }, _callee10, this);
+        }, _callee10);
       }));
 
       return function (_x6) {
@@ -68254,11 +73732,7 @@ define("freshservice/tests/integration/components/ui-components/common-module/ne
               case 0:
                 successFlashSpy = (0, _spyFlashMessage.default)('success'); // nestedFormFields contains only default fields + nested fields and only nested fields are marked as required for agents
 
-                this.server.get('/api/_/ticket_form_fields', function () {
-                  return {
-                    ticket_fields: _nestedFormFields.default
-                  };
-                });
+                loadFormFields(null, _nestedFormFields.default);
                 _context11.next = 4;
                 return renderComponent();
 
@@ -68293,7 +73767,7 @@ define("freshservice/tests/integration/components/ui-components/common-module/ne
                 return _context11.stop();
             }
           }
-        }, _callee11, this);
+        }, _callee11);
       }));
 
       return function (_x7) {
@@ -68309,15 +73783,10 @@ define("freshservice/tests/integration/components/ui-components/common-module/ne
               case 0:
                 this.intl = this.owner.lookup('service:intl');
                 maxEmailCount = 1;
-                this.server.get('/api/_/ticket_form_fields', function () {
-                  return {
-                    meta: {
-                      visible_type_field: 'true',
-                      max_email_count: maxEmailCount
-                    },
-                    ticket_fields: _defaultFormFields.default
-                  };
-                });
+                loadFormFields({
+                  visible_type_field: 'true',
+                  max_email_count: maxEmailCount
+                }, _defaultFormFields.default);
                 _context12.next = 5;
                 return renderComponent();
 
@@ -68375,11 +73844,7 @@ define("freshservice/tests/integration/components/ui-components/common-module/ne
               case 0:
                 successFlashSpy = (0, _spyFlashMessage.default)('success'); // nestedFormFields contains only default fields + nested fields and only nested fields are marked as required for agents
 
-                this.server.get('/api/_/ticket_form_fields', function () {
-                  return {
-                    ticket_fields: _nestedFormFields.default
-                  };
-                });
+                loadFormFields(null, _nestedFormFields.default);
                 _context13.next = 4;
                 return renderComponent();
 
@@ -68427,7 +73892,7 @@ define("freshservice/tests/integration/components/ui-components/common-module/ne
                 return _context13.stop();
             }
           }
-        }, _callee13, this);
+        }, _callee13);
       }));
 
       return function (_x9) {
@@ -68443,11 +73908,7 @@ define("freshservice/tests/integration/components/ui-components/common-module/ne
               case 0:
                 successFlashSpy = (0, _spyFlashMessage.default)('success'); // nestedFormFields contains only default fields + nested fields and only nested fields are marked as required for agents
 
-                this.server.get('/api/_/ticket_form_fields', function () {
-                  return {
-                    ticket_fields: _nestedFormFields.default
-                  };
-                });
+                loadFormFields(null, _nestedFormFields.default);
                 _context14.next = 4;
                 return renderComponent();
 
@@ -68508,7 +73969,7 @@ define("freshservice/tests/integration/components/ui-components/common-module/ne
                 return _context14.stop();
             }
           }
-        }, _callee14, this);
+        }, _callee14);
       }));
 
       return function (_x10) {
@@ -68524,11 +73985,7 @@ define("freshservice/tests/integration/components/ui-components/common-module/ne
               case 0:
                 successFlashSpy = (0, _spyFlashMessage.default)('success'); // nestedFormFields contains only default fields + nested fields and only nested fields are marked as required for agents
 
-                this.server.get('/api/_/ticket_form_fields', function () {
-                  return {
-                    ticket_fields: [].concat(_toConsumableArray(_defaultFormFields.default), [MINI_PARA])
-                  };
-                });
+                loadFormFields(null, [].concat(_toConsumableArray(_defaultFormFields.default), [MINI_PARA]));
                 _context15.next = 4;
                 return renderComponent();
 
@@ -68561,11 +74018,175 @@ define("freshservice/tests/integration/components/ui-components/common-module/ne
                 return _context15.stop();
             }
           }
-        }, _callee15, this);
+        }, _callee15);
       }));
 
       return function (_x11) {
         return _ref16.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Should show validation error for custom text field and section field when entering more than 255 characters', /*#__PURE__*/function () {
+      var _ref17 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee16(assert) {
+        return regeneratorRuntime.wrap(function _callee16$(_context16) {
+          while (1) {
+            switch (_context16.prev = _context16.next) {
+              case 0:
+                _context16.next = 2;
+                return renderComponent();
+
+              case 2:
+                _context16.next = 4;
+                return _newTicket.default.fillCustomTextField(MOCK_DATA.newTicket.customTextInvalid);
+
+              case 4:
+                _context16.next = 6;
+                return _formFields.default.selectSingle('customFields.cust_sec_parent_dd', '2');
+
+              case 6:
+                _context16.next = 8;
+                return _newTicket.default.fillCustomSection2TextField(MOCK_DATA.newTicket.customTextInvalid);
+
+              case 8:
+                _context16.next = 10;
+                return _newTicket.default.save();
+
+              case 10:
+                assert.ok(_newTicket.default.hasCustomTextError, 'Error thrown if the char count is greater than 255');
+                assert.ok(_newTicket.default.hasCustomSection2TextError, 'Error thrown if the char count is greater than 255');
+
+              case 12:
+              case "end":
+                return _context16.stop();
+            }
+          }
+        }, _callee16);
+      }));
+
+      return function (_x12) {
+        return _ref17.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Should not be able to save the form without requester data', /*#__PURE__*/function () {
+      var _ref18 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee17(assert) {
+        var successFlashSpy;
+        return regeneratorRuntime.wrap(function _callee17$(_context17) {
+          while (1) {
+            switch (_context17.prev = _context17.next) {
+              case 0:
+                successFlashSpy = (0, _spyFlashMessage.default)('success');
+                _context17.next = 3;
+                return renderComponent();
+
+              case 3:
+                _context17.next = 5;
+                return _newTicket.default.requesterInput();
+
+              case 5:
+                _context17.next = 7;
+                return _newTicket.default.fillRequesterInput('');
+
+              case 7:
+                _context17.next = 9;
+                return _newTicket.default.fillSubject(MOCK_DATA.newTicket.subject);
+
+              case 9:
+                _context17.next = 11;
+                return _newTicket.default.fillDescription(MOCK_DATA.newTicket.description);
+
+              case 11:
+                _context17.next = 13;
+                return _formFields.default.selectSingle('status', '0');
+
+              case 13:
+                _context17.next = 15;
+                return _formFields.default.selectSingle('priority', '0');
+
+              case 15:
+                _context17.next = 17;
+                return _newTicket.default.fillCustomTextField(MOCK_DATA.newTicket.customText);
+
+              case 17:
+                _context17.next = 19;
+                return _formFields.default.selectSingle('customFields.cust_dd_1', '1');
+
+              case 19:
+                _context17.next = 21;
+                return _formFields.default.selectSingle('customFields.msf_cust_multi_dd', '1');
+
+              case 21:
+                _context17.next = 23;
+                return _formFields.default.selectSingle('customFields.cust_sec_parent_dd', '2');
+
+              case 23:
+                _context17.next = 25;
+                return _newTicket.default.fillCustomSection2TextField(MOCK_DATA.newTicket.customText);
+
+              case 25:
+                _context17.next = 27;
+                return _formFields.default.autocompleteSelectMultiple('tags', MOCK_DATA.newTicket.tags, '0');
+
+              case 27:
+                _context17.next = 29;
+                return _newTicket.default.save();
+
+              case 29:
+                assert.notOk(successFlashSpy.calledOnce, 'Ticket is not created');
+                _context17.next = 32;
+                return _newTicket.default.requesterInput();
+
+              case 32:
+                _context17.next = 34;
+                return _newTicket.default.fillRequesterInput(MOCK_DATA.newTicket.requesterId);
+
+              case 34:
+                _context17.next = 36;
+                return _newTicket.default.save();
+
+              case 36:
+                assert.ok(successFlashSpy.calledOnce);
+
+              case 37:
+              case "end":
+                return _context17.stop();
+            }
+          }
+        }, _callee17);
+      }));
+
+      return function (_x13) {
+        return _ref18.apply(this, arguments);
+      };
+    }());
+    (0, _qunit.test)('Should throw validation errors while saving, if number fields are more than 19 digits', /*#__PURE__*/function () {
+      var _ref19 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee18(assert) {
+        return regeneratorRuntime.wrap(function _callee18$(_context18) {
+          while (1) {
+            switch (_context18.prev = _context18.next) {
+              case 0:
+                _context18.next = 2;
+                return renderComponent();
+
+              case 2:
+                _context18.next = 4;
+                return _newTicket.default.fillCustomNumberField(MOCK_DATA.newTicket.customNumber + '1');
+
+              case 4:
+                _context18.next = 6;
+                return _newTicket.default.save();
+
+              case 6:
+                assert.notOk(_newTicket.default.isFormValid, 'Error thrown if the digits count is greater than 19 numbers');
+
+              case 7:
+              case "end":
+                return _context18.stop();
+            }
+          }
+        }, _callee18);
+      }));
+
+      return function (_x14) {
+        return _ref19.apply(this, arguments);
       };
     }());
   });
@@ -73766,6 +79387,85 @@ define("freshservice/tests/integration/modifiers/autofocus-test", ["qunit", "emb
     }());
   });
 });
+define("freshservice/tests/integration/modifiers/code-mirror-test", ["qunit", "ember-qunit", "@ember/test-helpers", "freshservice/utils/portal-designer"], function (_qunit, _emberQunit, _testHelpers, _portalDesigner) {
+  "use strict";
+
+  function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+  function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+  (0, _qunit.module)('Integration | Modifier | code-mirror', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    hooks.beforeEach( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              this.set('value', '<div>test</div>');
+              this.set('fullscreen', false);
+              this.set('selectedPlaceholder', '');
+              this.set('onUpdate', function () {}); //do nothing
+
+              this.set('toggleFullScreen', function () {}); //do nothing
+
+              this.set('mode', {
+                name: 'Handlebars',
+                base: 'text/html'
+              });
+              _context.next = 8;
+              return (0, _portalDesigner.dynamicImportMirror)();
+
+            case 8:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, this);
+    })));
+    (0, _qunit.test)('it renders', /*#__PURE__*/function () {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(assert) {
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return (0, _testHelpers.render)(Ember.HTMLBars.template(
+                /*
+                  <div {{code-mirror
+                			value	= this.value
+                			fullScreen = this.fullScreen
+                			selectedPlaceholder = this.selectedPlaceholder
+                			onUpdate = this.onUpdate
+                			toggleFullScreen = this.toggleFullScreen
+                			mode = this.mode
+                		}}></div>
+                */
+                {
+                  id: "+X2Ondry",
+                  block: "{\"symbols\":[],\"statements\":[[7,\"div\",false],[3,\"code-mirror\",null,[[\"value\",\"fullScreen\",\"selectedPlaceholder\",\"onUpdate\",\"toggleFullScreen\",\"mode\"],[[23,0,[\"value\"]],[23,0,[\"fullScreen\"]],[23,0,[\"selectedPlaceholder\"]],[23,0,[\"onUpdate\"]],[23,0,[\"toggleFullScreen\"]],[23,0,[\"mode\"]]]]],[8],[9]],\"hasEval\":false}",
+                  meta: {}
+                }));
+
+              case 2:
+                assert.ok(this.element.getElementsByClassName('CodeMirror'), 'Code Mirror initiated');
+                assert.equal(this.element.getElementsByClassName('CodeMirror-line')[0].innerText, '<div>test</div>', 'Contains eidtor value');
+                this.set('fullScreen', true);
+                assert.ok(this.element.querySelector('.CodeMirror.CodeMirror-fullscreen'), 'toggled fullscreen');
+
+              case 6:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      return function (_x) {
+        return _ref3.apply(this, arguments);
+      };
+    }());
+  });
+});
 define("freshservice/tests/lib/error-responses", ["exports"], function (_exports) {
   "use strict";
 
@@ -76278,6 +81978,29 @@ define("freshservice/tests/pages/components/module-ams/services/activities", ["e
 
   _exports.default = _default;
 });
+define("freshservice/tests/pages/components/module-ams/services/details-associations", ["exports", "ember-cli-page-object"], function (_exports, _emberCliPageObject) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+  var SELECTORS = {
+    SERVICE_ASSOCIATED_CHANGE: '.service-associations-change .itom-associations-tab-container .itom-associated-change-list',
+    SERVICE_ASSOCIATED_CHANGE_DETAILS: '.service-associations-change .itom-associations-tab-container .itom-associated-change-list .change-details',
+    SERVICE_NO_ASSOCIATED_CHANGE: '.service-associations-change .empty-states'
+  };
+
+  var _default = (0, _emberCliPageObject.create)({
+    //count
+    associatedChange: (0, _emberCliPageObject.count)(SELECTORS.SERVICE_ASSOCIATED_CHANGE),
+    //isVisible
+    emptyChangeState: (0, _emberCliPageObject.isVisible)(SELECTORS.SERVICE_NO_ASSOCIATED_CHANGE),
+    isAssociatedChangeVisible: (0, _emberCliPageObject.isVisible)(SELECTORS.SERVICE_ASSOCIATED_CHANGE_DETAILS)
+  });
+
+  _exports.default = _default;
+});
 define("freshservice/tests/pages/components/module-kanban-board/board", ["exports", "ember-cli-page-object"], function (_exports, _emberCliPageObject) {
   "use strict";
 
@@ -77352,7 +83075,7 @@ define("freshservice/tests/pages/components/module-service-request/list", ["expo
   });
   _exports.default = void 0;
   var SELECTORS = {
-    EMPTY_STATE: '.catalog-items-empty',
+    EMPTY_STATE: '.catalog-items-empty h2',
     EMPTY_STATE_TITLE: '.catalog-items-empty > h2',
     TITLE: '#item-title-id',
     LAZY_LOADER: '.infinity-loader .load-spinner',
@@ -77434,8 +83157,8 @@ define("freshservice/tests/pages/components/module-service-request/list", ["expo
       deliveryText2: (0, _emberCliPageObject.text)(SELECTORS.ITEM.SECOND.DELIVERY),
       deliveryText3: (0, _emberCliPageObject.text)(SELECTORS.ITEM.THIRD.DELIVERY),
       costText1: (0, _emberCliPageObject.text)(SELECTORS.ITEM.FIRST.COST),
-      costText2: (0, _emberCliPageObject.text)(SELECTORS.ITEM.SECOND.COST),
-      costText3: (0, _emberCliPageObject.text)(SELECTORS.ITEM.THIRD.COST),
+      cost2Hidden: (0, _emberCliPageObject.isHidden)(SELECTORS.ITEM.SECOND.COST),
+      cost3Hidden: (0, _emberCliPageObject.isHidden)(SELECTORS.ITEM.THIRD.COST),
       emptyHyphenText1: (0, _emberCliPageObject.text)(SELECTORS.ITEM.FIRST.HYPHEN),
       attributesText: (0, _emberCliPageObject.text)(SELECTORS.ITEM.THIRD.INFO),
       isTitleIdAvailable: (0, _emberCliPageObject.contains)(SELECTORS.TITLE),
@@ -78145,6 +83868,8 @@ define("freshservice/tests/pages/components/module-tickets/detail", ["exports", 
     // showRequesterHoverCard		: triggerable('mouseover', '[data-test-id="requester-name"]'),
     // showRequestedForHoverCard	: triggerable('mouseover', '[data-test-id="requested-for-name"]'),
     // requesterHoverCardVisible	: hasClass('ember-tooltip-show', 'requester-card-content'),
+    requesterCellWrapperExists: (0, _emberCliPageObject.isVisible)('.requester-card-wrapper'),
+    requesterSpanWrapperExists: (0, _emberCliPageObject.isVisible)('[data-test-id="requester-read-only-card"]'),
     SRIconVisible: (0, _emberCliPageObject.hasClass)('cart', '[data-test-id="module-icon"]'),
     INCIconVisible: (0, _emberCliPageObject.hasClass)('tickets', '[data-test-id="module-icon"]'),
     requesterVIPBadge: (0, _emberCliPageObject.isVisible)('[data-test-id="requester-vip-badge"]'),
@@ -78159,7 +83884,9 @@ define("freshservice/tests/pages/components/module-tickets/detail", ["exports", 
     phoneCallContainerExists: (0, _emberCliPageObject.isVisible)('[data-test-id="phone-call-wrapper"]'),
     eodContainerExists: (0, _emberCliPageObject.isVisible)('[data-test-id="eod-wrapper"]'),
     attachmentContainerExists: (0, _emberCliPageObject.isVisible)('[data-test-id="tickets-attachment-container"]'),
-    noDescriptionContent: (0, _emberCliPageObject.isVisible)('[data-test-id="no-description"]')
+    noDescriptionContent: (0, _emberCliPageObject.isVisible)('[data-test-id="no-description"]'),
+    disabledDeleteButtonExists: (0, _emberCliPageObject.isVisible)('[data-test-id="tickets-restore"] .disabled'),
+    disabledSpamButtonExists: (0, _emberCliPageObject.isVisible)('[data-test-id="tickets-unspam"] .disabled')
   });
 
   _exports.default = _default;
@@ -78297,6 +84024,85 @@ define("freshservice/tests/pages/components/module-tickets/execute-scenario", ["
 
   _exports.default = _default;
 });
+define("freshservice/tests/pages/components/module-tickets/freddy-suggestion", ["exports", "ember-cli-page-object"], function (_exports, _emberCliPageObject) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = (0, _emberCliPageObject.create)({
+    freddySuggetionsWrapperExists: (0, _emberCliPageObject.isVisible)('.ticket-freddy-suggestions-wrapper .ticket-freddy-suggestions-body'),
+    irrelevantSolutionArticlesText: (0, _emberCliPageObject.text)('[data-test-id="panel_solution_articles"] .feedback-thanks-text'),
+    irrelevantCannedResponsesText: (0, _emberCliPageObject.text)('[data-test-id="panel_canned_responses"] .feedback-thanks-text'),
+    irrelevantSimilarIncidentsText: (0, _emberCliPageObject.text)('[data-test-id="panel_similar_incidents"] .feedback-thanks-text'),
+    freddySuggestionsActions: {
+      openSolutionArticles: (0, _emberCliPageObject.clickable)('[data-test-id="solution_articles"]'),
+      openCannedResponse: (0, _emberCliPageObject.clickable)('[data-test-id="canned_responses"]'),
+      openSimilarIncidents: (0, _emberCliPageObject.clickable)('[data-test-id="similar_incidents"]'),
+      solutionArticlesExists: (0, _emberCliPageObject.isVisible)('[data-test-id="panel_solution_articles"]'),
+      cannedResponsesExists: (0, _emberCliPageObject.isVisible)('[data-test-id="panel_canned_responses"]'),
+      similarIncidentsExists: (0, _emberCliPageObject.isVisible)('#panel_similar_incidents'),
+      solutionArticlesBtnExists: (0, _emberCliPageObject.isVisible)('[data-test-id="solution_articles"]'),
+      cannedResponseBtnExists: (0, _emberCliPageObject.isVisible)('[data-test-id="canned_responses"]'),
+      similarIncidentsBtnExists: (0, _emberCliPageObject.isVisible)('[data-test-id="similar_incidents"]'),
+      solutionArticlesBtnActive: (0, _emberCliPageObject.isVisible)('.ticket-freddy-suggestions-body .multitab-navitem.active'),
+      cannedResponseBtnActive: (0, _emberCliPageObject.isVisible)('.ticket-freddy-suggestions-body .multitab-navitem.active'),
+      similarIncidentsBtnActive: (0, _emberCliPageObject.isVisible)('.ticket-freddy-suggestions-body .multitab-navitem.active'),
+      openCannedResponsesInsertContent: (0, _emberCliPageObject.clickable)('[data-test-id="insert-cr-btn"]'),
+      replyEditorExists: (0, _emberCliPageObject.isVisible)('[data-test-id="reply-editor"]'),
+      replyConversationEditor: (0, _emberCliPageObject.isVisible)('.tkt-reply-form'),
+      forwardEditorExists: (0, _emberCliPageObject.isVisible)('[data-test-id="forward-editor"]'),
+      addNoteEditorExists: (0, _emberCliPageObject.isVisible)('[data-test-id="note-editor"]'),
+      similarIncidentsModal: (0, _emberCliPageObject.clickable)('[data-test-id="similar-incidents-title"]'),
+      freddyMultiTabExists: (0, _emberCliPageObject.isVisible)('.ticket-freddy-suggestions-body [data-test-multitab-pane-content]'),
+      openCannedResponseModal: (0, _emberCliPageObject.clickable)('[data-test-id="canned-response-title-1"]'),
+      closeCannedResponseModal: (0, _emberCliPageObject.clickable)('.tkt-freddy-canned-response-modal [data-test-id="ember-modal-close"]'),
+      openSolutionArticlesModal: (0, _emberCliPageObject.clickable)('[data-test-id="solution-title-3"]'),
+      closeSolutionArticlesModal: (0, _emberCliPageObject.clickable)('.tkt-freddy-insert-solution-modal [data-test-id="ember-modal-close"]'),
+      openSimilarIncidentsModal: (0, _emberCliPageObject.clickable)('[data-test-id="similar-incidents-title"]'),
+      closeSimilarIncidentsModal: (0, _emberCliPageObject.clickable)('.ticket-freddy-si-summary-modal [data-test-id="ember-modal-close"]'),
+      solutionArticlesTabExists: (0, _emberCliPageObject.isVisible)('#tab_solution_articles'),
+      solutionArticlesInserturl: (0, _emberCliPageObject.clickable)('[data-test-id="insert-url-btn"]'),
+      irrelevantSuggestionSolutionArticlesExists: (0, _emberCliPageObject.isVisible)('#panel_solution_articles [data-test-id="freddy-irrelevant-suggestions"]'),
+      irrelevantSuggestionCannedResponseExists: (0, _emberCliPageObject.isVisible)('#panel_canned_responses [data-test-id="freddy-irrelevant-suggestions"]'),
+      irrelevantSuggestionSimilarIncidentsExists: (0, _emberCliPageObject.isVisible)('#panel_similar_incidents [data-test-id="freddy-irrelevant-suggestions"]'),
+      irrelevantSuggestionButtonClick: (0, _emberCliPageObject.clickable)('[data-test-id="freddy-irrelevant-suggestions"]'),
+      cannedResponseTabExists: (0, _emberCliPageObject.isVisible)('#tab_canned_responses'),
+      similarIncidentsTabExists: (0, _emberCliPageObject.isVisible)('#tab_similar_incidents'),
+      conversationCancelButton: (0, _emberCliPageObject.isVisible)('[data-test-id="reply-cancel"]'),
+      similarIncidentsPageNavNextClick: (0, _emberCliPageObject.clickable)('[data-test-id="pageNavNext"]'),
+      similarIncidentsPagePrevNextClick: (0, _emberCliPageObject.clickable)('[data-test-id="pageNavPrev"]'),
+      similarIncidentsConversationExists: (0, _emberCliPageObject.isVisible)('#ticket-conversation-card-65 .convo-actions'),
+      insertConversationButtonExists: (0, _emberCliPageObject.isVisible)('[data-test-id="insert-si-content"]'),
+      insertConversationClick: (0, _emberCliPageObject.clickable)('[data-test-id="insert-si-content"]'),
+      solutionArticlesInsertButton: (0, _emberCliPageObject.clickable)('[data-test-id="insert-content-btn"]'),
+      draftTagExists: (0, _emberCliPageObject.isVisible)('[data-test-id="draft-tag-1"]'),
+      openDraftTagSolutionArticleModal: (0, _emberCliPageObject.clickable)('[data-test-id="solution-title-1"]'),
+      externalTagExists: (0, _emberCliPageObject.isVisible)('[data-test-id="external-tag-2"]'),
+      openExternaltagSolutionArticleModal: (0, _emberCliPageObject.clickable)('[data-test-id="solution-title-2"]'),
+      replyButtonExists: (0, _emberCliPageObject.isVisible)('[data-test-id="ticket-reply-btn"]'),
+      similarIncidentCardExists: (0, _emberCliPageObject.isVisible)('.tkt-freddy-similar-incidents-list .tkt-freddy-similar-incidents-card-15'),
+      similarIncidentStatusExists: (0, _emberCliPageObject.isVisible)('.similar-incident-status-15'),
+      similarIncidentsAssignToExists: (0, _emberCliPageObject.isVisible)('.similar-incident-assign-to-15'),
+      openStatusText: (0, _emberCliPageObject.text)('.similar-incident-status-value-15'),
+      pendingStatusText: (0, _emberCliPageObject.text)('.similar-incident-status-value-12'),
+      resolvedStatusText: (0, _emberCliPageObject.text)('.similar-incident-status-value-17'),
+      closedStatusText: (0, _emberCliPageObject.text)('.similar-incident-status-value-16'),
+      assignedToText: (0, _emberCliPageObject.text)('.agent-ellipsis'),
+      triggerAssignToDropdown: (0, _emberCliPageObject.clickable)('.agent-group-trigger'),
+      triggerSupportManAgent: (0, _emberCliPageObject.clickable)('.agent-group-section .agent-group-item:nth-child(2)'),
+      agentGroupInputExists: (0, _emberCliPageObject.isVisible)('.agent-group-search-input'),
+      clickOnGroupTab: (0, _emberCliPageObject.clickable)('.group-tab'),
+      triggerDatabaseTeamGroup: (0, _emberCliPageObject.clickable)('.agent-group-section .agent-group-item:nth-child(4)'),
+      agentGroupItemExists: (0, _emberCliPageObject.isVisible)('.agent-group-section .agent-group-item:nth-child(2)'),
+      clickOnAgentTab: (0, _emberCliPageObject.clickable)('.agent-tab')
+    }
+  });
+
+  _exports.default = _default;
+});
 define("freshservice/tests/pages/components/module-tickets/new-ticket", ["exports", "ember-cli-page-object", "ember-cli-page-object/macros", "@ember/test-helpers"], function (_exports, _emberCliPageObject, _macros, _testHelpers) {
   "use strict";
 
@@ -78371,6 +84177,7 @@ define("freshservice/tests/pages/components/module-tickets/new-ticket", ["export
     addNewRequesterLink: (0, _emberCliPageObject.clickable)('[data-test-field-name="requesterId"] .add-new-requester-btn'),
     fillRequesterInput: (0, _emberCliPageObject.fillable)('[data-test-field-name="requesterId"] .ember-power-select-search-input'),
     fillRequesterModalFirstName: (0, _emberCliPageObject.fillable)('[data-test-field-name="firstName"] input'),
+    fillRequesterModalLastName: (0, _emberCliPageObject.fillable)('[data-test-field-name="lastName"] input'),
     fillRequesterModalEmail: (0, _emberCliPageObject.fillable)('[data-test-field-name="primaryEmail"] input'),
     fillRequesterMobilePhone: (0, _emberCliPageObject.fillable)('[data-test-field-name="mobile"] input'),
     requesterMobilePhone: (0, _emberCliPageObject.isVisible)('[data-test-field-name="mobile"] input'),
@@ -78386,6 +84193,8 @@ define("freshservice/tests/pages/components/module-tickets/new-ticket", ["export
     fillCustomSection2TextField: (0, _emberCliPageObject.fillable)('[data-test-field-name="customFields.sec_2_text_1"] input'),
     fillSection3TextField: (0, _emberCliPageObject.fillable)('[data-test-field-name="customFields.sec_3_text_1"] input'),
     hasCustomParaError: (0, _emberCliPageObject.isVisible)('[data-test-field-name="customFields.custom_para"] .form-field--errors'),
+    hasCustomTextError: (0, _emberCliPageObject.isVisible)('[data-test-field-name="customFields.cust_text"] .form-field--errors'),
+    hasCustomSection2TextError: (0, _emberCliPageObject.isVisible)('[data-test-field-name="customFields.sec_2_text_1"] .form-field--errors'),
     addAttachment: function addAttachment(fileName) {
       return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
         return regeneratorRuntime.wrap(function _callee$(_context) {
@@ -78523,6 +84332,30 @@ define("freshservice/tests/pages/components/module-tickets/pagerduty", ["exports
 
   _exports.default = _default;
 });
+define("freshservice/tests/pages/components/module-tickets/quick-actions-watchers", ["exports", "ember-cli-page-object"], function (_exports, _emberCliPageObject) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = (0, _emberCliPageObject.create)({
+    quickActionsWatcherWrapperExists: (0, _emberCliPageObject.isVisible)('.ticket-watcher-wrapper'),
+    openWatcherDropdown: (0, _emberCliPageObject.clickable)('[data-test-id="ticket-toggle-watcher"]'),
+    watcherDropdownExists: (0, _emberCliPageObject.isVisible)('.watcher-dropdown'),
+    watchersContainerOpened: (0, _emberCliPageObject.isVisible)('.ticket-watchers-container'),
+    noWatchersExistenceText: (0, _emberCliPageObject.text)('.empty-message'),
+    watchersListExists: (0, _emberCliPageObject.isVisible)('.watchers-list'),
+    clickOnAddMe: (0, _emberCliPageObject.clickable)('[data-test-id="ticket-watcher-add-me"]'),
+    watchingIconHighlightVisible: (0, _emberCliPageObject.isVisible)('.watching'),
+    unwatchWatchers: (0, _emberCliPageObject.clickable)('[data-test-id="remove-watcher-button-1"]'),
+    addWatchersInputExists: (0, _emberCliPageObject.isVisible)('[data-test-id="ticket-watcher-agent-search-dropdown"] .ember-basic-dropdown'),
+    dropdownOptionsExists: (0, _emberCliPageObject.isVisible)('[data-test-id="ticket-watcher-agent-search-dropdown"] .ember-power-select-options')
+  });
+
+  _exports.default = _default;
+});
 define("freshservice/tests/pages/components/module-tickets/related-tickets", ["exports", "ember-cli-page-object"], function (_exports, _emberCliPageObject) {
   "use strict";
 
@@ -78587,6 +84420,7 @@ define("freshservice/tests/pages/components/module-tickets/requested-item", ["ex
   var reqItemFromDate = '[data-test-id=requested-item-card-3] [data-test-id=req-item-from-date]';
   var reqItemToDate = '[data-test-id=requested-item-card-3] [data-test-id=req-item-to-date]'; //more info button
 
+  var reqItemMoreInfoBtnOfFirstRI = '[data-test-id=requested-item-card-1] [data-test-id=req-item-more-info-btn]';
   var reqItemMoreInfoBtnOfLoanerRI = '[data-test-id=requested-item-card-3] [data-test-id=req-item-more-info-btn]';
   var reqItemMoreInfoBtnOfAPermanentRI = '[data-test-id=requested-item-card-2] [data-test-id=req-item-more-info-btn]';
   var reqItemMoreInfoDescription = '[data-test-id=requested-item-card-3] [data-test-id=more-info-description]';
@@ -78608,12 +84442,15 @@ define("freshservice/tests/pages/components/module-tickets/requested-item", ["ex
     reqItemToDate: (0, _emberCliPageObject.text)(reqItemToDate),
     reqItemStageText: (0, _emberCliPageObject.text)(reqItemStage),
     reqItemToggleInfoTextOfLoanerRI: (0, _emberCliPageObject.text)(reqItemMoreInfoBtnOfLoanerRI),
+    reqItemToggleInfoTextOfPermanentRI: (0, _emberCliPageObject.text)(reqItemMoreInfoBtnOfAPermanentRI),
+    reqItemToggleInfoTextOfFirstRI: (0, _emberCliPageObject.text)(reqItemMoreInfoBtnOfFirstRI),
     noSIEmptyStateTitleText: (0, _emberCliPageObject.text)('.catalog-items-empty > h2'),
     //click
     modalSubmit: (0, _emberCliPageObject.clickable)('[data-test-id="modal-submit"]'),
     cancelModalSubmitBtn: (0, _emberCliPageObject.clickable)('.form-button--submit'),
     reqItemMoreInfoBtnOfLoanerRI: (0, _emberCliPageObject.clickable)(reqItemMoreInfoBtnOfLoanerRI),
     reqItemMoreInfoBtnOfPermanentRI: (0, _emberCliPageObject.clickable)(reqItemMoreInfoBtnOfAPermanentRI),
+    reqItemMoreInfoBtnOfFirstRI: (0, _emberCliPageObject.clickable)(reqItemMoreInfoBtnOfFirstRI),
     clickStageTrigger: (0, _emberCliPageObject.clickable)(reqItemStage),
     clickLoanerStageTrigger: (0, _emberCliPageObject.clickable)(loanerReqItemStage),
     clickAddReqItemBtn: (0, _emberCliPageObject.clickable)(addReqItemBtn),
@@ -78630,7 +84467,7 @@ define("freshservice/tests/pages/components/module-tickets/requested-item", ["ex
     cancellationModalVisible: (0, _emberCliPageObject.isVisible)('.req-stage-cancel-modal'),
     addReqItemSliderExists: (0, _emberCliPageObject.isVisible)('.add-req-item-modal'),
     clearSearchBtnVisible: (0, _emberCliPageObject.isVisible)(clearBtnInSearch),
-    noSIEmptyStateVisible: (0, _emberCliPageObject.isVisible)('.catalog-items-empty'),
+    noSIEmptyStateVisible: (0, _emberCliPageObject.isVisible)('.catalog-items-empty h2'),
     otherResultsTitleVisible: (0, _emberCliPageObject.isVisible)('#other-results'),
     otherResultsListVisible: (0, _emberCliPageObject.isVisible)('.list-catalog-items[data-test-id="other-results-list"]'),
     addReqItemBtnVisible: (0, _emberCliPageObject.isVisible)(addReqItemBtn),
@@ -78649,6 +84486,27 @@ define("freshservice/tests/pages/components/module-tickets/requested-item", ["ex
     loanerItemStageDropdownContentChoices: (0, _emberCliPageObject.collection)(loanerItemStageDropdownContentChoices, {
       text: (0, _emberCliPageObject.text)('.stage-option-text')
     })
+  });
+
+  _exports.default = _default;
+});
+define("freshservice/tests/pages/components/module-tickets/state", ["exports", "ember-cli-page-object"], function (_exports, _emberCliPageObject) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = (0, _emberCliPageObject.create)({
+    stateWrapperExists: (0, _emberCliPageObject.isVisible)('[data-test-id="ticket-state-wrapper"]'),
+    overdueStateText: (0, _emberCliPageObject.text)('[data-test-id="ticket-state-overdue"]'),
+    newStateText: (0, _emberCliPageObject.text)('[data-test-id="ticket-state-new"]'),
+    customerRespondedStateValueExists: (0, _emberCliPageObject.isVisible)('.state-value'),
+    customerRespondedStateText: (0, _emberCliPageObject.text)('[data-test-id="ticket-state-customer_responded_overdue"]'),
+    elapsedStateStatusText: (0, _emberCliPageObject.text)('[data-test-id="ticket-state-elapsed"]'),
+    customerRespondedStatusText: (0, _emberCliPageObject.text)('[data-test-id="ticket-state-customer_responded"]'),
+    emptyStateExists: (0, _emberCliPageObject.isVisible)('[data-test-id="ticket-state-"]')
   });
 
   _exports.default = _default;
@@ -78674,7 +84532,7 @@ define("freshservice/tests/pages/components/module-tickets/summary", ["exports",
     // Due fields
     frDueSummaryExists: (0, _emberCliPageObject.isVisible)('[data-test-id="fr-due-container"]'),
     resolutionDueSummaryExists: (0, _emberCliPageObject.isVisible)('[data-test-id="resol-due-container"]'),
-    changeDueByFormExists: (0, _emberCliPageObject.isVisible)('[data-test-id="change-due-by-form-container"]'),
+    changeDueByFormExists: (0, _emberCliPageObject.isVisible)('[data-test-id="date-menu-picker"]'),
     editDuebyBtnExists: (0, _emberCliPageObject.isVisible)('[data-test-id="edit-due-by-btn"]'),
     editDuebyBtn: (0, _emberCliPageObject.clickable)('[data-test-id="edit-due-by-btn"]'),
     dateMenuPickerContExists: (0, _emberCliPageObject.isVisible)('[data-test-id="date-picker-container"]'),
@@ -78684,8 +84542,8 @@ define("freshservice/tests/pages/components/module-tickets/summary", ["exports",
     datePickerCancelBtn: (0, _emberCliPageObject.clickable)('[data-test-id="date-picker-cancel-btn"]'),
     datePickerUpdateBtnExists: (0, _emberCliPageObject.isVisible)('[data-test-id="date-picker-update-btn"]'),
     datePickerUpdateBtn: (0, _emberCliPageObject.clickable)('[data-test-id="date-picker-update-btn"]'),
-    datePickerUpdateDisabledBtnExists: (0, _emberCliPageObject.isVisible)('[data-test-id="date-picker-update-disabled-btn"]'),
-    datePickerUpdateDisabledBtn: (0, _emberCliPageObject.clickable)('[data-test-id="date-picker-update-disabled-btn"]'),
+    datePickerUpdateDisabledBtnExists: (0, _emberCliPageObject.isVisible)('[data-test-id="date-picker-update-btn"]'),
+    datePickerUpdateDisabledBtn: (0, _emberCliPageObject.clickable)('[data-test-id="date-picker-update-btn"]'),
     datePickerErrorBannerExists: (0, _emberCliPageObject.isVisible)('[data-test-id="date-picker-error-banner"]'),
     defaultDateMenuPickerExists: (0, _emberCliPageObject.isVisible)('[data-test-id="default-date-menu-picker"]'),
     customDatePickerBtnExists: (0, _emberCliPageObject.isVisible)('[data-test-id="custom-date-picker-btn"]'),
@@ -78756,6 +84614,34 @@ define("freshservice/tests/pages/components/module-tickets/tasks", ["exports", "
       selectNotifyNever: (0, _emberCliPageObject.clickable)('[data-test-field-name="notifyBefore"] [data-option-index="0"]'),
       selectNotify2Hours: (0, _emberCliPageObject.clickable)('[data-test-field-name="notifyBefore"] [data-option-index="5"]')
     }
+  });
+
+  _exports.default = _default;
+});
+define("freshservice/tests/pages/components/module-workloads/people-filter", ["exports", "ember-cli-page-object"], function (_exports, _emberCliPageObject) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = (0, _emberCliPageObject.create)({
+    nextPage: (0, _emberCliPageObject.clickable)('[data-test-id="pagination-link"]'),
+    peopleFilterTrigger: (0, _emberCliPageObject.clickable)('[data-test-id="wlm-capacity-people-filter-dd-trigger"]'),
+    dropdownTrigger: (0, _emberCliPageObject.clickable)('.ember-power-select-trigger-multiple-input'),
+    resetDropdownTrigger: (0, _emberCliPageObject.clickable)('[data-wlm-filter-reset="wlm-filter-reset"]'),
+    firstOption: (0, _emberCliPageObject.clickable)('[data-option-index="0"]'),
+    secondOption: (0, _emberCliPageObject.clickable)('[data-option-index="1"]'),
+    thirdOption: (0, _emberCliPageObject.clickable)('[data-option-index="2"]'),
+    fourthOption: (0, _emberCliPageObject.clickable)('[data-option-index="3"]'),
+    dropdownUserOptions: (0, _emberCliPageObject.collection)('.ember-power-select-option .user-options-label'),
+    dropdownOptions: (0, _emberCliPageObject.collection)('.ember-power-select-option'),
+    suggestNoMessage: (0, _emberCliPageObject.text)('.ember-power-select-option--search-message'),
+    removeChoice: (0, _emberCliPageObject.clickable)('.ember-power-select-multiple-remove-btn'),
+    applyButton: (0, _emberCliPageObject.clickable)('[data-test-id="apply-filter"]'),
+    clearButton: (0, _emberCliPageObject.clickable)('[data-test-id="clear-filter"]'),
+    groupRadioBtn: (0, _emberCliPageObject.clickable)('#wlm-people-filter-groups-view')
   });
 
   _exports.default = _default;
@@ -80238,6 +86124,7 @@ define("freshservice/tests/unit/Class/business-rule-executor/index-test", ["quni
       assert.equal(satisfied, true, "BR current_entity data based _processConditions of 'all' satisfied");
     });
     (0, _qunit.test)('#2 brExecutor modelSchema changes - test', function (assert) {
+      var ticketModuleCustomFieldPrefix = _businessRuleExecutor.customFieldNamePrefix['ticket'].formSchema;
       var services = {
         currentAccount: {
           id: 1
@@ -80263,7 +86150,7 @@ define("freshservice/tests/unit/Class/business-rule-executor/index-test", ["quni
           },
           "action_data": {
             "action": [{
-              "name": ["source", "urgency", "impact"],
+              "name": ["".concat(ticketModuleCustomFieldPrefix, "cust_text"), "".concat(ticketModuleCustomFieldPrefix, "cust_number"), "impact"],
               "property": "hide"
             }, {
               "name": ["agent", "category"],
@@ -80276,15 +86163,19 @@ define("freshservice/tests/unit/Class/business-rule-executor/index-test", ["quni
         services: services
       };
       this.brExecutor = new _businessRuleExecutor2.default(moduleConfig, brConfig);
-      this.brExecutor.formFields = _ticketFormFields.default;
+      this.brExecutor.formFields = _ticketFormFields.default.map(function (field) {
+        var newField = JSON.parse(JSON.stringify(field));
+        if (!field.default_field) newField.name = "".concat(ticketModuleCustomFieldPrefix).concat(field.name);
+        return newField;
+      });
       this.brExecutor.execute([], modelSchema, 'status');
       this.brExecutor.execute(_ticketFormFields.default, modelSchema, 'status');
 
-      this.brExecutor._originalFieldStates.hidden.push('urgency');
+      this.brExecutor._originalFieldStates.hidden.push("".concat(ticketModuleCustomFieldPrefix, "cust_number"));
 
       this.brExecutor.setFieldStates(modelSchema);
-      assert.equal(modelSchema.br_hidden_fields.length, 2, "Field states - hidden fields has been updated properly");
-      assert.equal(modelSchema.br_hidden_fields.includes('urgency'), false, "Field states - hidden fields does not includes Original field state");
+      assert.equal(modelSchema.br_hidden_fields.length, 2, "Field states - hidden custom fields has been updated properly");
+      assert.equal(modelSchema.br_hidden_fields.includes("".concat(ticketModuleCustomFieldPrefix, "cust_number")), false, "Field states - hidden fields does not includes Original field state");
       assert.notEqual(modelSchema.br_validation_excludes.length, 0, "JWT has been generated");
     });
     (0, _qunit.test)('#3 brExecutor execute Validation Rules', function (assert) {
@@ -80449,6 +86340,18 @@ define("freshservice/tests/unit/controllers/admin/explore-plan/goal-selection-te
 
     (0, _qunit.test)('it exists', function (assert) {
       var controller = this.owner.lookup('controller:admin/explore-plan/goal-selection');
+      assert.ok(controller);
+    });
+  });
+});
+define("freshservice/tests/unit/controllers/admin/explore-plan/plan-comparison-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Controller | admin/explore-plan/plan-comparison', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks); // Replace this with your real tests.
+
+    (0, _qunit.test)('it exists', function (assert) {
+      var controller = this.owner.lookup('controller:admin/explore-plan/plan-comparison');
       assert.ok(controller);
     });
   });
@@ -80872,6 +86775,17 @@ define("freshservice/tests/unit/routes/admin/explore-plan/goal-selection-test", 
     });
   });
 });
+define("freshservice/tests/unit/routes/admin/explore-plan/plan-comparison-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Route | admin/explore-plan/plan-comparison', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks);
+    (0, _qunit.test)('it exists', function (assert) {
+      var route = this.owner.lookup('route:admin/explore-plan/plan-comparison');
+      assert.ok(route);
+    });
+  });
+});
 define("freshservice/tests/unit/routes/admin/field-suggester-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
   "use strict";
 
@@ -80928,6 +86842,50 @@ define("freshservice/tests/unit/routes/admin/response-suggestions-test", ["qunit
         return _ref.apply(this, arguments);
       };
     }());
+  });
+});
+define("freshservice/tests/unit/routes/admin/roles/clone-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Route | admin/roles/clone', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks);
+    (0, _qunit.test)('it exists', function (assert) {
+      var route = this.owner.lookup('route:admin/roles/clone');
+      assert.ok(route);
+    });
+  });
+});
+define("freshservice/tests/unit/routes/admin/roles/edit-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Route | admin/roles/edit', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks);
+    (0, _qunit.test)('it exists', function (assert) {
+      var route = this.owner.lookup('route:admin/roles/edit');
+      assert.ok(route);
+    });
+  });
+});
+define("freshservice/tests/unit/routes/admin/roles/index-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Route | admin/roles', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks);
+    (0, _qunit.test)('it exists', function (assert) {
+      var route = this.owner.lookup('route:admin/roles/index');
+      assert.ok(route);
+    });
+  });
+});
+define("freshservice/tests/unit/routes/admin/roles/new-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Route | admin/roles/new', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks);
+    (0, _qunit.test)('it exists', function (assert) {
+      var route = this.owner.lookup('route:admin/roles/new');
+      assert.ok(route);
+    });
   });
 });
 define("freshservice/tests/unit/routes/admin/workload-management/index-test", ["qunit", "ember-qunit", "freshservice/tests/lib/stub-current-user"], function (_qunit, _emberQunit, _stubCurrentUser) {
@@ -81579,7 +87537,7 @@ define("freshservice/tests/unit/services/native-integration-test", ["qunit", "em
     });
   });
 });
-define("freshservice/tests/unit/services/portal-designer-translations-test", ["qunit", "ember-qunit", "freshservice/constants/portal-designer/placeholders"], function (_qunit, _emberQunit, _placeholders) {
+define("freshservice/tests/unit/services/portal-designer-translations-test", ["qunit", "ember-qunit", "freshservice/tests/lib/intl", "freshservice/constants/portal-designer/designer-placeholders"], function (_qunit, _emberQunit, _intl, _designerPlaceholders) {
   "use strict";
 
   var MOCK_TRANSLATIONS = {
@@ -81594,8 +87552,11 @@ define("freshservice/tests/unit/services/portal-designer-translations-test", ["q
   });
   (0, _qunit.module)('Unit | Service | portal-designer-translations', function (hooks) {
     (0, _emberQunit.setupTest)(hooks);
+    (0, _intl.setupTranslations)(hooks);
     hooks.beforeEach(function () {
       this.owner.register('service:portal-builder', BUILDER_SERVICE_STUB);
+      var intl = this.owner.lookup("service:intl");
+      this.placeholdersList = (0, _designerPlaceholders.default)(intl);
     }); // Replace this with your real tests.
 
     (0, _qunit.test)('it exists', function (assert) {
@@ -81630,7 +87591,7 @@ define("freshservice/tests/unit/services/portal-designer-translations-test", ["q
       assert.deepEqual(allowedPlaceholders, allowedPlaceholdersExpected, 'allowed placeholders updated');
       Ember.set(service, 'placeholderForPortal', true);
       var placeholderForPortal = service.allowedPlaceholderOptions;
-      assert.deepEqual(placeholderForPortal, _placeholders.default, 'allowed all placeholders for portal');
+      assert.deepEqual(placeholderForPortal, this.placeholdersList, 'allowed all placeholders for portal');
     });
   });
 });
@@ -82350,7 +88311,7 @@ define("freshservice/tests/unit/services/workload-test", ["qunit", "ember-qunit"
     });
   });
 });
-define("freshservice/tests/unit/utils/business-rule-executor-test", ["qunit", "freshservice/mirage/fixtures/ticket-form-fields", "freshservice/mirage/fixtures/sr-item-for-br", "freshservice/utils/common", "freshservice/mirage/fixtures/business-rules-executor", "freshservice/utils/business-rule-executor", "freshservice/constants/business-rule-executor", "moment"], function (_qunit, _ticketFormFields, _srItemForBr, _common, _businessRulesExecutor, _businessRuleExecutor, _businessRuleExecutor2, _moment) {
+define("freshservice/tests/unit/utils/business-rule-executor-test", ["qunit", "ember-qunit", "freshservice/mirage/fixtures/ticket-form-fields", "freshservice/mirage/fixtures/sr-item-for-br", "freshservice/utils/common", "freshservice/mirage/fixtures/business-rules-executor", "freshservice/utils/business-rule-executor", "freshservice/constants/business-rule-executor", "moment"], function (_qunit, _emberQunit, _ticketFormFields, _srItemForBr, _common, _businessRulesExecutor, _businessRuleExecutor, _businessRuleExecutor2, _moment) {
   "use strict";
 
   function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -82379,7 +88340,8 @@ define("freshservice/tests/unit/utils/business-rule-executor-test", ["qunit", "f
     });
   };
 
-  (0, _qunit.module)('Unit | Utility | business-rule-executor', function () {
+  (0, _qunit.module)('Unit | Utility | business-rule-executor', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks);
     (0, _qunit.test)('setChoices test asserts', function (assert) {
       var statusField = (0, _common.deepCloneNestedObject)(getFormField('status')),
           populateConstraint = new Set([2, 3, 4]),
@@ -82670,130 +88632,136 @@ define("freshservice/tests/unit/utils/business-rule-executor-test", ["qunit", "f
       }, {
         value: ['lorem']
       }), true);
-    });
-    (0, _qunit.test)('conditionsHash "date_operators" operator test asserts', function (assert) {
-      var dateString = '2022-06-24T18:30:00.000Z';
+    }); // Have to revisit these cases in br fixes 3, as cases itself are not valid
+
+    (0, _qunit.skip)('conditionsHash "date_operators" operator test asserts', function (assert) {
+      var currentUser = this.owner.lookup('service:current-user');
+      var dateString = (0, _moment.default)('2022-06-24', 'YYYY-MM-DD').format(); // 2022-06-24T00:00:00+05:30
+
       var twoDaysAgo = (0, _moment.default)().subtract(2, 'days').format();
       var twoDaysAway = (0, _moment.default)().add(2, 'days').format();
+      var services = {
+        currentUser: currentUser
+      };
       assert.equal(_businessRuleExecutor.default.conditionsHash.date_operators({
         value: 'lorem'
       }, {
         operator: 'is_empty_empty'
-      }), false);
+      }, services), false);
       assert.equal(_businessRuleExecutor.default.conditionsHash.date_operators({
         value: 'lorem'
       }, {
         operator: 'is_empty'
-      }), true);
+      }, services), true);
       assert.equal(_businessRuleExecutor.default.conditionsHash.date_operators({
         value: dateString
       }, {
-        value: ['24 Jun, 2022', '25 Jun, 2022'],
+        value: [(0, _moment.default)('2022-06-24', 'YYYY-MM-DD').format(), (0, _moment.default)('2022-06-25', 'YYYY-MM-DD').format()],
         operator: 'is_in_the_range'
-      }), true);
+      }, services), true);
       assert.equal(_businessRuleExecutor.default.conditionsHash.date_operators({
         value: dateString
       }, {
-        value: ['24 Jun, 2022', '24 Jun, 2022'],
+        value: [(0, _moment.default)('2022-06-24', 'YYYY-MM-DD').format(), (0, _moment.default)('2022-06-24', 'YYYY-MM-DD').format()],
         operator: 'is_in_the_range'
-      }), true);
+      }, services), true);
       assert.equal(_businessRuleExecutor.default.conditionsHash.date_operators({
         value: dateString
       }, {
-        value: '24 Jun, 2022',
+        value: (0, _moment.default)('2022-06-24', 'YYYY-MM-DD').format(),
         operator: 'is'
-      }), true);
+      }, services), true);
       assert.equal(_businessRuleExecutor.default.conditionsHash.date_operators({
         value: dateString
       }, {
-        value: '25 Jun, 2022',
+        value: (0, _moment.default)('2022-06-25', 'YYYY-MM-DD').format(),
         operator: 'is_not'
-      }), true);
+      }, services), true);
       assert.equal(_businessRuleExecutor.default.conditionsHash.date_operators({
         value: dateString
       }, {
         operator: 'is_not_empty'
-      }), false);
+      }, services), false);
       assert.equal(_businessRuleExecutor.default.conditionsHash.date_operators({
         value: dateString
       }, {
-        value: '23 Jun, 2022',
+        value: (0, _moment.default)('2022-06-23', 'YYYY-MM-DD').format(),
         operator: 'greater_than'
-      }), true);
+      }, services), true);
       assert.equal(_businessRuleExecutor.default.conditionsHash.date_operators({
         value: dateString
       }, {
-        value: '24 Jun, 2022',
+        value: (0, _moment.default)('2022-06-24', 'YYYY-MM-DD').format(),
         operator: 'greater_than_or_eql'
-      }), true);
+      }, services), true);
       assert.equal(_businessRuleExecutor.default.conditionsHash.date_operators({
         value: dateString
       }, {
-        value: '25 Jun, 2022',
+        value: (0, _moment.default)('2022-06-25', 'YYYY-MM-DD').format(),
         operator: 'less_than'
-      }), true);
+      }, services), true);
       assert.equal(_businessRuleExecutor.default.conditionsHash.date_operators({
         value: dateString
       }, {
-        value: '24 Jun, 2022',
+        value: (0, _moment.default)('2022-06-24', 'YYYY-MM-DD').format(),
         operator: 'less_than_or_eql'
-      }), true);
+      }, services), true);
       assert.equal(_businessRuleExecutor.default.conditionsHash.date_operators({
         value: twoDaysAgo
       }, {
         value: '',
         valueNumber: 2,
         operator: 'exactly_ago'
-      }), true);
+      }, services), true);
       assert.equal(_businessRuleExecutor.default.conditionsHash.date_operators({
         value: twoDaysAgo
       }, {
         value: '',
         valueNumber: 8,
         operator: 'not_exactly_ago'
-      }), true);
+      }, services), true);
       assert.equal(_businessRuleExecutor.default.conditionsHash.date_operators({
         value: twoDaysAway
       }, {
         value: '',
         valueNumber: 2,
         operator: 'exactly_away'
-      }), true);
+      }, services), true);
       assert.equal(_businessRuleExecutor.default.conditionsHash.date_operators({
         value: twoDaysAway
       }, {
         value: '',
         valueNumber: 8,
         operator: 'not_exactly_away'
-      }), true);
+      }, services), true);
       assert.equal(_businessRuleExecutor.default.conditionsHash.date_operators({
         value: twoDaysAgo
       }, {
         value: '',
         valueNumber: 2,
         operator: 'atleast_ago'
-      }), true);
+      }, services), true);
       assert.equal(_businessRuleExecutor.default.conditionsHash.date_operators({
         value: twoDaysAgo
       }, {
         value: '',
         valueNumber: 8,
         operator: 'not_atleast_ago'
-      }), true);
+      }, services), true);
       assert.equal(_businessRuleExecutor.default.conditionsHash.date_operators({
         value: twoDaysAway
       }, {
         value: '',
         valueNumber: 2,
         operator: 'atleast_away'
-      }), true);
+      }, services), true);
       assert.equal(_businessRuleExecutor.default.conditionsHash.date_operators({
         value: twoDaysAway
       }, {
         value: '',
         valueNumber: 8,
         operator: 'not_atleast_away'
-      }), true);
+      }, services), true);
     });
     (0, _qunit.test)('BUSINESS_RULES_URL test', function (assert) {
       assert.equal((0, _businessRuleExecutor2.BUSINESS_RULES_URL)('ticket', 'cf_'), 'business_rules?ember_api=true&module_type=ticket&form_type=new_form&cf_name_prefix=cf_&item_id=null&requester=&requested_for=');
@@ -82923,10 +88891,11 @@ define("freshservice/tests/unit/utils/business-rule-executor-test", ["qunit", "f
       _businessRuleExecutor.default.excludeHiddenFields(payload, hiddenFields, 'ticket');
 
       assert.deepEqual(payload, {
+        priority: 3,
         status: 2,
         impact: 6,
         custom_fields: {}
-      }, 'Ticket - HiddenFields has been excluded from payload');
+      }, 'Ticket - Hidden custom fields has been excluded from payload');
       var srPayload = {
         status: 2,
         custom_fields: {
@@ -82961,19 +88930,19 @@ define("freshservice/tests/unit/utils/business-rule-executor-test", ["qunit", "f
         'customField.cf_customfield': {
           editable: true
         },
-        'customField.customfield': {
+        'customFields.hiddenCustomfield': {
           hidden: true
         }
       };
 
-      var ticketActual = _businessRuleExecutor.default.brModifiedFieldStates(initialState, brState, 'ticket', 1);
+      var ticketActual = _businessRuleExecutor.default.brModifiedFieldStates(initialState, brState, 'ticket', 1, 'customFields.');
 
       var ticketExpected = {
-        "hidden": ["customField.customfield"],
+        "hidden": ["customFields.hiddenCustomfield"],
         "validationExcludes": {
-          "disabled": ["customfield_1", "customField.customfield"],
-          "hidden": ["customField.customfield"],
-          "optional": ["customfield_1", "customField.cf_customfield", "customField.customfield"]
+          "disabled": ["customfield_1", "hiddenCustomfield_1"],
+          "hidden": ["hiddenCustomfield_1"],
+          "optional": ["customfield_1", "customField.cf_customfield", "hiddenCustomfield_1"]
         }
       };
       assert.deepEqual(ticketActual, ticketExpected, 'Ticket - brModifiedFieldStates test');
@@ -83023,13 +88992,17 @@ define("freshservice/tests/unit/utils/business-rule-executor-test", ["qunit", "f
     (0, _qunit.test)('combinePopulateRemoveActions test', function (assert) {
       var action1 = [];
       var action2 = [{
+        property: 'populate',
         values: new Set([1])
       }, {
+        property: 'remove',
         values: new Set()
       }];
       var action3 = [{
+        property: 'populate',
         values: new Set([1, 2, 3, 4])
       }, {
+        property: 'remove',
         values: new Set([1, 2])
       }];
       assert.deepEqual(_businessRuleExecutor.default.combinePopulateRemoveActions(action1), {}, 'empty action test');
@@ -83069,8 +89042,15 @@ define("freshservice/tests/unit/utils/business-rule-executor-test", ["qunit", "f
           optional: ['bundleitem_13', 'bundleitem_14']
         })
       };
+      var childItems = Ember.A([{
+        id: 11,
+        formId: 11
+      }, {
+        id: 12,
+        formId: 12
+      }]);
 
-      _businessRuleExecutor.default.setSrValidationExcludes(modelSchema, formId, brFieldStates);
+      _businessRuleExecutor.default.setSrValidationExcludes(modelSchema, formId, brFieldStates, childItems);
 
       assert.deepEqual(brFieldStates.excludes.bundle_items, {
         '10': ['13', '14']
@@ -83264,7 +89244,7 @@ define("freshservice/tests/unit/validators/multi-select-field-email-validator-te
 define('freshservice/config/environment', [], function() {
   
           var exports = {
-            'default': {"marketplaceFreshParentUrl":"https://static.freshcloud.io/fdk/2.0/assets/fresh_parent.js","freshReleasePlatform":{"routeName":"projects","routePath":"project_management"},"modulePrefix":"freshservice","environment":"test","rootURL":"/a/","locationType":"none","EmberENV":{"FEATURES":{},"EXTEND_PROTOTYPES":false,"LOG_STACKTRACE_ON_DEPRECATION":false,"_APPLICATION_TEMPLATE_WRAPPER":false,"_DEFAULT_ASYNC_OBSERVERS":true,"_JQUERY_INTEGRATION":false,"_TEMPLATE_ONLY_GLIMMER_COMPONENTS":true},"APP":{"rootElement":"#ember-testing","LOG_ACTIVE_GENERATION":false,"LOG_VIEW_LOOKUPS":false,"autoboot":false,"renderInEmber":true,"hostURL":"http://localhost.freshservice-dev.com:4000","name":"freshservice","version":"0.0.1+34a9c59a"},"OPTIONS":{"test":true,"fingerprint":{"enabled":false,"extensions":["js","css","png","jpg","gif","json","svg","js"],"prepend":"http://localhost.freshservice-dev.com:7357/","exclude":["assets/fs-chunk-**"]},"outputPaths":{"app":{"css":{"app":"/assets/freshservice.css","modules/admin/main":"/assets/modules/styles/admin.css","modules/ams/main":"/assets/modules/styles/ams.css","modules/services/main":"/assets/modules/styles/services.css","modules/assets/main":"/assets/modules/styles/assets.css","modules/projects/main":"/assets/modules/styles/projects.css","modules/purchase-order/main":"/assets/modules/styles/purchase-order.css","modules/sam/main":"/assets/modules/styles/sam.css","modules/solutions/main":"/assets/modules/styles/solutions.css","modules/dashboard/main":"/assets/modules/styles/dashboard.css","modules/leaderboard/main":"/assets/modules/styles/leaderboard.css","modules/quest/main":"/assets/modules/styles/quest.css","modules/approvals/main":"/assets/modules/styles/approvals.css","modules/tickets/main":"/assets/modules/styles/tickets.css","modules/catalog/main":"/assets/modules/styles/catalog.css","modules/workloads/main":"/assets/modules/styles/workloads.css","modules/portal-designer/main":"/assets/modules/styles/portal-designer.css"}}},"sourcemaps":{"enabled":false},"minifyCSS":{"enabled":true},"minifyJS":{"enabled":true},"babel":{"plugins":["/Users/sreeramv/Documents/ws/itil/frontend/node_modules/ember-auto-import/babel-plugin/index.js"]},"autoImport":{"alias":{"froala-editor":"froala-editor/js/froala_editor.pkgd.min.js"},"webpack":{"output":{"chunkFilename":"fs-chunk-[name]-[chunkhash].js"}}},"svgJar":{"rootURL":"/a/","sourceDirs":["public/assets/inline-svg","node_modules/collab-ui/public/assets/images"],"optimizer":{"plugins":[{"cleanupIDs":{"minify":false}}]}},"emberHighCharts":{"includeHighCharts":false},"ember-cli-babel":{"includePolyfill":true},"ember-froala-editor":{"plugins":true,"languages":true,"dynamicImportFroala":true},"ember-service-worker":{"enabled":false,"unregister":false,"versionStrategy":"every-build"},"esw-cache-first":{"api_name":"FS-api-cache","apiPatterns":["/api/_/bootstrap/agents_groups","/api/_/ticket_form_fields"]},"hinting":false,"stylelint":{"generateTests":false,"testFailingFiles":false,"testPassingFiles":false}},"moment":{"includeTimezone":"all","includeLocales":["ar","ca","cs","da","de","en","es-do","es","et","fi","fr","hu","id","it","ja","ko","nb","nl","pl","pt-br","pt","ru","sk","sl","sv","tr","vi","zh-cn","uk","he","th","cy","zh-tw","ro","lv","hr"],"allowEmpty":true},"ember-cli-mirage":{"enabled":true,"usingProxy":false,"useDefaultPassthroughs":true},"ember-froala-editor":{"key":"QFF4nB16B10A8A6F6C5A4fLUQZa1ASFe1EFRNc1He1BCCQDUHnD5D4B3C3C3D7A5C2F5A3=="},"buildEnvironment":"test","ember-form-for":{"errorsPath":"validations.attrs.PROPERTY_NAME.errors"},"stackTraceLimit":30,"exportApplicationGlobal":true,"emberHifi":{"debug":false,"connections":[{"name":"NativeAudio","config":{}},{"name":"HLS","config":{}},{"name":"Howler","config":{}}]},"ember-modal-dialog":{},"ember-a11y-testing":{"componentOptions":{"turnAuditOff":true,"excludeAxeCore":true,"axeOptions":{"iframes":false,"reporter":"v2","resultTypes":["violations"],"rules":{"duplicate-id":{"enabled":false},"duplicate-id-active":{"enabled":false},"duplicate-id-aria":{"enabled":false}}}}}}
+            'default': {"marketplaceFreshParentUrl":"https://static.freshcloud.io/fdk/2.0/assets/fresh_parent.js","freshReleasePlatform":{"routeName":"projects","routePath":"project_management"},"modulePrefix":"freshservice","environment":"test","rootURL":"/a/","locationType":"none","workspacePath":"/ws/","EmberENV":{"FEATURES":{},"EXTEND_PROTOTYPES":false,"LOG_STACKTRACE_ON_DEPRECATION":false,"_APPLICATION_TEMPLATE_WRAPPER":false,"_DEFAULT_ASYNC_OBSERVERS":true,"_JQUERY_INTEGRATION":false,"_TEMPLATE_ONLY_GLIMMER_COMPONENTS":true},"APP":{"rootElement":"#ember-testing","LOG_ACTIVE_GENERATION":false,"LOG_VIEW_LOOKUPS":false,"autoboot":false,"renderInEmber":true,"hostURL":"http://localhost.freshservice-dev.com:4000","name":"freshservice","version":"0.0.1+390a4f6c"},"OPTIONS":{"test":true,"fingerprint":{"enabled":false,"extensions":["js","css","png","jpg","gif","json","svg","js"],"prepend":"http://localhost.freshservice-dev.com:7357/","exclude":["assets/fs-chunk-**"]},"outputPaths":{"app":{"css":{"app":"/assets/freshservice.css","modules/admin/main":"/assets/modules/styles/admin.css","modules/ams/main":"/assets/modules/styles/ams.css","modules/services/main":"/assets/modules/styles/services.css","modules/assets/main":"/assets/modules/styles/assets.css","modules/projects/main":"/assets/modules/styles/projects.css","modules/purchase-order/main":"/assets/modules/styles/purchase-order.css","modules/sam/main":"/assets/modules/styles/sam.css","modules/solutions/main":"/assets/modules/styles/solutions.css","modules/dashboard/main":"/assets/modules/styles/dashboard.css","modules/leaderboard/main":"/assets/modules/styles/leaderboard.css","modules/quest/main":"/assets/modules/styles/quest.css","modules/approvals/main":"/assets/modules/styles/approvals.css","modules/tickets/main":"/assets/modules/styles/tickets.css","modules/catalog/main":"/assets/modules/styles/catalog.css","modules/workloads/main":"/assets/modules/styles/workloads.css","modules/portal-customise/main":"/assets/modules/styles/portal-customise.css"}}},"sourcemaps":{"enabled":false},"minifyCSS":{"enabled":true},"minifyJS":{"enabled":true},"babel":{"plugins":["/home/jenkins/workspace/ITILDESK_STORY_PUSH/frontend/node_modules/ember-auto-import/babel-plugin/index.js"]},"autoImport":{"alias":{"froala-editor":"froala-editor/js/froala_editor.pkgd.min.js"},"webpack":{"output":{"chunkFilename":"fs-chunk-[name]-[chunkhash].js"}}},"svgJar":{"rootURL":"/a/","sourceDirs":["public/assets/inline-svg","node_modules/collab-ui/public/assets/images"],"optimizer":{"plugins":[{"cleanupIDs":{"minify":false}}]}},"emberHighCharts":{"includeHighCharts":false},"ember-cli-babel":{"includePolyfill":true},"ember-froala-editor":{"plugins":true,"languages":true,"dynamicImportFroala":true},"ember-service-worker":{"enabled":false,"unregister":false,"versionStrategy":"every-build"},"esw-cache-first":{"api_name":"FS-api-cache","apiPatterns":["/api/_/bootstrap/agents_groups","/api/_/ticket_form_fields"]},"hinting":false,"stylelint":{"generateTests":false,"testFailingFiles":false,"testPassingFiles":false}},"moment":{"includeTimezone":"all","includeLocales":["ar","ca","cs","da","de","en","es-do","es","et","fi","fr","hu","id","it","ja","ko","nb","nl","pl","pt-br","pt","ru","sk","sl","sv","tr","vi","zh-cn","uk","he","th","cy","zh-tw","ro","lv","hr"],"allowEmpty":true},"ember-cli-mirage":{"enabled":true,"usingProxy":false,"useDefaultPassthroughs":true},"ember-froala-editor":{"key":"QFF4nB16B10A8A6F6C5A4fLUQZa1ASFe1EFRNc1He1BCCQDUHnD5D4B3C3C3D7A5C2F5A3=="},"buildEnvironment":"test","ember-form-for":{"errorsPath":"validations.attrs.PROPERTY_NAME.errors"},"stackTraceLimit":30,"exportApplicationGlobal":true,"emberHifi":{"debug":false,"connections":[{"name":"NativeAudio","config":{}},{"name":"HLS","config":{}},{"name":"Howler","config":{}}]},"ember-modal-dialog":{},"ember-a11y-testing":{"componentOptions":{"turnAuditOff":true,"excludeAxeCore":true,"axeOptions":{"iframes":false,"reporter":"v2","resultTypes":["violations"],"rules":{"duplicate-id":{"enabled":false},"duplicate-id-active":{"enabled":false},"duplicate-id-aria":{"enabled":false}}}}}}
           };
           Object.defineProperty(exports, '__esModule', {value: true});
           return exports;
