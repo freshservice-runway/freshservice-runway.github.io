@@ -1,4 +1,4 @@
-(window["webpackJsonp_ember_auto_import_"] = window["webpackJsonp_ember_auto_import_"] || []).push([[24],{
+(window["webpackJsonp_ember_auto_import_"] = window["webpackJsonp_ember_auto_import_"] || []).push([[25],{
 
 /***/ "./node_modules/froala-editor/js/froala_editor.pkgd.min.js":
 /*!*****************************************************************!*\
