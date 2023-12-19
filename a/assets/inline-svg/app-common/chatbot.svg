@@ -3,7 +3,7 @@
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 16 16" style="enable-background:new 0 0 16 16;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#475867;}
+	.st0{fill-rule:evenodd;clip-rule:evenodd;fill:var(--color-icon-primary);}
 </style>
 <path class="st0" d="M13.7,6.5h0.5c0.3,0,0.5,0.2,0.5,0.5v2c0,0.3-0.2,0.5-0.5,0.5h-1.6v3.8h1.1c0.3,0,0.5,0.2,0.5,0.5
 	c0,0.3-0.2,0.5-0.5,0.5H2.2c-0.3,0-0.5-0.2-0.5-0.5c0-0.3,0.2-0.5,0.5-0.5h1.1V9.5H1.7C1.5,9.5,1.2,9.3,1.2,9V7

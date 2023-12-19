@@ -1,3 +1,3 @@
 <svg width="22" height="15" viewBox="0 0 22 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect x="1.68063" y="1.62985" width="18.6389" height="12.152" rx="2.67471" stroke="#12344D" stroke-width="1.78314"/>
+<rect x="1.68063" y="1.62985" width="18.6389" height="12.152" rx="2.67471" stroke="var(--color-fill-neutral-bold)" stroke-width="1.78314"/>
 </svg>
