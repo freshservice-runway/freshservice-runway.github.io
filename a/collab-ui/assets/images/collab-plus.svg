@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55 (78076) - https://sketchapp.com -->
+    <title>+ Icon</title>
+    <desc>Created with Sketch.</desc>
+    <g id="*-Desktop-Experience-v4" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="FCON---Inherited-Groups-(Suggestion-Box)" transform="translate(-512.000000, -611.000000)">
+            <g id="People-Suggestion" transform="translate(480.000000, 445.000000)">
+                <g id="+-Icon" transform="translate(32.000000, 166.000000)">
+                    <path d="M8,0.5 C3.85764237,0.5 0.5,3.85764237 0.5,8 C0.5,12.1423576 3.85764237,15.5 8,15.5 C12.1423576,15.5 15.5,12.1423576 15.5,8 C15.5,3.85764237 12.1423576,0.5 8,0.5 Z" id="Fill-1" stroke="#3399FF"></path>
+                    <polygon id="Path" fill="#3399FF" points="8.4 7.6 12 7.6 12 8.4 8.4 8.4 8.4 12 7.6 12 7.6 8.4 4 8.4 4 7.6 7.6 7.6 7.6 4 8.4 4"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
