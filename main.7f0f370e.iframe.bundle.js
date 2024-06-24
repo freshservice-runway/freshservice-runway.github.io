@@ -592,12 +592,8 @@
     "force_authn_for_public_url": false,
     "features": "[features list]",
     "temp_features": {
-        "ember": true,
         "formserv_sc": true,
-        "onboarding_kits": true,
-        "default_table_ui": true,
-        "ember_new_ticket": true,
-        "ember_ticket_show": true
+        "onboarding_kits": true
     }
   }
   `,mdxType:"Source"}),Object(_mdx_js_react__WEBPACK_IMPORTED_MODULE_5__.b)("li",null,Object(_mdx_js_react__WEBPACK_IMPORTED_MODULE_5__.b)("code",null,"accountDateFormat")," - provides the selected account date format"),Object(_mdx_js_react__WEBPACK_IMPORTED_MODULE_5__.b)(_storybook_addon_docs__WEBPACK_IMPORTED_MODULE_6__.e,{language:"js",dark:!0,format:!1,code:ts_dedent__WEBPACK_IMPORTED_MODULE_7__.a`
