@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="12" height="13" fill="none" xmlns:v="https://vecta.io/nano">
+  <g clip-path="url(#A)" fill-rule="evenodd">
+    <g fill="var(--color-icon-primary)">
+      <use href="#B" />
+      <path d="M9 10.656c-.51 0-.923.413-.923.923s.413.923.923.923.923-.413.923-.923-.413-.923-.923-.923z" />
+    </g>
+    <path d="M11.737 3.658a1.27 1.27 0 0 0-1.013-.503H3.434l-.308-1.613A1.26 1.26 0 0 0 1.881.5H.523c-.29 0-.525.235-.525.525s.235.525.525.525h1.358c.106.001.196.076.218.18l1.305 7.021c.112.604.639 1.042 1.253 1.043h4.951c.572-.003 1.071-.386 1.223-.938l1.125-4.088c.108-.384.027-.796-.218-1.11z" fill="var(--color-fill-semantic-success-mild)" />
+  </g>
+  <defs>
+    <clipPath id="A">
+      <path fill="var(--color-fill-surface)" d="M0 0h12v13H0z" />
+    </clipPath>
+    <path id="B" d="M5.249 10.656c-.51 0-.923.413-.923.923s.413.923.923.923.923-.413.923-.923-.413-.923-.923-.923z" />
+  </defs>
+</svg>

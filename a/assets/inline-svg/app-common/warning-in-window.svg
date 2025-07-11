@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="151" height="151" fill="none">
+    <path stroke="var(--color-text-placeholder)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"
+        d="M134.93 134.254h5.49M104.939 134.254h24.03M11.419 134.254h87.82" />
+    <path fill="var(--color-boundary-border-mild)"
+        d="M75.919 127.314c27.614 0 50-22.385 50-50s-22.386-50-50-50-50 22.386-50 50 22.386 50 50 50"
+        opacity=".2" />
+    <path fill="var(--color-text-inverse)" stroke="var(--color-text-placeholder)" stroke-miterlimit="10" stroke-width="1.2"
+        d="M39 41.815h73.829c3.13 0 5.68 2.54 5.68 5.68v59.639c0 3.13-2.54 5.68-5.68 5.68h-73.83c-3.13 0-5.68-2.54-5.68-5.68v-59.64c0-3.13 2.54-5.68 5.68-5.68Z" />
+    <path fill="var(--color-text-placeholder)" stroke="var(--color-text-placeholder)" stroke-linecap="round" stroke-linejoin="round"
+        stroke-width=".83"
+        d="M38.55 42.484h74.809c2.48 0 4.5 2.02 4.5 4.5v11.86h-83.91v-11.76a4.6 4.6 0 0 1 4.6-4.6" />
+    <path fill="var(--color-text-inverse)" d="M53.07 50.664h-9.84z" />
+    <path stroke="var(--color-text-inverse)" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1.2"
+        d="M53.07 50.664h-9.84" />
+    <path stroke="var(--color-text-placeholder)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"
+        d="M19.32 40.234h6.04M32.52 26.145v6.05M21.879 30.475l4.8 3.69" />
+    <path stroke="var(--color-overlay-neutral)" stroke-width="1.2"
+        d="M73.271 71.178c1.155-2 4.042-2 5.197 0L93.035 96.41c1.155 2-.288 4.5-2.598 4.5H61.302c-2.31 0-3.753-2.5-2.599-4.5z" />
+    <path fill="var(--color-boundary-border-mildest)" d="M73.753 78.078h4.233l-.546 12.644H74.3z" />
+    <circle cx="75.869" cy="94.163" r="2.253" fill="var(--color-boundary-border-mildest)" />
+</svg>
