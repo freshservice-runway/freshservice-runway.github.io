@@ -1,0 +1,11 @@
+<svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg" data-icon-name="dew-tick-success">
+<g clip-path="url(#clip0_77701_17561)">
+<rect width="16" height="16" transform="translate(0 0.862518)" fill="var(--color-icon-inverse)" fill-opacity="0.01"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0.125 8.86252C0.125 4.52002 3.6575 0.987518 8 0.987518C12.3425 0.987518 15.875 4.52002 15.875 8.86252C15.875 13.205 12.3425 16.7375 8 16.7375C3.6575 16.7375 0.125 13.205 0.125 8.86252ZM6.97624 10.0437L10.5987 6.42122C10.8687 6.16247 11.2962 6.15122 11.555 6.42122C11.8137 6.69122 11.8137 7.11872 11.555 7.37747L7.44874 11.4837C7.32499 11.6187 7.14499 11.6862 6.97624 11.6862C6.80749 11.6862 6.62749 11.6075 6.50374 11.4837L4.54624 9.52622C4.28749 9.25622 4.27624 8.82872 4.54624 8.56997C4.81624 8.31122 5.24374 8.31122 5.50249 8.56997L6.97624 10.0437Z" fill="var(--color-icon-semantic-success)"/>
+</g>
+<defs>
+<clipPath id="clip0_77701_17561">
+<rect width="16" height="16" fill="var(--color-icon-inverse)" transform="translate(0 0.862518)"/>
+</clipPath>
+</defs>
+</svg>
